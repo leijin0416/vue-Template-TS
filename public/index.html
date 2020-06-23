@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 启用360浏览器的极速模式(webkit) -->
+        <meta name="renderer" content="webkit">
+        <!-- 避免IE使用兼容模式 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <title></title>
+        <meta name="keywords" content="一呼百应，工业品直卖网，企业采购，工业品采购">
+        <meta name="description"
+            content="“工业品采购上一呼百应！”，一呼百应工业品直卖网（www.youboy.com）优选710多万家制造业云工厂直卖，劳保用品、包装印刷、化工橡塑、电子仪表、五金建材、电动工具、机械配件、原材料等2000多品类供应链产品。">
+        <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+        <!-- 使用CDN的CSS文件 -->
+        <% for (var i in htmlWebpackPlugin.options.cdn &&
+            htmlWebpackPlugin.options.cdn.css) { %>
+            <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
+        <% } %>
+        <!-- 使用CDN的CSS文件 -->
+    </head>
+    <body>
+        <noscript>
+            <strong>Please enable it to continue.</strong>
+        </noscript>
+        <div id="app"></div>
+        <!-- 使用CDN的JS文件 -->
+        <% for (var i in htmlWebpackPlugin.options.cdn &&
+            htmlWebpackPlugin.options.cdn.js) { %>
+            <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+        <% } %>
+        <!-- 使用CDN的JS文件 -->
+    </body>
+</html>
