@@ -30,7 +30,7 @@ service.interceptors.request.use(
         // tslint:disable-next-line:no-unused-expression
         token && (config.headers.token = token);
         config.data = {
-            // 文本数据交换格式 https://juejin.im/post/5eee33d6e51d45742615751a
+            // 文本数据交换格式
             data: CryptoJS.Encrypt(JSON.stringify(config.data))
         };
         return config;
