@@ -25,8 +25,7 @@ const service = axios.create(axiosConfig);
 service.interceptors.request.use(
     (config) => {
         const token = sessionData('get', 'getSessionToken', null);
-        console.log('token：' + token);
-
+        // console.log('token：' + token);
         // tslint:disable-next-line:no-unused-expression
         token && (config.headers.token = token);
         config.data = {

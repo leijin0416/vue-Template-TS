@@ -127,6 +127,24 @@ export function getUrlBase64(file: any) {
     });
 }
 
+/**
+ * 保存图片
+ * @param data url
+ * @param filename 名称
+ * https://www.jianshu.com/p/6620eac670da
+ * https://blog.csdn.net/bamboozjy/article/details/81631487
+ * https://www.cnblogs.com/FACESCORE/p/11804177.html
+ */
+export function saveFile(data, filename) {
+    const save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+    save_link.href = data;
+    save_link.download = filename;
+
+    const event = document.createEvent('MouseEvents');
+    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    save_link.dispatchEvent(event);
+}
+
 export default {
     formatFloat,
     formatPhone,
