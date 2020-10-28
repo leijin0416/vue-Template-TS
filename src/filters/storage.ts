@@ -1,12 +1,12 @@
 /**
- *  local操作
+ *  localStorage 操作
  *  @param String method  get获取，set存入或覆盖，clean清除
  *  @param String name    localStorage 名称
  *  @param obj          存入的内容，可以是任意类型
  *
  *  @param localData('set', 'localeCut', val);  -调用方式
  */
-const localData = (method, name, obj) => {
+const localData = (method: any, name: any, obj: any) => {
     /*
      * 参数说明：
      * localStorage.getItem(key):    获取指定key本地存储的值
@@ -37,14 +37,14 @@ const localData = (method, name, obj) => {
 };
 
 /**
- *  session操作
+ *  sessionStorage 操作
  *  @param String method  get获取，set存入或覆盖，clean清除
  *  @param String name    session 名称
  *  @param obj          存入的内容，可以是任意类型
  *
  *  @param sessionData('set', 'localeCut', val);  -调用方式
  */
-const sessionData = (method, name, obj) => {
+const sessionData = (method: any, name: any, obj: any) => {
     switch (method) {
         case 'get':
             if (sessionStorage.getItem(name + '_obj')) {

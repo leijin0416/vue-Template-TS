@@ -2,19 +2,14 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import CryptoJS from './cryptoJS';
 import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 import { sessionData } from '@/filters/storage';
+import { Message } from 'element-ui';
 
-// 超时重新请求配置
 // const VUE_APP_URL = process.env.VUE_APP_URL;
+// 超时重新请求配置
 const axiosConfig: AxiosRequestConfig = {
     baseURL: '',
-    timeout: 10000,
-    // 跨域是否带Token
-    withCredentials: true,
-    responseType: 'json',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-    },
+    timeout: 5000,
+    withCredentials: true
 };
 
 // 修改axios配置信息
@@ -59,6 +54,11 @@ service.interceptors.response.use(
                 505: 'HTTP版本不受支持',
             };
             error.message = RESPONSE_CODE[error.response.status] || '服务器开小差！！';
+            Message({
+                message: error.message,
+                type: 'error',
+                onClose: () => {}
+            });
         }
         return Promise.reject(error);
     },

@@ -38,7 +38,7 @@ const cdn = {
 
 const isDevCS = {
     '/api': {
-        target: 'http://114.55.165.42:6100',
+        target: 'http://54.254.93.190:6100',
         changeOrigin: true,
         wx: true,
         pathRewrite: {
