@@ -1,4 +1,4 @@
-import service from '@/common/service';
+import service from '@/common/httpService';
 
 /**
  * 短信区号
