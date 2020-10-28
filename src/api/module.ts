@@ -1,4 +1,4 @@
-import service from '@/axios/service';
+import service from '@/common/service';
 
 /**
  * 短信区号

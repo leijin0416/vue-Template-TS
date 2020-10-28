@@ -1,19 +1,16 @@
-# Vue cli3 template 开发须知
+# TS + Element + VUE2
 
-[vuex-class 如何使用](https://blog.csdn.net/qq_33447462/article/details/85251527) | [1\ 模板 06/19](https://github.com/livelyPeng/vue-cli3-tpl) | [1\ 模板 06/22](https://github.com/Jack-Star-T/Vue3.0-typescript/tree/master/src)
+标签|内容
+:-|:-:
+[vuex-class 如何使用](https://blog.csdn.net/qq_33447462/article/details/85251527) -- [1\ 模板 06/19](https://github.com/livelyPeng/vue-cli3-tpl) | [1\ 模板 06/22](https://github.com/Jack-Star-T/Vue3.0-typescript/tree/master/src)
+[vscode 的注释](https://segmentfault.com/q/1010000013367208) -- [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6) | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
 
-[vscode 的注释](https://segmentfault.com/q/1010000013367208) | [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6) | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
+## vue2.5后增加了对ts的支持
 
-- vue2.5后增加了对ts的支持；
 - `vue-class-component：` 强化 Vue 组件，使用 TypeScript/装饰器 增强 Vue 组件；
 - `vue-property-decorator：` 在 vue-class-component 上增强更多的结合 Vue 特性的装饰器；`@Watch`、`@Prop`等
 
 ---
-
-## 技术栈及使用要求
-
-> 1. 基于Vue全家桶 + axios + mockjs + typescript + element-ui + scss + webpack4构建的企业级应用项目;
-> 2. 开发时请确保你已了解或掌握以上技术要求,然后你就可以愉快的玩耍了;
 
 ## 从新建项目到设置打包环境
 

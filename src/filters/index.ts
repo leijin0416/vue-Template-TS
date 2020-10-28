@@ -136,7 +136,7 @@ export function getUrlBase64(file: any) {
  * https://www.cnblogs.com/FACESCORE/p/11804177.html
  */
 export function saveFile(data, filename) {
-    const save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+    const save_link: any = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
     save_link.href = data;
     save_link.download = filename;
 

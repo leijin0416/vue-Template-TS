@@ -1,7 +1,6 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import CryptoJS from './cryptoJS';
-// 格式化返回数据
-import { getRealJsonData } from '@/assets/js/jsonData';
+import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 import { sessionData } from '@/filters/storage';
 
 // 超时重新请求配置
@@ -43,8 +42,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     (response) => {
         response.data = getRealJsonData(CryptoJS.Decrypt(response.data.data));
-
         return response;
+
     },
     (error) => {
         if (error && error.response) {

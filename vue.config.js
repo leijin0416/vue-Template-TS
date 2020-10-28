@@ -22,7 +22,7 @@ const cdn = {
         'vuex': 'Vuex',
         'vue-router': 'VueRouter',
         'axios': 'axios',
-        'element-ui': 'ELEMENT'
+        'element-ui': 'Element'
     },
     css: [
 		'https://lib.baomitu.com/element-ui/2.8.0/theme-chalk/index.css'

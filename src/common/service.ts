@@ -1,4 +1,4 @@
-import axios from './config';
+import axios from './axios';
 
 // 封装HTTP工具类
 export default class Http {
