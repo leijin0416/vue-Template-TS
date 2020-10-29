@@ -5,7 +5,37 @@
 [vuex-class 如何使用](https://blog.csdn.net/qq_33447462/article/details/85251527) -- [1\ 模板 06/19](https://github.com/livelyPeng/vue-cli3-tpl) | [1\ 模板 06/22](https://github.com/Jack-Star-T/Vue3.0-typescript/tree/master/src)
 [vscode 的注释](https://segmentfault.com/q/1010000013367208) -- [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6)   | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
  | ——
-[vuex-module-decorators 私有](https://blog.csdn.net/SkelleBest/article/details/102971817) | [git 上案例](https://github.com/chengxintuan/vue-typescript-project/blob/master/src/page/todo/todo.ts)
+[vuex-module-decorators VUEX私有](https://blog.csdn.net/SkelleBest/article/details/102971817) | [git 上案例](https://github.com/chengxintuan/vue-typescript-project/blob/master/src/page/todo/todo.ts)
+[【1.0】vue-property-decorator 简单用法 -详细](https://blog.csdn.net/sllailcp/article/details/102542796/) +++ [【1.1】git form校验](https://github.com/slailcp/vue-cli3/blob/master/src/pc-project/views/login/index.vue) | ——
+
+---
+
+## @Emit(event?: string)
+
+```js
+// 子组件
+// <button @click="addToCount(person)"> 点击emit </button>
+@Emit()                       // 如果此处不设置别名字,则默认使用下面的函数命名
+addToCount(p: Person) {       // 此处命名如果有大写字母则需要用横线隔开  @add-to-count
+  return this.person;         // 此处不return,则会默认使用括号里的参数p;
+}
+
+// 父组件  -接收
+// <EmitComponent sex='女' @add-to-count="returnPersons" @delemit="delemit"></EmitComponent>
+returnPersons(data: any) {
+    this.emitData = data;
+}
+```
+
+## @Prop()
+
+属性的 ts类型 后面需要加上undefined类型；或者在属性名后面加上!，表示非null 和 非undefined 的断言，否则编译器会给出错误提示；
+
+```js
+
+```
+
+---
 
 ## vue2.5后增加了对ts的支持
 
