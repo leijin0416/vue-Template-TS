@@ -116,7 +116,7 @@ export default class loginPage extends Vue {
     })
     let roleIdType: any = MessageTips(subMenuRoleId, true, true);
     if (roleIdType) {
-
+      // 递归
     }
     console.log(subMenuRoleId);
   }
