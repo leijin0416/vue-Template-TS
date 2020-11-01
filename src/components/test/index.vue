@@ -20,7 +20,7 @@ const someModule = namespace('indexVUEX');
 @Component({
 })
 export default class About extends Vue {
-    @someModule.State(state => state.author) author;
+    @someModule.State(state => state.author) author:any
     // prop
     @Prop({
         required: false,

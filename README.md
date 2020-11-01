@@ -2,11 +2,12 @@
 
 标签|内容
 :-|:-:
-[vuex-class 如何使用](https://blog.csdn.net/qq_33447462/article/details/85251527) -- [1\ 模板 06/19](https://github.com/livelyPeng/vue-cli3-tpl) | [1\ 模板 06/22](https://github.com/Jack-Star-T/Vue3.0-typescript/tree/master/src)
-[vscode 的注释](https://segmentfault.com/q/1010000013367208) -- [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6)   | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
+[vuex-class 如何使用](https://blog.csdn.net/qq_33447462/article/details/85251527) +++ [1\ 模板 06/19](https://github.com/livelyPeng/vue-cli3-tpl) | [1\ 模板 06/22](https://github.com/Jack-Star-T/Vue3.0-typescript/tree/master/src)
+[vscode 的注释](https://segmentfault.com/q/1010000013367208) +++ [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6)  | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
  | ——
 [vuex-module-decorators VUEX私有](https://blog.csdn.net/SkelleBest/article/details/102971817) | [git 上案例](https://github.com/chengxintuan/vue-typescript-project/blob/master/src/page/todo/todo.ts)
-[【1.0】vue-property-decorator 简单用法 -详细](https://blog.csdn.net/sllailcp/article/details/102542796/) +++ [【1.1】git form校验](https://github.com/slailcp/vue-cli3/blob/master/src/pc-project/views/login/index.vue) | ——
+[【1.0】vue-property-decorator 简单用法 -详细](https://blog.csdn.net/sllailcp/article/details/102542796/) +++ [【1.1】git form校验案例](https://github.com/slailcp/vue-cli3/blob/master/src/pc-project/views/login/index.vue) | ——
+[【2.0】Git 前端内参](https://github.com/coffe1891/frontend-hard-mode-interview) +++ [【2.1】Git tower1229 - Tree树形](https://github.com/tower1229) | ——
 
 ---
 
@@ -33,6 +34,23 @@ returnPersons(data: any) {
 
 ```js
 
+```
+
+## VUEX 私有
+
+```js
+// 默认
+import {
+  State,
+  Getter,
+  Action,
+  Mutation,
+  namespace,
+} from 'vuex-class';
+const someModule = namespace('indexVUEX'); // 私有名称
+{
+  @someModule.State(state => state.author) author:any // 取值
+}
 ```
 
 ---

@@ -1,6 +1,9 @@
 const getComponentSMin = (name: any) => () =>
   import(`@/views/${name}.vue`);
 
+const getComponentMMin = (name: any, component: any) => () =>
+  import(`@/views/${name }/${component}.vue`);
+
 /**
  * meta 可配置参数
  * @param displayNavBar 是否需要底部导航
@@ -15,8 +18,9 @@ export const constantRouterMaps = [
     redirect: '/index'
   },
   {
-    path: '/home',
-    component: getComponentSMin('home'),
+    path: '/login',
+    name: 'Login',
+    component: getComponentMMin('login', 'index'),
     meta: { title: '登录_后台管理平台' }
   },
   {

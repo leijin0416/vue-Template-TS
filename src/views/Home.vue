@@ -32,7 +32,6 @@ export default class Home extends Vue {
     // 生命周期
     mounted () {
         this.getApiData();
-        sessionData('set', 'getSessionToken', this.obj);
     }
     getApiData() {
         webGetSelectAreaCode({

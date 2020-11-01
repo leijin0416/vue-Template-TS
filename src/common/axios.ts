@@ -18,12 +18,12 @@ const service = axios.create(axiosConfig);
 // 添加请求拦截器
 service.interceptors.request.use(
   (config) => {
-    const token = sessionData('get', 'getSessionToken', null);
+    const token = sessionData('get', 'HasSessionToken', '');
     // console.log('token：' + token);
     // tslint:disable-next-line:no-unused-expression
     token && (config.headers.token = token);
     config.data = {
-        // 文本数据交换格式
+      // 文本数据交换格式
       data: CryptoJS.Encrypt(JSON.stringify(config.data))
     };
     return config;
@@ -57,6 +57,7 @@ service.interceptors.response.use(
       Message({
         message: error.message,
         type: 'error',
+        showClose: true,
         onClose: () => {}
       });
     }

@@ -101,12 +101,11 @@ export default class HeaderBar extends Vue {
   // 用户名下拉菜单选择事件
   handleCommand(command) {
     let _that = this;
-    if (command == "loginout") {
-      _that.$router.push("/login");
-      sessionData("clean", "", "userNames");
-      sessionData("clean", "", "userNameId");
-      sessionData("clean", "", "userSessionToken");
-      sessionData("clean", "", "navbarData");
+    if (command === 'loginout') {
+      _that.$router.push('/login');
+      sessionData('clean', 'HasSessionUserId', '');
+      sessionData('clean', 'HasSessionToken', '');
+      sessionData('clean', 'navbarData', '');
       // _that.handleBooleanVlue("2");
     }
   }
