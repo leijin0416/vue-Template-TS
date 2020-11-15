@@ -1,4 +1,4 @@
-# TS + Element + VUE2
+# TS + Element + VUE2.0
 
 标签|内容
 :-|:-:
@@ -6,12 +6,18 @@
 [vscode 的注释](https://segmentfault.com/q/1010000013367208) +++ [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6)  | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
  | ——
 [【VUEX私有】vuex-module-decorators](https://blog.csdn.net/SkelleBest/article/details/102971817) | [git 上案例](https://github.com/chengxintuan/vue-typescript-project/blob/master/src/page/todo/todo.ts)
-[【1.0】vue-property-decorator 简单用法 -详细](https://blog.csdn.net/sllailcp/article/details/102542796/) +++ [【1.1】git form校验案例](https://github.com/slailcp/vue-cli3/blob/master/src/pc-project/views/login/index.vue) | ——
+[【1.0】vue-property-decorator 简单用法 -详细](https://blog.csdn.net/sllailcp/article/details/102542796/) +++ [【1.1】Git slailcp -form表单校验](https://github.com/slailcp/vue-cli3/blob/master/src/pc-project/views/login/index.vue) | ——
 [【2.0】Git -前端内参](https://github.com/coffe1891/frontend-hard-mode-interview) +++ [【2.1】Git -tower1229 -Tree树形](https://github.com/tower1229) | ——
+ | ——
+[【Git】Element UI Pro3.0](https://github.com/qidaizhe11/element-pro) | [【掘金】vue-element-admin 登录权限校验](https://juejin.im/post/6894635161326256141)
 
 ---
 
 ## Vuex 私有化
+
+在 vuex 中是要通过 commit 来更改state中的数据.在vuex-module-decorators中有 MutationAction修饰器，可以直接修改state数据
+
+[介绍](https://www.jianshu.com/p/82e3f82c48f5)
 
 ```js
 // 默认
@@ -26,6 +32,40 @@ const someModule = namespace('indexVUEX'); // 私有名称
 {
   @someModule.State(state => state.author) author:any // 取值
 }
+
+---
+
+// getModule: 创建类型安全的访问
+import { Module, VuexModule, Mutation, Action, getModule, MutationAction, } from 'vuex-module-decorators';
+import store from '@/store';
+
+public wheels = 2;
+
+get userNumber(): number {
+  return typeof this.wheels;
+}
+
+@Mutation
+addWheel(n: number) {
+  this.wheels = this.wheels + n;
+}
+
+@Action
+async fetchNewWheels(wheelStore: string) {
+  const wheels = await get(wheelStore);
+  this.context.commit('addWheel', wheels); // 调用
+}
+
+// 可以直接修改 state 中的值（wheels）
+@MutationAction({ mutate: ['wheels',] })
+async setPassenger(name: string) {
+  const response: any = await request(name);
+  return {
+    wheels: name,
+  }
+}
+
+// UserModule.setPassenger('西施');  vue中调用
 ```
 
 ## @Emit(event?: string)
@@ -51,6 +91,38 @@ returnPersons(data: any) {
 
 ```js
 
+@Component({
+  props: {
+    defaultActiveKey: {
+      type: String,
+      default: ''
+    }
+  }
+})
+export default class Login extends Vue{
+  defaultActiveKey: string
+}
+
+// 父
+<login
+  :default-active-key="type"
+  @tab-change="onTabChange"
+  @submit="handleSubmit" >
+```
+
+## 路由： query / params
+
+- 标签跳转: `<router-link :to="{name:'c', params:{id: 1}}">第四个</router-link>`
+
+```js
+{
+  this.$router.push({
+    path: `/user`,
+    params:{
+      id: id
+    }
+  })
+}
 ```
 
 ---
