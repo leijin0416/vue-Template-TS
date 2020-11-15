@@ -2,12 +2,12 @@
 
 标签|内容
 :-|:-:
-[vuex-class 如何使用](https://blog.csdn.net/qq_33447462/article/details/85251527) +++ [1\ 模板 06/19](https://github.com/livelyPeng/vue-cli3-tpl) | [1\ 模板 06/22](https://github.com/Jack-Star-T/Vue3.0-typescript/tree/master/src)
-[vscode 的注释](https://segmentfault.com/q/1010000013367208) +++ [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6)  | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
+[vuex-class 如何使用](https://blog.csdn.net/qq_33447462/article/details/85251527) | [【模板】 06/19](https://github.com/livelyPeng/vue-cli3-tpl) --/-- [【模板】 06/22](https://github.com/Jack-Star-T/Vue3.0-typescript/tree/master/src)
+[vscode 的注释](https://segmentfault.com/q/1010000013367208) --/-- [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6)  | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
  | ——
-[【VUEX私有】vuex-module-decorators](https://blog.csdn.net/SkelleBest/article/details/102971817) | [git 上案例](https://github.com/chengxintuan/vue-typescript-project/blob/master/src/page/todo/todo.ts)
-[【1.0】vue-property-decorator 简单用法 -详细](https://blog.csdn.net/sllailcp/article/details/102542796/) +++ [【1.1】Git slailcp -form表单校验](https://github.com/slailcp/vue-cli3/blob/master/src/pc-project/views/login/index.vue) | ——
-[【2.0】Git -前端内参](https://github.com/coffe1891/frontend-hard-mode-interview) +++ [【2.1】Git -tower1229 -Tree树形](https://github.com/tower1229) | ——
+[【VUEX私有】vuex-module-decorators](https://blog.csdn.net/SkelleBest/article/details/102971817) | [【1.0】vue-property-decorator 用法 详细](https://blog.csdn.net/sllailcp/article/details/102542796/)
+[【Git】 案例](https://github.com/chengxintuan/vue-typescript-project/blob/master/src/page/todo/todo.ts) --/-- [【Git】1.1 slailcp -form表单校验](https://github.com/slailcp/vue-cli3/blob/master/src/pc-project/views/login/index.vue) | ——
+[【Git】2.0 -前端内参 面经](https://github.com/coffe1891/frontend-hard-mode-interview) --/-- [【Git】2.1 tower1229 -Tree树形](https://github.com/tower1229) | ——
  | ——
 [【Git】Element UI Pro3.0](https://github.com/qidaizhe11/element-pro) | [【掘金】vue-element-admin 登录权限校验](https://juejin.im/post/6894635161326256141)
 
