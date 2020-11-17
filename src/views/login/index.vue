@@ -76,10 +76,12 @@ export default class loginPage extends Vue {
     ],
   }
 
-  // validate 报错找不到类型
+  /** 登录校验
+   *  - validate 报错找不到类型
+   */
   submitForm(formName: any) {
     let _that = this;
-    let ref: any = _that.$refs[formName]; // 类型断言的用,定义一个变量等价ref
+    let ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.validate( (valid: any) => {
       if (valid) {
         _that.submitFormClick();
