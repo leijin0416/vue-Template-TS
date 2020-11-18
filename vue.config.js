@@ -7,7 +7,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
-function resolve(dir) { return path.join(__dirname, dir) };
+const resolve = dir => path.join(__dirname, dir);
 
 const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 const isDev = process.env.NODE_ENV;  //当前的环境
@@ -25,14 +25,14 @@ const cdn = {
     'element-ui': 'Element'
   },
   css: [
-		'https://lib.baomitu.com/element-ui/2.8.0/theme-chalk/index.css'
+		'https://lib.baomitu.com/element-ui/2.8.0/theme-chalk/index.css',
 	],
   js: [
     'https://lib.baomitu.com/vue/2.6.6/vue.min.js',
     'https://lib.baomitu.com/vue-router/3.0.1/vue-router.min.js',
     'https://lib.baomitu.com/vuex/3.0.1/vuex.min.js',
 		'https://lib.baomitu.com/axios/0.18.0/axios.min.js',
-		'https://lib.baomitu.com/element-ui/2.8.0/index.js'
+		'https://lib.baomitu.com/element-ui/2.8.0/index.js',
   ]
 }
 
@@ -42,7 +42,7 @@ const isDevCS = {
     changeOrigin: true,
     wx: true,
     pathRewrite: {
-        "^/api": "/"
+      "^/api": "/"
     }
   }
 }
@@ -65,21 +65,25 @@ module.exports = {
 			// 生产环境或本地需要cdn时，才注入cdn
 			if (isProduction || devNeedCdn) args[0].cdn = cdn;
 			return args
-		});
+		})
 		// ============注入cdn end==============
 		config
 			.entry('index')
 			.add('babel-polyfill')
-			.end();
+      .end()
+
+    // 路径别名alias配置
 		config.resolve.alias
 			.set("@", resolve("src"))
 			.set("@img", resolve("src/assets/images"))
 			.set("@css", resolve("src/assets/styles/css"))
-			.set("@scss", resolve("src/assets/styles/scss"));
+      .set("@scss", resolve("src/assets/styles/scss"))
+
 		config
 			.plugin('speed-measure-webpack-plugin')
 			.use(SpeedMeasurePlugin)
-			.end();
+      .end()
+
 		// 生产环境配置
 		if (isProduction) {
 			// 删除预加载
@@ -103,12 +107,12 @@ module.exports = {
 			config.plugins.push(
         // 压缩代码
         new CompressionPlugin({
-            algorithm: 'gzip',
-            filename: '[path].gz[query]',
-            test: productionGzipExtensions,
-            threshold: 10240,
-            minRatio: 0.8,
-            deleteOriginalAssets: false
+          algorithm: 'gzip',
+          filename: '[path].gz[query]',
+          test: productionGzipExtensions,
+          threshold: 10240,
+          minRatio: 0.8,
+          deleteOriginalAssets: false
         }),
 				//生产环境自动删除console
 				new UglifyJsPlugin({
@@ -144,9 +148,7 @@ module.exports = {
 			// pass options to sass-loader
 			sass: {
 				// 引入全局变量样式
-				data: `
-				@import "@/assets/styles/theme.scss";
-				`
+				data: `@import "@/assets/styles/theme.scss";`
 			}
 		},
 		// 启用 CSS modules for all css / pre-processor files.

@@ -25,7 +25,7 @@ export const constantRouterMaps = [
   },
   {
     path: '/',
-    component: resolve => require.ensure([], () => resolve(require('@/components/layout/Init')), 'Index'),
+    component: resolve => require.ensure([], () => resolve(require('@/layout/Init')), 'Index'),
     meta: { title: '初始化组件_后台管理平台' },
     children: [
       {
