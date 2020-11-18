@@ -2,8 +2,6 @@ const path = require("path");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; 
 const CompressionPlugin = require("compression-webpack-plugin");
-// 打包去掉console
-const TerserPlugin = require("terser-webpack-plugin");
 
 // 分析打包时间
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
@@ -60,7 +58,6 @@ module.exports = {
   productionSourceMap: devNeedCdn,
 	// eslint-loader 是否在保存的时候检查
 	lintOnSave: false, // 可恶的eslint,千万不要开启
-	// see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
 	chainWebpack: config => {
 		// ============注入cdn start============
 		config.plugin('html').tap(args => {
