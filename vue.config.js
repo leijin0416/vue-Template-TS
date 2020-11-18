@@ -2,6 +2,8 @@ const path = require("path");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; 
 const CompressionPlugin = require("compression-webpack-plugin");
+// 打包去掉console
+const TerserPlugin = require("terser-webpack-plugin");
 
 // 分析打包时间
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
@@ -101,9 +103,23 @@ module.exports = {
     // 用cdn方式引入，则构建时要忽略相关资源
     if (isProduction || devNeedCdn) config.externals = cdn.externals;
 		// 为生产环境修改配置
-		if (isProduction) {
-			// terser-webpack-plugin 去掉console.log
-			config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
+    if (isProduction) {
+      // terser-webpack-plugin 去掉console.log
+      // config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
+      const optimization: {
+        minimizer: [
+          new TerserPlugin({
+            terserOptions: {
+              compress: {
+                warnings: false,
+                drop_console: true,
+                drop_debugger: true,
+                pure_funcs: ['console.log', 'console.error']
+              },
+            },
+          }),
+        ],
+      }
 			config.plugins.push(
         // 压缩代码
         new CompressionPlugin({
@@ -131,9 +147,14 @@ module.exports = {
         new BundleAnalyzerPlugin(),
         // 打包进度显示
         new ProgressBarPlugin()
-			);
+      )
+      // 将optimization的所有属性合并到config里
+      Object.assign(config, {
+        optimization
+      })
 		} else {
-		  // 为开发环境修改配置...
+      // 为开发环境修改配置...
+      config.mode = 'development'
 		}
 	},
 	productionSourceMap: false, // 生产环境是否生成 sourceMap 文件
