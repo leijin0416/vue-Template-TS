@@ -65,7 +65,7 @@ module.exports = {
 		// ============注入cdn start============
 		config.plugin('html').tap(args => {
 			// 生产环境或本地需要cdn时，才注入cdn
-			if (isProduction || devNeedCdn) args[0].cdn = cdn;
+			if (devNeedCdn) args[0].cdn = cdn;
 			return args
 		})
 		// ============注入cdn end==============
@@ -101,25 +101,13 @@ module.exports = {
 	},
 	configureWebpack: config => {
     // 用cdn方式引入，则构建时要忽略相关资源
-    if (isProduction || devNeedCdn) config.externals = cdn.externals;
+    if (devNeedCdn) config.externals = cdn.externals;
 		// 为生产环境修改配置
     if (isProduction) {
       // terser-webpack-plugin 去掉console.log
-      // config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
-      const optimization: {
-        minimizer: [
-          new TerserPlugin({
-            terserOptions: {
-              compress: {
-                warnings: false,
-                drop_console: true,
-                drop_debugger: true,
-                pure_funcs: ['console.log', 'console.error']
-              },
-            },
-          }),
-        ],
-      }
+      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true;
+      config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log'];
+
 			config.plugins.push(
         // 压缩代码
         new CompressionPlugin({
@@ -147,17 +135,14 @@ module.exports = {
         new BundleAnalyzerPlugin(),
         // 打包进度显示
         new ProgressBarPlugin()
-      )
-      // 将optimization的所有属性合并到config里
-      Object.assign(config, {
-        optimization
-      })
+      );
 		} else {
       // 为开发环境修改配置...
-      config.mode = 'development'
+      config.mode = 'development';
 		}
-	},
-	productionSourceMap: false, // 生产环境是否生成 sourceMap 文件
+  },
+  // 生产环境是否生成 sourceMap 文件
+	productionSourceMap: false,
 	// css相关配置
 	css: {
 		// 是否使用css分离插件 ExtractTextPlugin
