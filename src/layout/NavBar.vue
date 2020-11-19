@@ -161,13 +161,13 @@ export default class TagBar extends Vue {
   created() {
     let navbarData = sessionData('get', '', 'navbarData');
     if (navbarData) {
-        //this.treeData = navbarData;
+      //this.treeData = navbarData;
     }
     // console.log(navbarData);
     
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
     Event.$on('collapse', msg => {
-        this.collapse = msg;
+      this.collapse = msg;
     });
   }
 }

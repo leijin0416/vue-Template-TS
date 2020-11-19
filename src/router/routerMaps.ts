@@ -2,7 +2,7 @@ const getComponentSMin = (name: any) => () =>
   import(`@/views/${name}.vue`);
 
 const getComponentMMin = (name: any, component: any) => () =>
-  import(`@/views/${name }/${component}.vue`);
+  import(`@/views/${name}/${component}.vue`);
 
 /**
  * meta 可配置参数
@@ -14,27 +14,10 @@ const getComponentMMin = (name: any, component: any) => () =>
  */
 export const constantRouterMaps = [
   {
-    path: '/',
-    redirect: '/index'
-  },
-  {
     path: '/login',
     name: 'Login',
     component: getComponentMMin('login', 'index'),
     meta: { title: '登录_后台管理平台' }
-  },
-  {
-    path: '/',
-    component: resolve => require.ensure([], () => resolve(require('@/layout/Init')), 'Index'),
-    meta: { title: '初始化组件_后台管理平台' },
-    children: [
-      {
-        path: '/index',
-        name: 'Index',
-        component: getComponentSMin('index'),
-        meta: { title: '绿色星球' }
-      }
-    ]
   },
 ];
 
@@ -42,34 +25,41 @@ export const constantRouterMaps = [
  *  需要添加 -动态挂载路由1
  *  -navRouters
  */
-export const subMenuRouters = [
-  // {
-  //     path: '/403',
-  //     component: resolve => require.ensure([], () => resolve(require('@/components/page/403')), 'error'),
-  //     meta: { title: '403' }
-  // },
-  // {
-  //     path: '*',
-  //     component: resolve => require.ensure([], () => resolve(require('@/components/page/404')), 'error'),
-  //     meta: { title: '404' }
-  // }
+export const subMenuRouters: any = [
+  {
+    path: '/',
+    name: 'Index',
+    redirect: '/index',
+    component: resolve => require.ensure([], () => resolve(require('@/layout/Init')), 'Index'),
+    meta: { title: '管理模块' },
+    children: [
+      {
+        path: '/index',
+        name: 'welcome',
+        component: getComponentSMin('index'),
+        meta: { title: '管理模块' }
+      },
+    ]
+  },
+  { path: '/404', name: '404', component: getComponentSMin('404'), meta: { title: '404' } },
+  { path: '*', redirect: '/404' },
 ];
 
 /**
  *  需要比对 -本地路由比对后台路由2
  *  -dynamicRouter
  */
-export const dynamicRouter = [
-  // {
-  //     path: '/user/info',
-  //     name: 'userInfo',
-  //     component: getComponentMAx('admin', 'userstree'),
-  //     meta: { title: '树形控件' }
-  // },
-  // {
-  //     path: '/user/property',
-  //     name: 'userProperty',
-  //     component: getComponentMAx('admin', 'usersrole'),
-  //     meta: { title: '用户列表' }
-  // }
+export const dynamicRouter: any = [
+  {
+    path: '/user/info',
+    name: 'userInfo',
+    component: getComponentMMin('system', 'centre'),
+    meta: { title: '树形控件' }
+  },
+  {
+    path: '/user/property',
+    name: 'userProperty',
+    component: getComponentMMin('system', 'jurisdiction'),
+    meta: { title: '用户列表' }
+  }
 ];

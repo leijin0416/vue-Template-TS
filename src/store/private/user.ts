@@ -7,6 +7,7 @@ export default class User extends VuexModule {
   public Token: any = null;
   public UserId: any = '';
   public MenuItem: any = [];
+  public RouterMap: any = [];
 
   get getMessage() {
     return `${this.UserId}`;
@@ -24,6 +25,10 @@ export default class User extends VuexModule {
   public getStoreMenuItem(item: any) {
     this.SET_StoreMenuItem(item);
   }
+  @Action
+  public getStoreRouterMap(item: any) {
+    this.SET_StoreRouterMap(item);
+  }
 
   @Mutation
   private SET_StoreToken(item: any) {
@@ -39,6 +44,11 @@ export default class User extends VuexModule {
   private SET_StoreMenuItem(item: any) {
     this.MenuItem = item;
     sessionData('set', 'HasSessionMenuItem', item);
+  }
+  @Mutation
+  private SET_StoreRouterMap(item: any) {
+    this.RouterMap = item;
+    sessionData('set', 'HasSessionRouterMap', item);
   }
 }
 

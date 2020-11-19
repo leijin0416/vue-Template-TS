@@ -24,9 +24,12 @@
 
 <script lang="ts">
 import md5 from 'js-md5';
-import { Component, Vue, } from 'vue-property-decorator';
+import { Component, Vue, Watch, } from 'vue-property-decorator';
+import { dynamicRouter, subMenuRouters } from '@/router/routerMaps';
+import router from '@/router/index';
 import { UserStore } from '@/store/private/user';
 import { MessageTips } from '@/filters/MessageTips';
+import { TreeForeach } from '@/filters/common';
 import { webGetUserLogin, webGetUserfindRoleById } from "@/api/index";
 
 type IndexData = {
@@ -76,6 +79,13 @@ export default class loginPage extends Vue {
     ],
   }
 
+  @Watch("pageState", {
+    deep: true
+  })
+  private onLayoutChange() {
+    // store.saveLayout();
+  }
+
   /** 登录校验
    *  - validate 报错找不到类型
    */
@@ -103,7 +113,7 @@ export default class loginPage extends Vue {
       'userName': userName,
       'loginPwd': md5s,
     })
-    let type: any = MessageTips(subMenuUserId, false, true);
+    let type: any = MessageTips(subMenuUserId, false, true, '', null, null);
     if (type) {
       let roleId = subMenuUserId.data.data.roleId;
       UserStore.getStoreToken(subMenuUserId.data.data.token);
@@ -111,16 +121,27 @@ export default class loginPage extends Vue {
       _that.submitFormRoleId(roleId);
     }
   }
+
   async submitFormRoleId(roleId: number) {
     let _that = this;
+    let routerMap = subMenuRouters;
     let subMenuRoleId = await webGetUserfindRoleById({
       'roleId': roleId,
     })
-    let roleIdType: any = MessageTips(subMenuRoleId, true, true);
-    if (roleIdType) {
-      // 递归
-    }
-    console.log(subMenuRoleId);
+    MessageTips(subMenuRoleId, true, true, '登录成功，正在跳转', item => {
+      let routers = dynamicRouter;
+      // 权限递归
+      TreeForeach(subMenuRoleId.data.data, tree => {
+        routers.forEach( el => {
+          if(tree.router === el.path) {
+            routerMap[0].children.push(el);
+          }
+        });
+      });
+      router.addRoutes(routerMap);
+      _that.$router.push({path: '/'});
+      UserStore.getStoreRouterMap(routerMap);
+    }, null);
   }
 
   // 重置

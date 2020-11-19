@@ -106,7 +106,7 @@ export default class HeaderBar extends Vue {
       sessionData('clean', 'HasSessionUserId', '');
       sessionData('clean', 'HasSessionToken', '');
       sessionData('clean', 'navbarData', '');
-      // _that.handleBooleanVlue("2");
+      _that.$router.push({path: '/login'});
     }
   }
   // 侧边栏折叠
