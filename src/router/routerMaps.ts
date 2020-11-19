@@ -30,18 +30,18 @@ export const subMenuRouters: any = [
     path: '/',
     name: 'Index',
     redirect: '/index',
-    component: resolve => require.ensure([], () => resolve(require('@/layout/Init')), 'Index'),
+    component: (resolve) => require(['@/layout/Init'], resolve),
     meta: { title: '管理模块' },
     children: [
       {
         path: '/index',
         name: 'welcome',
-        component: getComponentSMin('index'),
+        component: () => import('@/views/index.vue'),
         meta: { title: '管理模块' }
       },
     ]
   },
-  { path: '/404', name: '404', component: getComponentSMin('404'), meta: { title: '404' } },
+  { path: '/404', name: '404', component: () => import('@/views/404.vue'), meta: { title: '404' } },
   { path: '*', redirect: '/404' },
 ];
 

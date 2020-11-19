@@ -26,7 +26,7 @@
 import md5 from 'js-md5';
 import { Component, Vue, Watch, } from 'vue-property-decorator';
 import { dynamicRouter, subMenuRouters } from '@/router/routerMaps';
-import router from '@/router/index';
+import router, { resetRouter } from '@/router/index';
 import { UserStore } from '@/store/private/user';
 import { MessageTips } from '@/filters/MessageTips';
 import { TreeForeach } from '@/filters/common';
@@ -119,6 +119,8 @@ export default class loginPage extends Vue {
       UserStore.getStoreToken(subMenuUserId.data.data.token);
       UserStore.getStoreUserId(roleId);
       _that.submitFormRoleId(roleId);
+      // 调用resetRouter方法，把原来的路由替换
+      resetRouter();
     }
   }
 
@@ -138,9 +140,10 @@ export default class loginPage extends Vue {
           }
         });
       });
+      UserStore.getStoreRouterMap(subMenuRoleId.data.data);
       router.addRoutes(routerMap);
       _that.$router.push({path: '/'});
-      UserStore.getStoreRouterMap(routerMap);
+      
     }, null);
   }
 
