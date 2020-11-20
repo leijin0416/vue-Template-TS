@@ -6,46 +6,43 @@
 </template>
 
 <script lang="ts">
-import md5 from 'js-md5';
 import { Component, Vue, Watch, } from 'vue-property-decorator';
 import router, { resetRouter } from '@/router/index';
 import { subMenuRouters, dynamicRouter } from '@/router/routerMaps';
-import { sessionData } from '@/filters/storage';
 import { UserStore } from '@/store/private/user';
+import { sessionData } from '@/filters/storage';
 import { TreeForeach } from '@/filters/common';
 
 @Component({
-  components: {
-  },
+  components: {},
 })
 export default class Index extends Vue {
   created () {
-    let routerMap = UserStore.RouterMap;
+    let routersMapList = UserStore.RouterMap;
     let sessionRouterMap: any = sessionData('get', 'HasSessionRouterMap', '');
     
-    if (routerMap.length === 0 && sessionRouterMap !== null) {
+    if (routersMapList.length === 0 && sessionRouterMap !== null) {
       this.onUserAddRoutes();
       UserStore.getStoreRouterMap(JSON.parse(sessionRouterMap));
-      console.log(`再次执行路由${routerMap}`);
+      console.log(`再次执行路由${routersMapList}`);
     }
     // console.log(sessionRouterMap);
   }
   
   // 刷新路由
 	onUserAddRoutes () {
-    // 有详情也的可以使用fullpath
-    let subMenuRoutersList = subMenuRouters;
-    let routers = dynamicRouter;
+    let routersMapList = subMenuRouters;
+    let dynamicMapList = dynamicRouter;
     let sessionRouterMap: any = sessionData('get', 'HasSessionRouterMap', '');
-
+    // 权限递归
     TreeForeach(JSON.parse(sessionRouterMap), tree => {
-      routers.forEach(el => {
+      dynamicMapList.forEach(el => {
         if (tree.router === el.path) {
-          subMenuRoutersList[0].children.push(el);
+          routersMapList[0].children.push(el);
         }
       });
     });
-    router.addRoutes(subMenuRoutersList);
+    router.addRoutes(routersMapList);
   }
 }
 </script>

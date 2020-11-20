@@ -3,6 +3,7 @@ import { Message } from 'element-ui';
 /**
  * Message 消息提示
  * @return res
+ * @return true | false
  */
 const MessageTips = (res: any, success: boolean, error: boolean, text: string, successFun: any, errorFun: any) => {
   if (res.data.code === 200) {
@@ -14,7 +15,6 @@ const MessageTips = (res: any, success: boolean, error: boolean, text: string, s
         type: 'success',
         onClose: () => {
           successFun(res);
-          return true;
         }
       });
     }
@@ -27,7 +27,6 @@ const MessageTips = (res: any, success: boolean, error: boolean, text: string, s
         type: 'error',
         onClose: () => {
           errorFun(res);
-          return false;
         }
       });
     }

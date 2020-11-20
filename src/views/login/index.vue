@@ -126,23 +126,25 @@ export default class loginPage extends Vue {
 
   async submitFormRoleId(roleId: number) {
     let _that = this;
-    let routerMap = subMenuRouters;
+    let routersMapList = subMenuRouters;
     let subMenuRoleId = await webGetUserfindRoleById({
       'roleId': roleId,
     })
     MessageTips(subMenuRoleId, true, true, '登录成功，正在跳转', item => {
-      let routers = dynamicRouter;
+      let dynamicMapList = dynamicRouter;
       // 权限递归
-      TreeForeach(subMenuRoleId.data.data, tree => {
-        routers.forEach( el => {
+      TreeForeach(item.data.data, tree => {
+        dynamicMapList.forEach( el => {
           if(tree.router === el.path) {
-            routerMap[0].children.push(el);
+            routersMapList[0].children.push(el);
           }
         });
       });
-      UserStore.getStoreRouterMap(subMenuRoleId.data.data);
-      router.addRoutes(routerMap);
+
+      UserStore.getStoreRouterMap(item.data.data);
+      router.addRoutes(routersMapList);
       _that.$router.push({path: '/'});
+      // console.log(item);
       
     }, null);
   }
