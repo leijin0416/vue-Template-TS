@@ -1,4 +1,5 @@
 <template>
+  <!-- 布局 -->
   <div class="init">
     <HeaderBar></HeaderBar>
     <NavBar></NavBar>

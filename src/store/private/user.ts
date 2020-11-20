@@ -49,6 +49,7 @@ export default class User extends VuexModule {
   private SET_StoreRouterMap(item: any) {
     this.RouterMap = item;
     sessionData('set', 'HasSessionRouterMap', item);
+    console.log(`初次执行路由${item}`);
   }
 }
 

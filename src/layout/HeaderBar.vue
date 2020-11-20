@@ -105,7 +105,7 @@ export default class HeaderBar extends Vue {
       _that.$router.push('/login');
       sessionData('clean', 'HasSessionUserId', '');
       sessionData('clean', 'HasSessionToken', '');
-      sessionData('clean', 'navbarData', '');
+      sessionData('clean', 'HasSessionRouterMap', '');
       _that.$router.push({path: '/login'});
     }
   }

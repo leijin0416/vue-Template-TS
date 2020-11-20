@@ -25,25 +25,27 @@ export default class Index extends Vue {
     
     if (routerMap.length === 0 && sessionRouterMap !== null) {
       this.onUserAddRoutes();
+      UserStore.getStoreRouterMap(JSON.parse(sessionRouterMap));
+      console.log(`再次执行路由${routerMap}`);
     }
+    // console.log(sessionRouterMap);
   }
   
   // 刷新路由
 	onUserAddRoutes () {
     // 有详情也的可以使用fullpath
-    let routerMapList = subMenuRouters;
+    let subMenuRoutersList = subMenuRouters;
     let routers = dynamicRouter;
     let sessionRouterMap: any = sessionData('get', 'HasSessionRouterMap', '');
 
     TreeForeach(JSON.parse(sessionRouterMap), tree => {
       routers.forEach(el => {
         if (tree.router === el.path) {
-          routerMapList[0].children.push(el);
+          subMenuRoutersList[0].children.push(el);
         }
       });
     });
-    router.addRoutes(routerMapList);
-    console.log(JSON.parse(sessionRouterMap));
+    router.addRoutes(subMenuRoutersList);
   }
 }
 </script>
