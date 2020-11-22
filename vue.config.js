@@ -25,14 +25,14 @@ const cdn = {
     'element-ui': 'Element'
   },
   css: [
-		'https://lib.baomitu.com/element-ui/2.8.0/theme-chalk/index.css',
+		'http://lib.baomitu.com/element-ui/2.8.2/theme-chalk/index.css',
 	],
   js: [
-    'https://lib.baomitu.com/vue/2.6.6/vue.min.js',
-    'https://lib.baomitu.com/vue-router/3.0.1/vue-router.min.js',
-    'https://lib.baomitu.com/vuex/3.0.1/vuex.min.js',
-		'https://lib.baomitu.com/axios/0.18.0/axios.min.js',
-		'https://lib.baomitu.com/element-ui/2.8.0/index.js',
+    'http://lib.baomitu.com/vue/2.6.6/vue.min.js',
+    'http://lib.baomitu.com/vue-router/3.0.1/vue-router.min.js',
+    'http://lib.baomitu.com/vuex/3.0.1/vuex.min.js',
+		'http://lib.baomitu.com/axios/0.18.0/axios.min.js',
+		'http://lib.baomitu.com/element-ui/2.8.2/index.js',
   ]
 }
 
