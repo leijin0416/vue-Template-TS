@@ -58,6 +58,12 @@ export default class TagBar extends Vue {
     return this.tagsList.length > 0;
   }
 
+  @Watch("tagsList", {
+    deep: true,
+  })
+  private onLayoutChange() {
+  }
+
   created() {
     let _that = this;
     _that.setTags(_that.$route);
@@ -110,10 +116,10 @@ export default class TagBar extends Vue {
       return item.path === _that.$route.fullPath;
     })
     _that.tagsList = curItem;
-}
+  }
 
   /**
-   *  设置标签
+   *  添加标签
    *  @param {String} route  -路由的数据
    */
   setTags(route: any) {
@@ -131,7 +137,7 @@ export default class TagBar extends Vue {
         name: route.matched[1].components.default.name
       });
     }
-    // console.log(route);
+    console.log(route);
     _that.$emit("tags", this.tagsList);
   }
 

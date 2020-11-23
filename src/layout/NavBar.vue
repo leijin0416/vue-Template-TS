@@ -7,19 +7,20 @@
             background-color="#324157"
             text-color="#bfcbd9" 
             active-text-color="#20a0ff" 
-            unique-opened router>
-            <template v-for="item in items" >
+            unique-opened
+            collapse-transition >
+            <template v-for="item in navMenuData" router >
               <!-- 二级 children -->
-              <template v-if="item.children">
+              <template v-if="item.children && item.children.length > 0">
                 <el-submenu :index="item.index" :key="item.index">
                   <template slot="title">
                     <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
                   </template>
                   <!-- 三级 children -->
                   <template v-for="subItem in item.children">
-                    <el-submenu v-if="subItem.children" :index="subItem.index" :key="subItem.index">
+                    <el-submenu v-if="subItem.children && subItem.children.length > 0" :index="subItem.index" :key="subItem.index">
                       <template slot="title">{{ subItem.title }}</template>
-                      <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.index">
+                      <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.index" >
                         {{ threeItem.title }}
                       </el-menu-item>
                     </el-submenu>
@@ -30,7 +31,7 @@
                 </el-submenu>
               </template>
               <template v-else>
-                <el-menu-item :index="item.index" :key="item.index">
+                <el-menu-item :index="item.index" :key="item.index" >
                   <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
                 </el-menu-item>
               </template>
@@ -81,33 +82,33 @@ export default class TagBar extends Vue {
       title: 'tab选项卡'
     },
     {
-        icon: 'el-icon-lx-calendar',
-        index: '3',
-        title: '表单相关',
-        children: [
-          {
-            index: 'form',
-            title: '基本表单'
-          },
-          {
-            index: '3-2',
-            title: '三级菜单',
-            children: [
-              {
-                index: 'editor',
-                title: '富文本编辑器'
-              },
-              {
-                index: 'markdown',
-                title: 'markdown编辑器'
-              },
-            ]
-          },
-          {
-            index: 'upload',
-            title: '文件上传'
-          }
-        ]
+      icon: 'el-icon-lx-calendar',
+      index: '3',
+      title: '表单相关',
+      children: [
+        {
+          index: 'form',
+          title: '基本表单'
+        },
+        {
+          index: '3-2',
+          title: '三级菜单',
+          children: [
+            {
+              index: 'editor',
+              title: '富文本编辑器'
+            },
+            {
+              index: 'markdown',
+              title: 'markdown编辑器'
+            },
+          ]
+        },
+        {
+          index: 'upload',
+          title: '文件上传'
+        }
+      ]
     },
     {
       icon: 'el-icon-lx-emoji',
@@ -150,7 +151,7 @@ export default class TagBar extends Vue {
       ]
     }
   ];
-  private navData: any = [];
+  private navMenuData: any = [];
   private collapse: boolean = false;
 
   // computed -计算 get 用法
@@ -159,11 +160,15 @@ export default class TagBar extends Vue {
   }
 
   created() {
-    let navbarData = sessionData('get', '', 'navbarData');
+    let data: any = sessionData('get', 'HasSessionRouterMap', '');
+    let navbarData: any = JSON.parse(data);
     if (navbarData) {
-      //this.treeData = navbarData;
+      navbarData.forEach( el => {
+        el.index = el.router
+      });
+      console.log(navbarData);
+      this.navMenuData = navbarData;
     }
-    // console.log(navbarData);
     
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
     Event.$on('collapse', msg => {
