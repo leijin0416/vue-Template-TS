@@ -1,37 +1,38 @@
 <template>
     <div class='navBar'>
         <el-menu 
-            class="sidebar-el-menu" 
-            :default-active="onRoutes" 
+            class="sidebar-el-menu"
+            :default-active="activeIndex" 
             :collapse="collapse" 
+            @select="onSelect"
             background-color="#324157"
             text-color="#bfcbd9" 
             active-text-color="#20a0ff" 
             unique-opened
-            collapse-transition >
-            <template v-for="item in navMenuData" router >
+            collapse-transition router >
+            <template v-for="item in navMenuData" >
               <!-- 二级 children -->
               <template v-if="item.children && item.children.length > 0">
-                <el-submenu :index="item.index" :key="item.index">
+                <el-submenu :index="item.index" :key="item.index" :route="item.router" >
                   <template slot="title">
                     <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
                   </template>
                   <!-- 三级 children -->
                   <template v-for="subItem in item.children">
-                    <el-submenu v-if="subItem.children && subItem.children.length > 0" :index="subItem.index" :key="subItem.index">
+                    <el-submenu v-if="subItem.children && subItem.children.length > 0" :index="subItem.index" :key="subItem.index" :route="subItem.router">
                       <template slot="title">{{ subItem.title }}</template>
-                      <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.index" >
+                      <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.index" :route="threeItem.router" >
                         {{ threeItem.title }}
                       </el-menu-item>
                     </el-submenu>
-                    <el-menu-item v-else :index="subItem.index" :key="subItem.index">
+                    <el-menu-item v-else :index="subItem.index" :key="subItem.index" :route="subItem.router" >
                       {{ subItem.title }}
                     </el-menu-item>
                   </template>
                 </el-submenu>
               </template>
               <template v-else>
-                <el-menu-item :index="item.index" :key="item.index" >
+                <el-menu-item :index="item.index" :key="item.index" :route="item.router" >
                   <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
                 </el-menu-item>
               </template>
@@ -64,7 +65,7 @@ type IndexData = {
 @Component({
   components: {}
 })
-export default class TagBar extends Vue {
+export default class NavBar extends Vue {
   private items: any = [
     {
       icon: 'el-icon-lx-home',
@@ -153,10 +154,12 @@ export default class TagBar extends Vue {
   ];
   private navMenuData: any = [];
   private collapse: boolean = false;
+  private activeIndex: string = '/';
 
   // computed -计算 get 用法
   get onRoutes(): any {
-    return this.$route.path.replace('/', '');
+    let routes = this.activeIndex ? this.activeIndex : this.$route.path.replace('/', '');
+    return routes
   }
 
   created() {
@@ -164,17 +167,31 @@ export default class TagBar extends Vue {
     let navbarData: any = JSON.parse(data);
     if (navbarData) {
       navbarData.forEach( el => {
-        el.index = el.router
+        let data = el.children;
+        el.icon = 'el-icon-folder-opened';
+        el.index = el.id; // 父标识
+        if (data.length > 0) {
+          data.forEach( (els, j) => {
+            els.index = el.id + '-' + j+1;  // 子标识
+          });
+        }
       });
       console.log(navbarData);
       this.navMenuData = navbarData;
-    }
+    };
     
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
     Event.$on('collapse', msg => {
       this.collapse = msg;
     });
-  }
+  };
+
+  // 点击导航
+  onSelect(key: any, keyPath: any) {
+    let _that = this;
+    _that.activeIndex = key;
+    console.log(key, keyPath);
+  };
 }
 </script>
 
