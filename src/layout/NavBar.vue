@@ -52,7 +52,7 @@ import {
   Watch
 } from "vue-property-decorator";
 import Event from '@/utils/Event';
-import { UserModule } from "@/store/private/index";
+import { UserStore } from '@/store/private/user';
 import { sessionData } from "@/filters/storage";
 
 type IndexData = {
@@ -154,7 +154,7 @@ export default class NavBar extends Vue {
   ];
   private navMenuData: any = [];
   private collapse: boolean = false;
-  private activeIndex: string = '/';
+  private activeIndex: string = '1-1';
 
   // computed -计算 get 用法
   get onRoutes(): any {
@@ -163,6 +163,7 @@ export default class NavBar extends Vue {
   }
 
   created() {
+    // 获取并循环 路由数组
     let data: any = sessionData('get', 'HasSessionRouterMap', '');
     let navbarData: any = JSON.parse(data);
     if (navbarData) {
@@ -171,12 +172,13 @@ export default class NavBar extends Vue {
         el.icon = 'el-icon-folder-opened';
         el.index = el.id; // 父标识
         if (data.length > 0) {
-          data.forEach( (els, j) => {
-            els.index = el.id + '-' + j+1;  // 子标识
+          data.forEach( (cd, j) => {
+            let size = Number(j) + 1;
+            cd.index = el.id + '-' + size;  // 子标识
           });
         }
       });
-      console.log(navbarData);
+      // console.log(navbarData);
       this.navMenuData = navbarData;
     };
     
@@ -190,7 +192,8 @@ export default class NavBar extends Vue {
   onSelect(key: any, keyPath: any) {
     let _that = this;
     _that.activeIndex = key;
-    console.log(key, keyPath);
+    UserStore.getStoreMenuItem(key);
+    // console.log(key, keyPath);
   };
 }
 </script>

@@ -1,3 +1,6 @@
+# VUEX私有化
+
+```js
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/store';
 
@@ -37,3 +40,4 @@ export default class Main extends VuexModule {
 }
 
 export const UserModule = getModule(Main);
+```

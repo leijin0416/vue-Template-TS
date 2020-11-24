@@ -33,7 +33,7 @@
             <i class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <a href="/index" target="_blank">
+            <a href="/" target="_blank">
               <el-dropdown-item>关于作者</el-dropdown-item>
             </a>
             <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
@@ -57,7 +57,6 @@ import {
   Vue,
   Watch
 } from "vue-property-decorator";
-import { UserModule } from "@/store/private/index";
 import { sessionData } from "@/filters/storage";
 import Event from "@/utils/Event";
 

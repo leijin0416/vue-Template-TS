@@ -6,11 +6,11 @@ import { sessionData } from '@/filters/storage';
 export default class User extends VuexModule {
   public Token: any = null;
   public UserId: any = '';
-  public MenuItem: any = [];
+  public MenuItem: any = '';
   public RouterMap: any = [];
 
-  get getMessage() {
-    return `${this.UserId}`;
+  get getMenuItem() {
+    return `${this.MenuItem}`;
   }
 
   @Action
@@ -22,7 +22,7 @@ export default class User extends VuexModule {
     this.SET_StoreUserId(item);
   }
   @Action
-  public getStoreMenuItem(item: any) {
+  public getStoreMenuItem(item: string) {
     this.SET_StoreMenuItem(item);
   }
   @Action
@@ -34,22 +34,25 @@ export default class User extends VuexModule {
   private SET_StoreToken(item: any) {
     this.Token = item;
     sessionData('set', 'HasSessionToken', item);
+    console.log(`用户TOKEN >>> ${item}`);
   }
   @Mutation
   private SET_StoreUserId(item: any) {
     this.UserId = item;
     sessionData('set', 'HasSessionUserId', item);
+    console.log(`用户ID >>> ${item}`);
   }
   @Mutation
-  private SET_StoreMenuItem(item: any) {
+  private SET_StoreMenuItem(item: string) {
     this.MenuItem = item;
     sessionData('set', 'HasSessionMenuItem', item);
+    console.log(`左侧路由INDEX >>> ${item}`);
   }
   @Mutation
   private SET_StoreRouterMap(item: any) {
     this.RouterMap = item;
     sessionData('set', 'HasSessionRouterMap', item);
-    console.log(`初次执行路由${item}`);
+    console.log(`初次执行路由 >>> ${item}`);
   }
 }
 

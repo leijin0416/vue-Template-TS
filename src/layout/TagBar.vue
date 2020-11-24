@@ -37,7 +37,7 @@ import {
   Vue,
   Watch
 } from "vue-property-decorator";
-import { UserModule } from "@/store/private/index";
+import { UserStore } from '@/store/private/user';
 import { sessionData } from "@/filters/storage";
 
 type IndexData = {
@@ -53,15 +53,16 @@ type IndexData = {
 export default class TagBar extends Vue {
   private tagsList: any = [];
 
+  readonly pageState = UserStore.MenuItem;
+
   // computed -计算 get 用法
   get showTags(): any {
     return this.tagsList.length > 0;
   }
 
-  @Watch("tagsList", {
-    deep: true,
-  })
-  private onLayoutChange() {
+  @Watch("UserStore.MenuItem", { deep: true, })
+  private onChildChanged(newVal, oldVal) {
+    console.log(newVal);
   }
 
   created() {
@@ -137,7 +138,7 @@ export default class TagBar extends Vue {
         name: route.matched[1].components.default.name
       });
     }
-    console.log(route);
+    // console.log(route);
     _that.$emit("tags", this.tagsList);
   }
 

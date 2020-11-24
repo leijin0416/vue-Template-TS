@@ -30,7 +30,6 @@ import HeaderBar from './HeaderBar.vue';
 import NavBar from './NavBar.vue';
 import TagBar from './TagBar.vue';
 import Event from '@/utils/Event';
-import { UserModule } from "@/store/private/index";
 import { sessionData } from "@/filters/storage";
 
 type IndexData = {
