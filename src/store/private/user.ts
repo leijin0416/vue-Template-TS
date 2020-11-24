@@ -34,13 +34,13 @@ export default class User extends VuexModule {
   private SET_StoreToken(item: any) {
     this.Token = item;
     sessionData('set', 'HasSessionToken', item);
-    console.log(`用户TOKEN >>> ${item}`);
+    console.log(`用户TOKEN >>> ${true}`);
   }
   @Mutation
   private SET_StoreUserId(item: any) {
     this.UserId = item;
     sessionData('set', 'HasSessionUserId', item);
-    console.log(`用户ID >>> ${item}`);
+    console.log(`用户ID >>> ${true}`);
   }
   @Mutation
   private SET_StoreMenuItem(item: string) {

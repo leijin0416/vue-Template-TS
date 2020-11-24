@@ -53,15 +53,18 @@ type IndexData = {
 export default class TagBar extends Vue {
   private tagsList: any = [];
 
-  readonly pageState = UserStore.MenuItem;
-
   // computed -计算 get 用法
   get showTags(): any {
     return this.tagsList.length > 0;
   }
 
-  @Watch("UserStore.MenuItem", { deep: true, })
-  private onChildChanged(newVal, oldVal) {
+  get pageStates(): any {
+    let state = UserStore.MenuItem;
+    return state;
+  }
+
+  @Watch("pageStates", { deep: true, })
+  private getShowStatus(newVal, oldVal) {
     console.log(newVal);
   }
 
