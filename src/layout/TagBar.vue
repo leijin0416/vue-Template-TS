@@ -3,13 +3,17 @@
     <ul>
       <li
         class="tags-li"
-        v-for="(item,index) in tagsList"
+        v-for="(item, index) in tagsList"
         :class="{'active': isActive(item.path)}"
         :key="index" >
-        <router-link :to="item.path" class="tags-li-title">{{item.title}}</router-link>
-        <span class="tags-li-icon" @click="closeTags(index)">
+        <span class="tags-li-title" @click="onTagsClick(item)">{{item.title}}</span>
+        <span class="tags-li-icon" v-if="item.name === 'Index'">
+          <i class="el-icon-s-opportunity"></i>
+        </span>
+        <span class="tags-li-icon" @click="closeTags(index)" v-else>
           <i class="el-icon-close"></i>
         </span>
+        
       </li>
     </ul>
     <div class="tags-close-box">
@@ -39,6 +43,7 @@ import {
 } from "vue-property-decorator";
 import { UserStore } from '@/store/private/user';
 import { sessionData } from "@/filters/storage";
+import { TreeForeach, FormatArrMapHas } from '@/filters/common';
 
 type IndexData = {
   collapses: boolean;
@@ -52,6 +57,7 @@ type IndexData = {
 })
 export default class TagBar extends Vue {
   private tagsList: any = [];
+  private tagsId: any = '';
 
   // computed -计算 get 用法
   get showTags(): any {
@@ -59,42 +65,46 @@ export default class TagBar extends Vue {
   }
 
   get pageStates(): any {
-    let state = UserStore.MenuItem;
+    let state = UserStore.MenuItemId;
     return state;
   }
 
   @Watch("pageStates", { deep: true, })
   private getShowStatus(newVal, oldVal) {
-    console.log(newVal);
+    let _that = this;
+    if (newVal !== '') {
+      _that.tagsId = newVal;
+      _that.setTags(_that.$route);
+    }
+    console.log(`【监听】TAG路由INDEX：${newVal}`);
   }
 
   created() {
     let _that = this;
-    _that.setTags(_that.$route);
-    // 监听关闭当前页面的标签页
-    _that.$on("close_current_tags", () => {
-      for (let i = 0, len = _that.tagsList.length; i < len; i++) {
-        const item = _that.tagsList[i];
-        if (item.path === _that.$route.fullPath) {
-          if (i < len - 1) {
-            _that.$router.push(_that.tagsList[i + 1].path);
-          } else if (i > 0) {
-            _that.$router.push(_that.tagsList[i - 1].path);
-          } else {
-            _that.$router.push("/");
-          }
-          _that.tagsList.splice(i, 1);
-        }
-      }
-    });
+    let sessionMenuItem: any = sessionData('get', 'HasSessionTagsMap', '');
+    if (sessionMenuItem !== null) {
+      _that.tagsList = JSON.parse(sessionMenuItem);
+      // console.log(sessionMenuItem);
+    } else {
+      _that.setTags(_that.$route);
+    }
   }
   
+  // 添加Class
   isActive(path: any) {
+    // console.log(path);
     let _that = this;
     return path === _that.$route.fullPath;
   }
 
-  // 关闭单个标签
+  /**
+   *  关闭【单个】标签
+   *  @param {Object} item                 -关闭后的当前标签
+   *  @param {Object} delItem              -要关闭的标签
+   * 
+   *  @param {String} getStoreMenuItemId   -更新INDEX
+   *  @param {Array}  getStoreTagsItem     -更新TAG数组
+   */
   closeTags(index: any) {
     let _that = this;
     const delItem = _that.tagsList.splice(index, 1)[0];
@@ -104,22 +114,40 @@ export default class TagBar extends Vue {
     } else {
       _that.$router.push('/');
     }
+    UserStore.getStoreMenuItemId(item.index);
+    UserStore.getStoreTagsItem(_that.tagsList);
   }
 
-  // 关闭全部标签
+  /**
+   *  关闭【全部】标签
+   *  @param {String} getStoreMenuItemId  -更新INDEX
+   */
   closeAll() {
     let _that = this;
-    _that.tagsList = [];
+    _that.tagsList.length = 0;
     _that.$router.push('/');
+    _that.tagsList.push({
+      title: _that.$route.meta.title,
+      path: _that.$route.fullPath,
+      index: '',
+      name: _that.$route.matched[1].components.default.name
+    });
+    UserStore.getStoreMenuItemId('');
   }
 
-  // 关闭其他标签
+  /**
+   *  关闭【其他】标签
+   *  @param {String} getStoreMenuItemId  -更新INDEX
+   *  @param {Array} getStoreTagsItem     -更新TAG数组
+   */
   closeOther() {
     let _that = this;
     const curItem = _that.tagsList.filter(item => {
       return item.path === _that.$route.fullPath;
     })
     _that.tagsList = curItem;
+    UserStore.getStoreMenuItemId(curItem[0].index);
+    UserStore.getStoreTagsItem(curItem);
   }
 
   /**
@@ -128,25 +156,46 @@ export default class TagBar extends Vue {
    */
   setTags(route: any) {
     let _that = this;
-    const isExist = _that.tagsList.some(item => {
-      return item.path === route.fullPath;
-    });
-    if (!isExist) {
-      if (_that.tagsList.length >= 8) {
-        _that.tagsList.shift();
-      }
+    let data = _that.tagsList;
+    let sessionRouterMap: any = sessionData('get', 'HasSessionMenuItem', '');
+    let sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
+    let tagsId: string = _that.tagsId ? _that.tagsId : sessionRouterId;
+    if (_that.tagsList.length == 0) {
       _that.tagsList.push({
         title: route.meta.title,
         path: route.fullPath,
+        index: '',
         name: route.matched[1].components.default.name
       });
+      
+    } else {
+      // 权限递归
+      TreeForeach(JSON.parse(sessionRouterMap), tree => {
+        // data.push(tree);
+        if (tree.index === tagsId) {
+          data.push({
+            title: tree.title,
+            path: tree.router,
+            name: tree.remarks,
+            index: tree.index,
+          });
+        }
+      });
+      _that.tagsList = FormatArrMapHas(data);
+      
     }
-    // console.log(route);
-    _that.$emit("tags", this.tagsList);
+    _that.$emit("tags", _that.tagsList);
+    UserStore.getStoreTagsItem(_that.tagsList);
   }
 
   handleTags(command: any) {
     command === 'other' ? this.closeOther() : this.closeAll();
+  }
+
+  onTagsClick(item) {
+    let _that = this;
+    _that.$router.push(item.path);
+    UserStore.getStoreMenuItemId(item.index);
   }
 }
 </script>

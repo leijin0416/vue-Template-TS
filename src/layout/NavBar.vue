@@ -154,7 +154,7 @@ export default class NavBar extends Vue {
   ];
   private navMenuData: any = [];
   private collapse: boolean = false;
-  private activeIndex: string = '1-1';
+  private activeIndex: string = '';
 
   // computed -计算 get 用法
   get onRoutes(): any {
@@ -162,10 +162,29 @@ export default class NavBar extends Vue {
     return routes
   }
 
+  get pageStates(): any {
+    let state = UserStore.MenuItemId;
+    return state;
+  }
+
+  @Watch("pageStates", { deep: true, })
+  private getShowStatus(newVal, oldVal) {
+    let _that = this;
+    if (newVal === '') {
+      _that.activeIndex = '';
+    } else {
+      _that.activeIndex = newVal;
+    }
+    console.log(`【监听】NAV路由INDEX：${newVal}`);
+  }
+
   created() {
+    let _that = this;
+    let sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
     // 获取并循环 路由数组
     let data: any = sessionData('get', 'HasSessionRouterMap', '');
     let navbarData: any = JSON.parse(data);
+    if (sessionRouterId != null) _that.activeIndex = sessionRouterId;
     if (navbarData) {
       navbarData.forEach( el => {
         let data = el.children;
@@ -179,12 +198,13 @@ export default class NavBar extends Vue {
         }
       });
       // console.log(navbarData);
-      this.navMenuData = navbarData;
+      _that.navMenuData = navbarData;
+      UserStore.getStoreMenuItem(navbarData);
     };
     
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
     Event.$on('collapse', msg => {
-      this.collapse = msg;
+      _that.collapse = msg;
     });
   };
 
@@ -192,7 +212,7 @@ export default class NavBar extends Vue {
   onSelect(key: any, keyPath: any) {
     let _that = this;
     _that.activeIndex = key;
-    UserStore.getStoreMenuItem(key);
+    UserStore.getStoreMenuItemId(key);
     // console.log(key, keyPath);
   };
 }

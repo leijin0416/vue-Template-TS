@@ -54,12 +54,12 @@ export const dynamicRouter: any = [
     path: '/user/info',
     name: 'userInfo',
     component: getComponentMMin('system', 'centre'),
-    meta: { title: '树形控件' }
+    meta: { title: '用户信息' }
   },
   {
     path: '/user/property',
     name: 'userProperty',
     component: getComponentMMin('system', 'jurisdiction'),
-    meta: { title: '用户列表' }
+    meta: { title: '用户资产' }
   }
 ];

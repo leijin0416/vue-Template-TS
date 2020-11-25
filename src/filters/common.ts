@@ -10,4 +10,16 @@ const TreeForeach =  (tree: any, func: any) => {
   });
 };
 
-export { TreeForeach };
+// 去重
+const FormatArrMapHas = (tree: any) => {
+  let map = new Map();
+  for (let item of tree) {
+    if (!map.has(item.title)) {
+      map.set(item.title, item);
+    }
+  }
+  return [...map.values()];
+};
+
+
+export { TreeForeach, FormatArrMapHas };
