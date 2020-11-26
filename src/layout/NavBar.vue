@@ -219,6 +219,10 @@ export default class NavBar extends Vue {
 </script>
 
 <style lang='scss' scoped>
+.el-menu-item.is-active {
+  color: #20a0ff !important;
+  background-color: #43556f !important;
+}
 .navBar {
   ul {
     position: relative;

@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import NProgress from 'nprogress';
 import { constantRouterMaps } from './routerMaps';
 import { sessionData } from '@/filters/storage';
-import { UserStore } from '@/store/private/user';
-import { subMenuRouters, dynamicRouter } from '@/router/routerMaps';
+import 'nprogress/nprogress.css';
 
 Vue.use(Router);
 
@@ -26,10 +26,13 @@ const LOGIN_PAGE_NAME = 'Login';
 router.beforeEach((to: any, from, next) => {
   document.title = to.meta.title;    // 改变每次页面的标题
   const token = sessionData('get', 'HasSessionToken', '');
+
+  // 进度条
+  if (to.path !== from.path) NProgress.start();
   if (!token && to.name !== LOGIN_PAGE_NAME) {
-    // 未登录且要跳转的页面不是登录页
+    // 未登录且要跳转的页面不是登录页，则跳转到登录页
     next({
-      name: LOGIN_PAGE_NAME // 跳转到登录页
+      name: LOGIN_PAGE_NAME
     });
 
   } else if (!token && to.name === LOGIN_PAGE_NAME) {
@@ -44,7 +47,7 @@ router.beforeEach((to: any, from, next) => {
 
 // 跳转之后
 router.afterEach(to => {
-    //
+  NProgress.done();
 });
 
 export default router;

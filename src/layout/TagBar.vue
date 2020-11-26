@@ -97,6 +97,13 @@ export default class TagBar extends Vue {
     return path === _that.$route.fullPath;
   }
 
+  // 跳转路由
+  onTagsClick(item) {
+    let _that = this;
+    _that.$router.push(item.path);
+    UserStore.getStoreMenuItemId(item.index);
+  }
+
   /**
    *  关闭【单个】标签
    *  @param {Object} item                 -关闭后的当前标签
@@ -120,6 +127,7 @@ export default class TagBar extends Vue {
 
   /**
    *  关闭【全部】标签
+   * 
    *  @param {String} getStoreMenuItemId  -更新INDEX
    */
   closeAll() {
@@ -137,6 +145,7 @@ export default class TagBar extends Vue {
 
   /**
    *  关闭【其他】标签
+   * 
    *  @param {String} getStoreMenuItemId  -更新INDEX
    *  @param {Array} getStoreTagsItem     -更新TAG数组
    */
@@ -153,6 +162,10 @@ export default class TagBar extends Vue {
   /**
    *  添加标签
    *  @param {String} route  -路由的数据
+   * 
+   *  @param {Array}  sessionRouterMap     -【缓存】左侧NAV数组
+   *  @param {String} sessionRouterId      -【缓存】左侧NAV数组INDEX
+   *  @param {String} getStoreTagsItem     -【缓存】TAG数组
    */
   setTags(route: any) {
     let _that = this;
@@ -190,12 +203,6 @@ export default class TagBar extends Vue {
 
   handleTags(command: any) {
     command === 'other' ? this.closeOther() : this.closeAll();
-  }
-
-  onTagsClick(item) {
-    let _that = this;
-    _that.$router.push(item.path);
-    UserStore.getStoreMenuItemId(item.index);
   }
 }
 </script>

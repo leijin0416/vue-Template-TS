@@ -17,6 +17,7 @@
 		"crypto-js": "^3.1.9-1",
 		"element-ui": "^2.8.0",
 		"js-md5": "^0.7.3",
+		"nprogress": "^0.2.0",
 		"vue": "^2.6.6",
 		"vue-class-component": "^7.2.6",
 		"vue-property-decorator": "^7.0.0",
