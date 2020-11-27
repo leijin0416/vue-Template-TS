@@ -13,7 +13,6 @@
         <span class="tags-li-icon" @click="closeTags(index)" v-else>
           <i class="el-icon-close"></i>
         </span>
-        
       </li>
     </ul>
     <div class="tags-close-box">
@@ -76,7 +75,7 @@ export default class TagBar extends Vue {
       _that.tagsId = newVal;
       _that.setTags(_that.$route);
     }
-    console.log(`【监听】TAG路由INDEX：${newVal}`);
+    console.log(`【监听】TAG数组路由INDEX：${newVal}`);
   }
 
   created() {
@@ -90,7 +89,10 @@ export default class TagBar extends Vue {
     }
   }
   
-  // 添加Class
+  /**
+   * 是否高亮  添加Class
+   * @param path path路由对象
+   */
   isActive(path: any) {
     // console.log(path);
     let _that = this;
@@ -110,7 +112,7 @@ export default class TagBar extends Vue {
    *  @param {Object} delItem              -要关闭的标签
    * 
    *  @param {String} getStoreMenuItemId   -更新INDEX
-   *  @param {Array}  getStoreTagsItem     -更新TAG数组
+   *  @param {Array}  getStoreTagsItem     -更新TAG数组标签
    */
   closeTags(index: any) {
     let _that = this;
@@ -128,26 +130,25 @@ export default class TagBar extends Vue {
   /**
    *  关闭【全部】标签
    * 
-   *  @param {String} getStoreMenuItemId  -更新INDEX
+   *  @param {String} getStoreMenuItemId  -【缓存】更新INDEX
+   *  @param {Array} getStoreTagsItem     -【缓存】更新TAG数组标签
    */
   closeAll() {
     let _that = this;
-    _that.tagsList.length = 0;
+    let arr = _that.tagsList;
     _that.$router.push('/');
-    _that.tagsList.push({
-      title: _that.$route.meta.title,
-      path: _that.$route.fullPath,
-      index: '',
-      name: _that.$route.matched[1].components.default.name
-    });
+    let arrFilter = arr.filter(ele => ele.index === '');
+    _that.tagsList = arrFilter;
+    
     UserStore.getStoreMenuItemId('');
+    UserStore.getStoreTagsItem(arrFilter);
   }
 
   /**
    *  关闭【其他】标签
    * 
-   *  @param {String} getStoreMenuItemId  -更新INDEX
-   *  @param {Array} getStoreTagsItem     -更新TAG数组
+   *  @param {String} getStoreMenuItemId  -【缓存】更新INDEX
+   *  @param {Array} getStoreTagsItem     -【缓存】更新TAG数组标签
    */
   closeOther() {
     let _that = this;
@@ -165,7 +166,7 @@ export default class TagBar extends Vue {
    * 
    *  @param {Array}  sessionRouterMap     -【缓存】左侧NAV数组
    *  @param {String} sessionRouterId      -【缓存】左侧NAV数组INDEX
-   *  @param {String} getStoreTagsItem     -【缓存】TAG数组
+   *  @param {String} getStoreTagsItem     -【缓存】TAG数组标签
    */
   setTags(route: any) {
     let _that = this;
@@ -214,7 +215,7 @@ export default class TagBar extends Vue {
   height: 30px;
   overflow: hidden;
   background: #fff;
-  padding: 5px 120px 5px 0;
+  padding: 3px 120px 3px 0;
   box-shadow: 0 4px 6px #ddd;
 
   ul {
@@ -231,7 +232,7 @@ export default class TagBar extends Vue {
     margin-left: 5px;
     vertical-align: middle;
     font-size: 12px;
-    line-height: 1;
+    line-height: 1.2;
     overflow: hidden;
     border: 1px solid #e9eaec;
     border-radius: 3px;
@@ -247,12 +248,21 @@ export default class TagBar extends Vue {
   }
 
   .tags-li.active {
-    color: #fff;
-  }
-  .tags-li.active {
     border: 1px solid #409eff;
+    color: #fff;
     background-color: #409eff;
+    .tags-li-title::before {
+      content: "";
+      background: #fff;
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      position: relative;
+      margin-right: 5px;
+    }
   }
+  
   .tags-li-title {
     float: left;
     max-width: 80px;
@@ -276,10 +286,13 @@ export default class TagBar extends Vue {
     box-sizing: border-box;
     width: 110px;
     min-height: 30px;
-    line-height: 35px;
+    line-height: 32px;
     text-align: center;
     box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1);
     background: #fff;
+    .el-button {
+      line-height: 1.2;
+    }
   }
 }
 </style>

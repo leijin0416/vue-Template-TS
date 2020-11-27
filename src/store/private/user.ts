@@ -74,6 +74,7 @@ export default class User extends VuexModule {
   private SET_StoreTagsItem(item: any) {
     this.TagListMap = item;
     sessionData('set', 'HasSessionTagsMap', item);
+    console.log(`【缓存】TAG数组标签 >>> ${item}`);
   }
 }
 

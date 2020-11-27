@@ -159,7 +159,7 @@ export default class NavBar extends Vue {
   // computed -计算 get 用法
   get onRoutes(): any {
     let routes = this.activeIndex ? this.activeIndex : this.$route.path.replace('/', '');
-    return routes
+    return routes;
   }
 
   get pageStates(): any {
@@ -170,12 +170,9 @@ export default class NavBar extends Vue {
   @Watch("pageStates", { deep: true, })
   private getShowStatus(newVal, oldVal) {
     let _that = this;
-    if (newVal === '') {
-      _that.activeIndex = '';
-    } else {
-      _that.activeIndex = newVal;
-    }
-    console.log(`【监听】NAV路由INDEX：${newVal}`);
+    if (newVal === '') _that.activeIndex = '';
+    else _that.activeIndex = newVal;
+    console.log(`【监听】NAV数组路由INDEX：${newVal}`);
   }
 
   created() {
