@@ -66,7 +66,7 @@ type IndexData = {
   names: string;
   messages: number;
 };
-// 挂载组件
+
 @Component({
   components: {}
 })
@@ -91,6 +91,7 @@ export default class HeaderBar extends Vue {
 
   // 初始化记载
   created() {}
+
   // DOM加载完毕执行操作
   mounted() {
     if (document.body.clientWidth < 1500) {
@@ -101,22 +102,24 @@ export default class HeaderBar extends Vue {
   handleCommand(command) {
     let _that = this;
     if (command === 'loginout') {
-      _that.$router.push('/login');
       sessionData('clean', 'HasSessionUserId', '');
       sessionData('clean', 'HasSessionToken', '');
       sessionData('clean', 'HasSessionRouterMap', '');
       sessionData('clean', 'HasSessionMenuItemId', '');
       sessionData('clean', 'HasSessionMenuItem', '');
       sessionData('clean', 'HasSessionTagsMap', '');
-      _that.$router.push({path: '/login'});
+      location.reload();
+      // _that.$router.push({path: '/login'});
     }
   }
+
   // 侧边栏折叠
   collapseChage() {
     let _that = this;
     _that.collapse = !_that.collapse;
     Event.$emit("collapse", _that.collapse);
   }
+
   // 全屏事件
   handleFullScreen() {
     let _that = this;
@@ -148,6 +151,7 @@ export default class HeaderBar extends Vue {
     }
     _that.fullscreen = !_that.fullscreen;
   }
+  
   // 离开路由的操作
   destroyed() {}
 }

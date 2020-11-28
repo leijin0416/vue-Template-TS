@@ -79,13 +79,6 @@ export default class loginPage extends Vue {
     ],
   }
 
-  @Watch("pageState", {
-    deep: true
-  })
-  private onLayoutChange() {
-    // store.saveLayout();
-  }
-
   /** 登录校验
    *  - validate 报错找不到类型
    */
@@ -112,7 +105,7 @@ export default class loginPage extends Vue {
     let subMenuUserId = await webGetUserLogin({
       'userName': userName,
       'loginPwd': md5s,
-    })
+    });
     let type: any = MessageTips(subMenuUserId, false, true, '', null, null);
     if (type) {
       let roleId = subMenuUserId.data.data.roleId;
@@ -129,7 +122,7 @@ export default class loginPage extends Vue {
     let routersMapList = subMenuRouters;
     let subMenuRoleId = await webGetUserfindRoleById({
       'roleId': roleId,
-    })
+    });
     MessageTips(subMenuRoleId, true, true, '登录成功，正在跳转', item => {
       let dynamicMapList = dynamicRouter;
       // 权限递归
@@ -154,7 +147,6 @@ export default class loginPage extends Vue {
     let ref: any = this.$refs[formName];
     ref.resetFields();
   }
-
 }
 </script>
 

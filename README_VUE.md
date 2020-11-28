@@ -162,7 +162,6 @@ returnPersons(data: any) {
 属性的 ts类型 后面需要加上undefined类型；或者在属性名后面加上!，表示非null 和 非undefined 的断言，否则编译器会给出错误提示；
 
 ```js
-
 @Component({
   props: {
     defaultActiveKey: {

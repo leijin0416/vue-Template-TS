@@ -13,8 +13,6 @@
 
 ---
 
----
-
 ## vue2.5后增加了对ts的支持
 
 - `vue-class-component：` 强化 Vue 组件，使用 TypeScript/装饰器 增强 Vue 组件；
