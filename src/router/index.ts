@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import NProgress from 'nprogress';
 import { constantRouterMaps } from './routerMaps';
 import { sessionData } from '@/filters/storage';
+
 import 'nprogress/nprogress.css';
 
 Vue.use(Router);
