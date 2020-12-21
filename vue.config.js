@@ -1,7 +1,7 @@
 const path = require("path");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; 
 const CompressionPlugin = require("compression-webpack-plugin");
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // 分析打包时间
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
@@ -115,19 +115,6 @@ module.exports = {
           minRatio: 0.8,
           deleteOriginalAssets: false
         }),
-				//生产环境自动删除console
-				new UglifyJsPlugin({
-					uglifyOptions: {
-						compress: {
-							warnings: false,
-							drop_debugger: true,
-							drop_console: true,
-              pure_funcs: ['console.log']
-						},
-					},
-					sourceMap: false,
-					parallel: true
-				}),
         // 体积压缩提示
         new BundleAnalyzerPlugin(),
         // 打包进度显示
