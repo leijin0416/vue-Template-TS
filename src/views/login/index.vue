@@ -28,8 +28,10 @@ import { Component, Vue, Watch, } from 'vue-property-decorator';
 import { dynamicRouter, subMenuRouters } from '@/router/routerMaps';
 import router, { resetRouter } from '@/router/index';
 import { UserStore } from '@/store/private/user';
+
 import { MessageTips } from '@/filters/MessageTips';
 import { TreeForeach } from '@/filters/common';
+import { childrenRouter } from '@/mock/childrenRouter';
 import { webGetUserLogin, webGetUserfindRoleById } from "@/api/index";
 
 type IndexData = {
@@ -44,6 +46,9 @@ export default class loginPage extends Vue {
     userName: 'admin',
     pass: '123456',
   }
+
+  // 请求环境
+  private LocalStatus: boolean = false;
 
   // 校验
   validateuserName = (rule: any, value: string, callback: Function) => {
@@ -90,7 +95,6 @@ export default class loginPage extends Vue {
         _that.submitFormClick();
         // console.log(_that.ruleForm);
         // this.$store.dispatch('login', this.ruleForm);
-
       } else {
         console.log('error submit!!');
         return false;
@@ -98,35 +102,61 @@ export default class loginPage extends Vue {
     });
   }
 
+  // 1\ 按钮登录
   async submitFormClick() {
     let _that = this;
     let { userName, pass } = _that.ruleForm;
-    let md5s = md5(pass).toUpperCase();
-    let subMenuUserId = await webGetUserLogin({
-      'userName': userName,
-      'loginPwd': md5s,
-    });
-    let type: any = MessageTips(subMenuUserId, false, true, '', null, null);
-    if (type) {
-      let roleId = subMenuUserId.data.data.roleId;
-      UserStore.getStoreToken(subMenuUserId.data.data.token);
-      UserStore.getStoreUserId(roleId);
-      _that.submitFormRoleId(roleId);
-      // 调用resetRouter方法，把原来的路由替换
+    if (_that.LocalStatus) {
+      let md5s = md5(pass).toUpperCase();
+      let subMenuUserId = await webGetUserLogin({
+        'userName': userName,
+        'loginPwd': md5s,
+      });
+      let type: any = MessageTips(subMenuUserId, false, true, '', null, null);
+      if (type) {
+        let roleId = subMenuUserId.data.data.roleId;
+        UserStore.getStoreToken(subMenuUserId.data.data.token);
+        UserStore.getStoreUserId(roleId);
+        _that.submitFormRoleId(roleId);
+        // 调用resetRouter方法，把原来的路由替换
+        resetRouter();
+      }
+    } else {
+      UserStore.getStoreToken(123);
+      _that.submitFormRoleId(1);
       resetRouter();
     }
   }
 
+  // 2\ 用户ID -> 权限表
   async submitFormRoleId(roleId: number) {
     let _that = this;
     let routersMapList = subMenuRouters;
-    let subMenuRoleId = await webGetUserfindRoleById({
-      'roleId': roleId,
-    });
-    MessageTips(subMenuRoleId, true, true, '登录成功，正在跳转', item => {
+    if (_that.LocalStatus) {
+      let subMenuRoleId = await webGetUserfindRoleById({
+        'roleId': roleId,
+      });
+      MessageTips(subMenuRoleId, true, true, '登录成功，正在跳转', item => {
+        let dynamicMapList = dynamicRouter;
+        // 权限递归
+        TreeForeach(item.data.data, tree => {
+          dynamicMapList.forEach( el => {
+            if(tree.router === el.path) {
+              routersMapList[0].children.push(el);
+            }
+          });
+        });
+
+        UserStore.getStoreRouterMap(item.data.data);
+        router.addRoutes(routersMapList);
+        _that.$router.push({path: '/'});
+        // console.log(item);
+        
+      }, null);
+    } else {
       let dynamicMapList = dynamicRouter;
       // 权限递归
-      TreeForeach(item.data.data, tree => {
+      TreeForeach(childrenRouter, tree => {
         dynamicMapList.forEach( el => {
           if(tree.router === el.path) {
             routersMapList[0].children.push(el);
@@ -134,12 +164,10 @@ export default class loginPage extends Vue {
         });
       });
 
-      UserStore.getStoreRouterMap(item.data.data);
+      UserStore.getStoreRouterMap(childrenRouter);
       router.addRoutes(routersMapList);
       _that.$router.push({path: '/'});
-      // console.log(item);
-      
-    }, null);
+    }
   }
 
   // 重置

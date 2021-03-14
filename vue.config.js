@@ -22,10 +22,10 @@ const cdn = {
     'vuex': 'Vuex',
     'vue-router': 'VueRouter',
     'axios': 'axios',
-    'element-ui': 'Element'
+    'element-ui': 'ElementUi'
   },
   css: [
-		'http://lib.baomitu.com/element-ui/2.8.2/theme-chalk/index.css',
+		//'http://lib.baomitu.com/element-ui/2.8.2/theme-chalk/index.css',
 	],
   js: [
     'http://lib.baomitu.com/vue/2.6.6/vue.min.js',
@@ -49,9 +49,9 @@ const isDevCS = {
 
 module.exports = {
   devServer: {
-  https: false,
-  open: false,     // 自动开启浏览器
-  compress: true,  // 开启压缩
+    https: false,
+    open: false,     // 自动开启浏览器
+    compress: true,  // 开启压缩
     proxy: isDevCS
   },
   runtimeCompiler: true,
@@ -95,6 +95,7 @@ module.exports = {
 				chunks: 'all'
 			});
 		}
+    
 	},
 	configureWebpack: config => {
     // 用cdn方式引入，则构建时要忽略相关资源
@@ -139,7 +140,7 @@ module.exports = {
 			sass: {
 				// 引入全局变量样式
 				data: `@import "@/assets/styles/theme.scss";`
-			}
+			},
 		},
 		// 启用 CSS modules for all css / pre-processor files.
 		modules: false,

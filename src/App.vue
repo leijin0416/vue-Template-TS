@@ -26,7 +26,7 @@ export default class Index extends Vue {
       UserStore.getStoreRouterMap(JSON.parse(sessionRouterMap));
       console.log(`【APP.JS】再次执行路由${routersMapList}`);
     }
-    // console.log(sessionRouterMap);
+    console.log(sessionRouterMap);
   }
   
   // 刷新路由
