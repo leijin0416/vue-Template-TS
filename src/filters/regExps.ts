@@ -9,6 +9,9 @@
  **/
 export const regExpZF = /[`~!#$%^&*()_\-+=<>?:"{}|,\/;'\\[\]·~！#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/im;
 
+// 去除空格
+export const regSpace = (test) => test.replace(/\s+/g,"")
+
 /**
  * 邮箱格式
  */
