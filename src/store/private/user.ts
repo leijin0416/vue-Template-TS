@@ -5,7 +5,7 @@ import { sessionData } from '@/filters/storage';
 // VUEX getModule 私有属性
 @Module({ name: 'user', dynamic: true, namespaced: false, store })
 export default class User extends VuexModule {
-  public Token: any = null;
+  public Token: string = '';
   public UserId: any = '';
   public MenuItemId: any = '';
   public MenuItem: any = [];
@@ -17,7 +17,7 @@ export default class User extends VuexModule {
   }
 
   @Action
-  public getStoreToken(item: any) {
+  public getStoreToken(item: string) {
     this.SET_StoreToken(item);
   }
   @Action

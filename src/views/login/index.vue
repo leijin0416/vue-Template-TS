@@ -122,7 +122,7 @@ export default class loginPage extends Vue {
         resetRouter();
       }
     } else {
-      UserStore.getStoreToken(123);
+      UserStore.getStoreToken('123');
       _that.submitFormRoleId(1);
       resetRouter();
     }
