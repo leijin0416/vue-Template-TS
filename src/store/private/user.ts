@@ -2,6 +2,7 @@ import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-dec
 import store from '@/store';
 import { sessionData } from '@/filters/storage';
 
+// VUEX getModule 私有属性
 @Module({ name: 'user', dynamic: true, namespaced: false, store })
 export default class User extends VuexModule {
   public Token: any = null;
