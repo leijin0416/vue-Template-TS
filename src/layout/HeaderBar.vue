@@ -2,7 +2,7 @@
   <div class="headerBar">
     <!-- 折叠按钮 -->
     <div class="collapse-btn" @click="collapseChage">
-      <i class="el-icon-menu"></i>
+      <i class="el-icon-s-fold"></i>
     </div>
     <div class="logo">信息直通车</div>
     <div class="header-right">
@@ -13,18 +13,21 @@
             <i class="el-icon-rank"></i>
           </el-tooltip>
         </div>
+        
         <!-- 消息中心 -->
-        <div class="btn-bell">
+        <!-- <div class="btn-bell">
           <el-tooltip effect="dark" :content="message ? `有${message}条未读消息`:`消息中心`" placement="bottom">
             <router-link to="/tabs">
               <i class="el-icon-bell"></i>
             </router-link>
           </el-tooltip>
           <span class="btn-bell-badge" v-if="message"></span>
-        </div>
+        </div> -->
+
         <!-- 用户头像 -->
         <div class="user-avator">
-          <img src="@/assets/img/img.jpg" />
+          <img src="@/assets/img/logo-tx.jpg" class="v-img" />
+          <span class="v-text">{{name}}</span>
         </div>
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
@@ -33,12 +36,10 @@
             <i class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <a href="/" target="_blank">
-              <el-dropdown-item>关于作者</el-dropdown-item>
-            </a>
-            <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-              <el-dropdown-item>项目仓库</el-dropdown-item>
-            </a>
+            <el-dropdown-item command="loginHome">回到首页</el-dropdown-item>
+            <!-- <a href="">
+              <el-dropdown-item>刷新页面</el-dropdown-item>
+            </a> -->
             <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -49,16 +50,11 @@
 
 <script lang="ts">
 import {
-  Component,
-  Inject,
-  Provide,
-  Emit,
-  Prop,
-  Vue,
-  Watch
+  Component, Inject, Provide, Emit, Prop, Vue, Watch
 } from "vue-property-decorator";
-import { sessionData } from "@/filters/storage";
 import Event from "@/utils/Event";
+import { UserStore } from '@/store/private/user';
+import { sessionData } from "@/filters/storage";
 
 type IndexData = {
   collapses: boolean;
@@ -81,26 +77,36 @@ export default class HeaderBar extends Vue {
 
   private collapse: boolean | undefined = false;
   private fullscreen: boolean | undefined = false;
-  private name: string | undefined = "张三";
+  private name: any = "";
   private message: number | undefined = 2;
 
-  @Watch("message", { immediate: true, deep: true })
+  // 获取数据
+  get getUserName() {
+    return UserStore.getUserName
+  };
+
+  @Watch("getUserName", { immediate: true, deep: true })
   onChangeValue(newVal: any, oldVal: any) {
-    // todo...
+    this.name = newVal;
+    // console.log(newVal);
   }
 
   // 初始化记载
-  created() {}
+  created() {
+    if(this.getUserName === '') {
+      this.name = sessionData('get', 'HasSessionUserName', '')
+    }
+  }
 
   // DOM加载完毕执行操作
   mounted() {
     if (document.body.clientWidth < 1500) {
       this.collapseChage();
     }
+    // console.log(sessionData('get', 'HasSessionUserName', ''));
   }
   // 用户名下拉菜单选择事件
   handleCommand(command) {
-    let _that = this;
     if (command === 'loginout') {
       sessionData('clean', 'HasSessionUserId', '');
       sessionData('clean', 'HasSessionToken', '');
@@ -108,24 +114,28 @@ export default class HeaderBar extends Vue {
       sessionData('clean', 'HasSessionMenuItemId', '');
       sessionData('clean', 'HasSessionMenuItem', '');
       sessionData('clean', 'HasSessionTagsMap', '');
-      location.reload();
+      sessionData('clean', 'HasSessionUserName', '')
+      window.location.reload();
       // _that.$router.push({path: '/login'});
+    } else if (command === 'loginHome') {
+      this.$router.push('/');
+      UserStore.storeActionLeftMenuMapId('');
     }
   }
 
   // 侧边栏折叠
   collapseChage() {
-    let _that = this;
+    const _that = this;
     _that.collapse = !_that.collapse;
     Event.$emit("collapse", _that.collapse);
   }
 
   // 全屏事件
   handleFullScreen() {
-    let _that = this;
+    const _that = this;
     // any: 类型上不存在属性
-    let element: any = document.documentElement;
-    let documentScreen: any = document;
+    const element: any = document.documentElement;
+    const documentScreen: any = document;
     if (_that.fullscreen) {
       if (documentScreen.exitFullscreen) {
         documentScreen.exitFullscreen();
@@ -165,7 +175,7 @@ export default class HeaderBar extends Vue {
   height: 70px;
   font-size: 22px;
   color: #fff;
-  background-color: #395c98;
+  background-color: #2e4d84;
 
   .collapse-btn {
     float: left;
@@ -227,14 +237,22 @@ export default class HeaderBar extends Vue {
   }
 
   .user-avator {
-    margin-left: 20px;
-  }
-
-  .user-avator img {
-    display: block;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    margin-left: 10px;
+    font-size: 0;
+    .v-img, .v-text {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .v-img {
+      width: 40px;
+      height: 40px;
+      margin-right: 5px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, .3);
+    }
+    .v-text {
+      font-size: 16px;
+    }
   }
 
   .el-dropdown-link {

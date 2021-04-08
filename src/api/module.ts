@@ -1,10 +1,78 @@
 import service from '@/common/httpService';
 
-/**
- * 短信区号
- */
-export const webGetSelectAreaCode = params => service.post('/api/areaCode/selectAreaCode', params);
 
-export const webGetUserLogin = params => service.post('/api/admin/login', params);
+// 创建管理员
+export const webGetAdminRegisterAdd = params => service.post('/admin/api/ping-admin/admin/register', params);
+// 管理员列表
+export const webGetAdminPageList = params => service.post('/admin/api/ping-admin/admin/pageList', params);
+// 更改管理员账号状态
+export const webGetAdminPageDisable = params => service.post('/admin/api/ping-admin/admin/disable', params);
 
-export const webGetUserfindRoleById = params => service.post('/api/admin/findRoleById', params);
+
+// 登录
+export const webGetAdminUserLogin = params => service.post('/admin/api/ping-admin/login', params);
+// 用户列表
+export const webGetAdminPageUserList = params => service.post('/admin/api/ping-admin/pageUserList', params);
+// 账号激活设置
+export const webGetAdminPageUserAtive = params => service.post('/admin/api/ping-admin/active', params);
+// 账号状态设置
+export const webGetAdminPageUserBlockedAccount = params => service.post('/admin/api/ping-admin/blockedAccount', params);
+// 账号注册
+export const webGetAdminPageUserRegister = params => service.post('/admin/api/ping-admin/register', params);
+// 修改账号信息
+export const webGetAdminPageUserUpdateUser = params => service.post('/admin/api/ping-admin/updateUser', params);
+// 用户购买合约
+export const webGetAdminPageUserBuyContract = params => service.post('/admin/api/ping-admin/buyUserContract', params);
+// 用户任务列表
+export const webGetAdminPageUserOpenTaskList = params => service.post('/admin/api/ping-task/noOpenTaskList', params);
+// 用户余额
+export const webGetAdminPageUserRemainingAccount = params => service.post('/admin/api/ping-task-investment/remainingAccount', params);
+// 用户购买任务
+export const webGetAdminPageUserInvestmentTaskBuy = params => service.post('/admin/api/ping-admin/userInvestmentTask', params);
+// 用户等级列表
+export const webGetAdminPageUserLevelList = params => service.post('/admin/api/ping-user-level/pageUserLevelList', params);
+
+
+// 合约列表
+export const webGetAdminContractList = params => service.post('/admin/api/ping-contract/pageContractList', params);
+// 添加合约列表
+export const webGetAdminContractAdd = params => service.post('/admin/api/ping-contract/addContract', params);
+// 修改合约列表
+export const webGetAdminContractUpdate = params => service.post('/admin/api/ping-contract/updateContract', params);
+// 删除合约列表
+export const webGetAdminContractDelte = params => service.post('/admin/api/ping-contract/delContract', params);
+
+// 合约任务列表
+export const webGetAdminContractTaskList = params => service.post('/admin/api/ping-task/pageTaskList', params);
+// 添加合约任务列表
+export const webGetAdminContractTaskAdd = params => service.post('/admin/api/ping-task/addTask', params);
+// 修改合约任务列表
+export const webGetAdminContractTaskUpdate = params => service.post('/admin/api/ping-task/updateTask', params);
+// 删除合约任务列表
+export const webGetAdminContractTaskDelte = params => service.post('/admin/api/ping-task/delTask', params);
+
+// 合约限时折扣列表
+export const webGetAdminContractActivityList = params => service.post('/admin/api/ping-contract-activity/pageContractActivityVoList', params);
+// 添加合约限时折扣列表
+export const webGetAdminContractActivityAdd = params => service.post('/admin/api/ping-contract-activity/addContractActivity', params);
+// 修改合约限时折扣列表
+export const webGetAdminContractActivityUpdate = params => service.post('/admin/api/ping-contract-activity/updateContractActivity', params);
+// 删除合约限时折扣列表
+export const webGetAdminContractActivityDelte = params => service.post('/admin/api/ping-contract-activity/delContractActivity', params);
+// 合约限时折扣ID列表
+export const webGetAdminContractActivityId = params => service.post('/admin/api/ping-contract/contractList', params);
+
+
+// 消费券列表
+export const webGetAdminCouponList = params => service.post('/admin/api/ping-coupon/pageCouponList', params);
+// 添加消费券列表
+export const webGetAdminCouponAdd = params => service.post('/admin/api/ping-coupon/addCoupon', params);
+// 修改消费券列表
+export const webGetAdminCouponUpdate = params => service.post('/admin/api/ping-coupon/updateCoupon', params);
+// 删除消费券列表
+export const webGetAdminCouponDelte = params => service.post('/admin/api/ping-coupon/delCoupon', params);
+
+
+
+// 权限ID
+export const webGetAdminUserFindRoleById = params => service.post('/api/admin/findRoleById', params);

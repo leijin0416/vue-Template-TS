@@ -1,0 +1,23 @@
+{
+    "loginPage_001": "Login",
+    "loginPage_002": "Register",
+    "loginPage_003": "Modify",
+    "loginPage_004": "Phone Register",
+    "loginPage_005": "Mailbox Register",
+    "loginPage_006": "Please enter your mobile number",
+    "loginPage_007": "Please input a username",
+    "loginPage_008": "Please input a password",
+    "loginPage_009": "Please confirm the password",
+    "loginPage_010": "User name of direct recommender",
+    "loginPage_011": "Please enter email number",
+    "loginPage_012": "Please input a phone/username/email",
+    "loginPage_013": "Please enter the verification code",
+    "loginPage_014": "User login",
+    "loginPage_015": "Retrieve Password",
+    "loginPage_016": "No account yet?",
+    "loginPage_017": "Register immediately",
+    "loginPage_018": "Return to login",
+    "loginPage_019": "Phone",
+    "loginPage_020": "Email",
+    "loginPage_021": "New password to："
+}

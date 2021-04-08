@@ -11,9 +11,9 @@
         <meta name="MobileOptimized" content="width">
         <meta name="HandheldFriendly" content="true">
         <title></title>
-        <meta data-vue-meta="ssr" name="keywords" content="一呼百应，工业品直卖网，企业采购，工业品采购">
+        <meta data-vue-meta="ssr" name="keywords" content="一呼百应，企业采购，工业品采购">
         <meta data-vue-meta="ssr" name="description"
-            content="“工业品采购上一呼百应！”，一呼百应工业品直卖网（www.youboy.com）优选710多万家制造业云工厂直卖，劳保用品、包装印刷、化工橡塑、电子仪表、五金建材、电动工具、机械配件、原材料等2000多品类供应链产品。">
+            content="“工业品采购上xxxx!”">
         <link rel="icon" href="<%= BASE_URL %>favicon.ico">
         <!-- 使用CDN的CSS文件 -->
         <% for (var i in htmlWebpackPlugin.options.cdn &&
@@ -33,5 +33,11 @@
             <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
         <% } %>
         <!-- 使用CDN的JS文件 -->
+        <script>
+            let locale = sessionStorage.getItem('accessLocaleI18n');   // 设置语言包
+            if(locale === 'en') ELEMENT.locale(ELEMENT.lang.en);
+            else ELEMENT.locale(ELEMENT.lang.zhCN);
+            console.log(locale);
+        </script>
     </body>
 </html>

@@ -10,14 +10,7 @@
 </template>
 
 <script lang="ts">
-import { 
-  Component,
-  Inject,
-  Provide,
-  Emit,
-  Prop,
-  Vue,
-  Watch } from 'vue-property-decorator';
+import { Component, Inject, Provide, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import { sessionData } from "@/filters/storage";
 
 @Component({
@@ -25,8 +18,7 @@ import { sessionData } from "@/filters/storage";
   },
 })
 export default class Index extends Vue {
-  mounted () {
-  }
+  mounted () {}
   created () {
     sessionData('clean', 'HasSessionUserId', '');
     sessionData('clean', 'HasSessionToken', '');

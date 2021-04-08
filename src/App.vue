@@ -23,10 +23,11 @@ export default class Index extends Vue {
     
     if (routersMapList.length === 0 && sessionRouterMap !== null) {
       this.onUserAddRoutes();
-      UserStore.getStoreRouterMap(JSON.parse(sessionRouterMap));
-      console.log(`【APP.JS】再次执行路由${routersMapList}`);
+      UserStore.storeActionRouterMap(JSON.parse(sessionRouterMap));
+      console.log(`【刷新】再次执行路由${routersMapList}`);
     }
-    console.log(sessionRouterMap);
+    
+    // console.log(sessionRouterMap);
   }
   
   // 刷新路由
@@ -42,6 +43,7 @@ export default class Index extends Vue {
         }
       });
     });
+    // console.log(routersMapList);
     router.addRoutes(routersMapList);
   }
 }

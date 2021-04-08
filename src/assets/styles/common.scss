@@ -1,0 +1,80 @@
+a,button,input{ outline:none; border:0;resize:none; }
+input{ outline:none; border:0; }
+input:focus{
+  outline:none; 
+  box-shadow: none !important;
+  // border-color: $color-body-c !important;
+}
+
+/*
+ *  去掉input type=number时输入框内的上下箭头
+ */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+}
+
+input[type="number"]{
+  -moz-appearance: textfield !important;
+}
+
+// 层级
+.v-zindex {z-index: 2099 !important;}
+
+// 弹性布局
+.weui-flex {
+  @include flex(row, nowrap);
+  @include align-item(center);  // 垂直Y
+  word-break: break-all;
+  overflow-wrap: break-word;
+  word-wrap: break-word; //兼容IE
+  overflow: hidden;
+  .weui-flex-hd, .weui-flex-ft {
+    display: inline-block;
+  }
+  .weui-flex-bd {
+    @include flex-size(1)
+  }
+}
+
+.v-btn-green {
+  color: #67c23a;
+  &:focus, &:hover {
+    color: #488f25;
+  }
+}
+
+.v-btn-yellow {
+  color: #f5a836;
+  &:focus, &:hover {
+    color: #dd8e19;
+  }
+}
+
+.v-btn-red {
+  color: #fd2727;
+  &:focus, &:hover {
+    color: #f95353;
+  }
+}
+
+// 表格头部按钮
+.v-button-box {
+  position: relative;
+  padding-bottom: 15px;
+  .v-btn:last-child {
+    position: absolute;
+    right: 0;
+    bottom: 15px;
+    &::before {
+      content: '刷新';
+      display: none;
+      position: absolute;
+      bottom: -16px;
+      right: 3px;
+      font-size: 12px;
+      color: #409eff;
+    }
+    &:hover::before{display: block;}
+  }
+}

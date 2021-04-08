@@ -1,42 +1,77 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
-import CryptoJS from './cryptoJS';
 import { Message } from 'element-ui';
-import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 import { sessionData } from '@/filters/storage';
+import CryptoJS from './cryptoJS';  // 加密
+import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 
-// const VUE_APP_URL = process.env.VUE_APP_URL;
-// 超时重新请求配置
+/**
+ *  const VUE_APP_URL = process.env.VUE_APP_URL;
+ *  axiosConfig.headers.AuthType = 'WEB';
+ *  超时重新请求配置
+ */
 const axiosConfig: AxiosRequestConfig = {
   baseURL: '',
   timeout: 5000,
-  withCredentials: true
+  withCredentials: true,
 };
 
 // 修改axios配置信息
 const service = axios.create(axiosConfig);
 
-// 添加请求拦截器
+/**
+ *  2、再在 request 拦截器实现, 传给后台的
+ *  Encrypt加密
+ *  config.data.hash = md5((new Date()).valueOf() + config.data.func);
+ * 
+ *  config.data = {
+      data: CryptoJS.Encrypt(JSON.stringify(config.data))  // 文本数据交换格式
+    }
+ */
 service.interceptors.request.use(
-  (config) => {
+  config => {
     const token = sessionData('get', 'HasSessionToken', '');
-    // console.log('token：' + token);
     // tslint:disable-next-line:no-unused-expression
-    token && (config.headers.token = token);
-    config.data = {
-      // 文本数据交换格式
-      data: CryptoJS.Encrypt(JSON.stringify(config.data))
-    };
+    token && (config.headers.Authorization = token);  // token
+    config.headers.AuthType = 'WEB';
+
     return config;
+
   },
   (err) => {
       return Promise.reject(err);
   },
 );
 
-// 返回状态判断(添加响应拦截器)
+/**
+ *  1、先在 response 拦截器实现, 拿后台返回的
+ *     Decrypt解密
+ *     getRealJsonData -去掉双引号，转化json格式
+ * 
+ *  response.data = getRealJsonData(CryptoJS.Decrypt(response.data.data));
+ */
 service.interceptors.response.use(
-  (response) => {
-    response.data = getRealJsonData(CryptoJS.Decrypt(response.data.data));
+  response => {
+    // console.log(response);
+    if (response.data.code === 401120) {
+      sessionData('clean', 'HasSessionToken', '');
+      sessionData('clean', 'HasSessionUserId', '');
+      sessionData('clean', 'HasSessionRouterMap', '');
+      sessionData('clean', 'HasSessionMenuItemId', '');
+      sessionData('clean', 'HasSessionMenuItem', '');
+      sessionData('clean', 'HasSessionTagsMap', '');
+
+      Message.error({
+        message: '您的登录信息已失效，请重新登录',
+        duration: 3000,
+        onClose: () => {
+          window.location.reload();
+        }
+      })
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 3000);
+    }
+
     return response;
 
   },

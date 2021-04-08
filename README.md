@@ -12,6 +12,19 @@
  | ——
 [【Git】Element UI Pro3.0](https://github.com/qidaizhe11/element-pro) <br> [【Git】2.1 tower1229 -Tree树形结构](https://github.com/tower1229) | [【掘金】vue-element-admin 登录权限校验](https://juejin.im/post/6894635161326256141) [权限校验 2](https://juejin.cn/post/6844904040598339598) <br> [【Git】2.0 -前端内参 面经](https://github.com/coffe1891/frontend-hard-mode-interview)
 
+[图片查看器 Viewer.js](https://blog.csdn.net/liang_wf/article/details/102561670)
+
+```html
+<viewer images="https://ivmg-blog.csdnimg.cn/20190523204045118.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMwNjY5ODMz,size_16,color_FFFFFF,t_70" v-viewer="{movable: false, toolbar: false,}">
+    <div class="v-viewer">
+        <img class="img"
+            src="https://img-blog.csdnimg.cn/20190523204045118.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMwNjY5ODMz,size_16,color_FFFFFF,t_70"
+            title="点击查看大图"
+            alt="chats.png">
+    </div>
+</viewer>
+```
+
 ---
 
 ## vue2.5后增加了对ts的支持

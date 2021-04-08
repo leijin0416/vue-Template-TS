@@ -1,0 +1,23 @@
+{
+    "loginPage_001": "立即登录",
+    "loginPage_002": "立即注册",
+    "loginPage_003": "确认重置",
+    "loginPage_004": "手机注册",
+    "loginPage_005": "邮箱注册",
+    "loginPage_006": "请输入手机号",
+    "loginPage_007": "请输入用户名",
+    "loginPage_008": "请输入登录密码",
+    "loginPage_009": "请确认登录密码",
+    "loginPage_010": "直接推荐人用户名",
+    "loginPage_011": "请输入邮箱号",
+    "loginPage_012": "请输入用户名",
+    "loginPage_013": "请输入验证码",
+    "loginPage_014": "用户登录",
+    "loginPage_015": "找回密码",
+    "loginPage_016": "还没有账号?",
+    "loginPage_017": "马上注册",
+    "loginPage_018": "返回登录",
+    "loginPage_019": "手机",
+    "loginPage_020": "邮箱",
+    "loginPage_021": "新密码将发送到："
+}

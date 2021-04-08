@@ -57,12 +57,6 @@ export default class UserList extends Vue {
   @Prop({ default: [] }) tableColumnData!: Array<object>;  // 表格表头
   @Prop({ default: '' }) totalCount!: number;  //  总信息条数
 
-
-  @Emit("handleSelectionChange")
-  private handleSelectionChange(val): void {
-    return val;
-  }
-
   // 生命周期
   mounted () {}
 
@@ -71,6 +65,11 @@ export default class UserList extends Vue {
     console.log(val);
   }
 
+  @Emit("handleSelectionChange")
+  private handleSelectionChange(val): void {
+    return val;
+  }
+  
   // 获取用户点击的当前页后刷新页面数据
   @Emit('handleCurrentChange')
   private handleCurrentChange(val) {
@@ -79,7 +78,7 @@ export default class UserList extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-/deep/.el-table th {background: #f5f5f5;}
+/deep/.el-table th {background: rgba(249, 249, 249, .8);}
 .v-page-box {
   padding: 30px 5px 5px;
   text-align: right;

@@ -2,42 +2,46 @@ import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-dec
 import store from '@/store';
 import { sessionData } from '@/filters/storage';
 
-// VUEX getModule 私有属性
 @Module({ name: 'user', dynamic: true, namespaced: false, store })
 export default class User extends VuexModule {
-  public Token: string = '';
+  public Token: any = null;
+  public UserName: string = '';
   public UserId: any = '';
   public MenuItemId: any = '';
   public MenuItem: any = [];
   public RouterMap: any = [];
   public TagListMap: any = [];
 
-  get getMenuItem() {
-    return `${this.MenuItemId}`;
+  get getUserName() {
+    return `${this.UserName}`;
   }
 
   @Action
-  public getStoreToken(item: string) {
+  public storeActionToken(item: any) {
     this.SET_StoreToken(item);
   }
   @Action
-  public getStoreUserId(item: any) {
+  public storeActionUserId(item: any) {
     this.SET_StoreUserId(item);
   }
   @Action
-  public getStoreTagsItem(item: any) {
+  public storeActionUserName(item: string) {
+    this.SET_StoreUserName(item);
+  }
+  @Action
+  public storeActionTagsListMap(item: any) {
     this.SET_StoreTagsItem(item);
   }
   @Action
-  public getStoreMenuItem(item: string) {
+  public storeActionMenuMap(item: string) {
     this.SET_StoreMenuItem(item);
   }
   @Action
-  public getStoreMenuItemId(item: string) {
+  public storeActionLeftMenuMapId(item: string) {
     this.SET_StoreMenuItemId(item);
   }
   @Action
-  public getStoreRouterMap(item: any) {
+  public storeActionRouterMap(item: any) {
     this.SET_StoreRouterMap(item);
   }
 
@@ -45,37 +49,43 @@ export default class User extends VuexModule {
   private SET_StoreToken(item: any) {
     this.Token = item;
     sessionData('set', 'HasSessionToken', item);
-    console.log(`【缓存】用户TOKEN >>> ${true}`);
+    console.log(`【缓存】___用户TOKEN___${true}`);
   }
   @Mutation
   private SET_StoreUserId(item: any) {
     this.UserId = item;
     sessionData('set', 'HasSessionUserId', item);
-    console.log(`【缓存】用户ID >>> ${true}`);
+    console.log(`【缓存】___用户ID___${true}`);
+  }
+  @Mutation
+  private SET_StoreUserName(item: string) {
+    this.UserName = item;
+    sessionData('set', 'HasSessionUserName', item);
+    console.log(`【缓存】___用户名___${item}`);
   }
   @Mutation
   private SET_StoreMenuItem(item: string) {
     this.MenuItem = item;
     sessionData('set', 'HasSessionMenuItem', item);
-    console.log(`【缓存】NAV左侧路由 >>> ${true}`);
+    console.log(`【缓存】___NAVs左侧路由___${true}`);
   }
   @Mutation
   private SET_StoreMenuItemId(item: string) {
     this.MenuItemId = item;
     sessionData('set', 'HasSessionMenuItemId', item);
-    console.log(`【缓存】NAV左侧路由INDEX >>> ${item}`);
+    console.log(`【缓存】___NAVs左侧路由INDEX___${item}`);
   }
   @Mutation
   private SET_StoreRouterMap(item: any) {
     this.RouterMap = item;
     sessionData('set', 'HasSessionRouterMap', item);
-    console.log(`【缓存】初次执行路由 >>> ${item}`);
+    console.log(`【缓存】___初次执行路由___${item}`);
   }
   @Mutation
   private SET_StoreTagsItem(item: any) {
     this.TagListMap = item;
     sessionData('set', 'HasSessionTagsMap', item);
-    console.log(`【缓存】TAG数组标签 >>> ${item}`);
+    console.log(`【缓存】___TAGs数组标签___${item}`);
   }
 }
 

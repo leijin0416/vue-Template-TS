@@ -18,7 +18,7 @@ export default class Http {
       url: req.url,
       params: req.data,
     });
-}
+  }
 
   /**
    * put

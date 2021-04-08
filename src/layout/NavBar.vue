@@ -1,56 +1,48 @@
 <template>
-    <div class='navBar'>
-        <el-menu 
-            class="sidebar-el-menu"
-            :default-active="activeIndex" 
-            :collapse="collapse" 
-            @select="onSelect"
-            background-color="#324157"
-            text-color="#bfcbd9" 
-            active-text-color="#20a0ff" 
-            unique-opened
-            collapse-transition router >
-            <template v-for="item in navMenuData" >
-              <!-- 二级 children -->
-              <template v-if="item.children && item.children.length > 0">
-                <el-submenu :index="item.index" :key="item.index" :route="item.router" >
-                  <template slot="title">
-                    <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
-                  </template>
-                  <!-- 三级 children -->
-                  <template v-for="subItem in item.children">
-                    <el-submenu v-if="subItem.children && subItem.children.length > 0" :index="subItem.index" :key="subItem.index" :route="subItem.router">
-                      <template slot="title">{{ subItem.title }}</template>
-                      <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.index" :route="threeItem.router" >
-                        {{ threeItem.title }}
-                      </el-menu-item>
-                    </el-submenu>
-                    <el-menu-item v-else :index="subItem.index" :key="subItem.index" :route="subItem.router" >
-                      {{ subItem.title }}
-                    </el-menu-item>
-                  </template>
-                </el-submenu>
-              </template>
-              <template v-else>
-                <el-menu-item :index="item.index" :key="item.index" :route="item.router" >
-                  <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
-                </el-menu-item>
-              </template>
+  <div class='navBar'>
+    <el-menu 
+      class="sidebar-el-menu"
+      :default-active="activeIndex" 
+      :collapse="collapse" 
+      @select="onSelect"
+      background-color="#324157"
+      text-color="#bfcbd9" 
+      active-text-color="#20a0ff" 
+      unique-opened
+      collapse-transition router >
+      <template v-for="item in navMenuData" >
+        <!-- 二级 children -->
+        <template v-if="item.children && item.children.length > 0">
+          <el-submenu :index="item.index" :key="item.index" :route="item.router" >
+            <template slot="title">
+              <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
             </template>
-        </el-menu>
-    </div>
+            <!-- 三级 children -->
+            <template v-for="subItem in item.children">
+              <el-submenu v-if="subItem.children && subItem.children.length > 0" :index="subItem.index" :key="subItem.index" :route="subItem.router">
+                <template slot="title">{{ subItem.title }}</template>
+                <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.index" :route="threeItem.router" >
+                  {{ threeItem.title }}
+                </el-menu-item>
+              </el-submenu>
+              <el-menu-item v-else :index="subItem.index" :key="subItem.index" :route="subItem.router" >
+                {{ subItem.title }}
+              </el-menu-item>
+            </template>
+          </el-submenu>
+        </template>
+        <template v-else>
+          <el-menu-item :index="item.index" :key="item.index" :route="item.router" >
+            <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
+          </el-menu-item>
+        </template>
+      </template>
+    </el-menu>
+  </div>
 </template>
 
 <script lang="ts">
-import {
-  Component,
-  Inject,
-  Provide,
-  Emit,
-  Prop,
-  Vue,
-  Watch
-} from "vue-property-decorator";
+import { Component, Inject, Provide, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import Event from '@/utils/Event';
 import { UserStore } from '@/store/private/user';
 import { sessionData } from "@/filters/storage";
@@ -66,7 +58,7 @@ type IndexData = {
   components: {}
 })
 export default class NavBar extends Vue {
-  private items: any = [
+  private items: object = [
     {
       icon: 'el-icon-lx-home',
       index: '/user/info',
@@ -158,45 +150,47 @@ export default class NavBar extends Vue {
 
   // computed -计算 get 用法
   get onRoutes(): any {
-    let routes = this.activeIndex ? this.activeIndex : this.$route.path.replace('/', '');
+    const routes = this.activeIndex ? this.activeIndex : this.$route.path.replace('/', '');
     return routes;
   }
 
   get pageStates(): any {
-    let state = UserStore.MenuItemId;
+    const state = UserStore.MenuItemId;
     return state;
   }
 
   @Watch("pageStates", { deep: true, })
   private getShowStatus(newVal, oldVal) {
-    let _that = this;
+    const _that = this;
     if (newVal === '') _that.activeIndex = '';
     else _that.activeIndex = newVal;
-    console.log(`【监听】NAV数组路由INDEX：${newVal}`);
+    console.log(`【监听】NAVs数组路由INDEX：${newVal}`);
   }
 
   created() {
-    let _that = this;
-    let sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
-    // 获取并循环 路由数组
-    let data: any = sessionData('get', 'HasSessionRouterMap', '');
-    let navbarData: any = JSON.parse(data);
+    const _that = this;
+    const sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
+    // 获取并循环 左侧路由数组
+    const data: any = sessionData('get', 'HasSessionRouterMap', '');
+    const navbarData: any = JSON.parse(data);
     if (sessionRouterId != null) _that.activeIndex = sessionRouterId;
     if (navbarData) {
       navbarData.forEach( el => {
         let data = el.children;
-        el.icon = 'el-icon-folder-opened';
+        el.icon = el.type;
         el.index = el.id; // 父标识
         if (data.length > 0) {
           data.forEach( (cd, j) => {
             let size = Number(j) + 1;
-            cd.index = el.id + '-' + size;  // 子标识
+            let num = el.id + '-' + size;
+            cd.index = num.toString();  // 子标识
+            // console.log(typeof cd.index);
           });
         }
       });
       // console.log(navbarData);
       _that.navMenuData = navbarData;
-      UserStore.getStoreMenuItem(navbarData);
+      UserStore.storeActionMenuMap(navbarData);
     };
     
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
@@ -209,7 +203,7 @@ export default class NavBar extends Vue {
   onSelect(key: any, keyPath: any) {
     let _that = this;
     _that.activeIndex = key;
-    UserStore.getStoreMenuItemId(key);
+    UserStore.storeActionLeftMenuMapId(key);
     // console.log(key, keyPath);
   };
 }

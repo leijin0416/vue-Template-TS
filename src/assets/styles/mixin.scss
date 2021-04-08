@@ -1,0 +1,195 @@
+/**
+ * Sass 3变成了 Scss  预编译器
+ * 变量：$var
+ */
+ @mixin allcover {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+@mixin ct {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin ctp($width, $height) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -$height/2;
+  margin-left: -$width/2;
+}
+
+@mixin tb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin lr {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@mixin flexct() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flextb {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flr() {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin wh($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin ft($size, $line-height) {
+  font-size: $size;
+  line-height: $line-height;
+}
+
+@mixin sc($size, $color) {
+  font-size: $size;
+  color: $color;
+}
+
+@mixin fj($type: space-between) {
+  display: flex;
+  justify-content: $type;
+}
+
+@mixin bg-image($url) {
+  background-image: url("./images/"+ $url + "@2x.png");
+
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min-device-pixel-ratio: 2) {
+    background-image: url("./images/"+ $url + "@3x.png");
+  }
+}
+
+@mixin ellipsis($line: 2, $line-height: 1.2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+  line-height: $line-height;
+}
+
+@mixin modalbg($color-bg: rgba(0, 0, 0, 0.2)) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-bg;
+}
+
+@mixin flex($direction: column, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+}
+
+@mixin clear() {
+  &:after {
+    content: '.';
+    clear: both;
+    display: block;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+}
+
+@mixin display-flex() {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@mixin justify-content($justify-content) {
+  @if $justify-content == 'flex-start' {
+    -webkit-box-pack: start;
+  }
+  @if $justify-content == 'flex-end' {
+    -webkit-box-pack: end;
+  }
+  @if $justify-content == 'center' {
+    -webkit-box-pack: center;
+  }
+  @if $justify-content == 'space-between' {
+    -webkit-box-pack: justify;
+  }
+  -webkit-justify-content: $justify-content;
+  justify-content: $justify-content;
+}
+
+
+@mixin align-item($align-items) {
+  @if $align-items == 'flex-start' {
+    -webkit-box-align: start;
+  }
+  @if $align-items == 'flex-end' {
+    -webkit-box-align: end;
+  }
+  @if $align-items == 'center' {
+    -webkit-box-align: center;
+  }
+  @if $align-items == 'baseline' {
+    -webkit-box-align: baseline;
+  }
+  @if $align-items == 'stretch' {
+    -webkit-box-align: stretch;
+  }
+  -webkit-align-items: $align-items;
+  align-items: $align-items;
+}
+
+@mixin flex-direction($direction) {
+  @if $direction == 'row' {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+  }
+  @if $direction == 'row-reverse' {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+  }
+  @if $direction == 'column' {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+  }
+  -webkit-flex-direction: $direction;
+  flex-direction: $direction;
+}
+
+@mixin flex-wrap($alignment) {
+  @if $alignment == 'nowrap' {
+    vertical-align: $alignment;
+  }
+  @if $alignment == 'wrap' {
+    -webkit-box-lines: single;
+  }
+  -webkit-flex-wrap: $alignment;
+  flex-wrap: $alignment;
+}
+
+@mixin flex-size($flex-size) {
+	-webkit-box-flex: $flex-size;
+		-ms-flex: $flex-size;
+			flex: $flex-size;
+}

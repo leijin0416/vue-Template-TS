@@ -1,12 +1,18 @@
 {
   "compilerOptions": {
+    // 编译输出目标 ES 版本
     "target": "esnext",
+    // 采用的模块系统
     "module": "esnext",
+    // 以严格模式解析
     "strict": true,
     "jsx": "preserve",
     "noImplicitAny": false,
     "importHelpers": true,
+    "skipLibCheck":true,   // 忽略所有的声明文件（ *.d.ts）的类型检查
+    // 如何处理模块
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "experimentalDecorators": true,
     // 启用 vuex-class 需要开启此选项
     "strictFunctionTypes": true,
@@ -30,6 +36,7 @@
       "scripthost"
     ]
   },
+  // ts 管理的文件
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
@@ -37,7 +44,9 @@
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
+  // ts 排除的文件
   "exclude": [
-    "node_modules", 
+    "node_modules",
+    "dist"
   ]
 }

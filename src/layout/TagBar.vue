@@ -31,15 +31,7 @@
 </template>
 
 <script lang="ts">
-import {
-  Component,
-  Inject,
-  Provide,
-  Emit,
-  Prop,
-  Vue,
-  Watch
-} from "vue-property-decorator";
+import { Component, Inject, Provide, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import { UserStore } from '@/store/private/user';
 import { sessionData } from "@/filters/storage";
 import { TreeForeach, FormatArrMapHas } from '@/filters/common';
@@ -64,23 +56,22 @@ export default class TagBar extends Vue {
   }
 
   get pageStates(): any {
-    let state = UserStore.MenuItemId;
-    return state;
+    return UserStore.MenuItemId;
   }
 
   @Watch("pageStates", { deep: true, })
   private getShowStatus(newVal, oldVal) {
-    let _that = this;
+    const _that = this;
     if (newVal !== '') {
       _that.tagsId = newVal;
       _that.setTags(_that.$route);
     }
-    console.log(`【监听】TAG数组路由INDEX：${newVal}`);
+    console.log(`【监听】TAG数组路由Index：${newVal}`);
   }
 
   created() {
-    let _that = this;
-    let sessionMenuItem: any = sessionData('get', 'HasSessionTagsMap', '');
+    const _that = this;
+    const sessionMenuItem: any = sessionData('get', 'HasSessionTagsMap', '');
     if (sessionMenuItem !== null) {
       _that.tagsList = JSON.parse(sessionMenuItem);
       // console.log(sessionMenuItem);
@@ -95,15 +86,16 @@ export default class TagBar extends Vue {
    */
   isActive(path: any) {
     // console.log(path);
-    let _that = this;
+    const _that = this;
     return path === _that.$route.fullPath;
   }
 
   // 跳转路由
   onTagsClick(item) {
-    let _that = this;
+    // console.log(item);
+    const _that = this;
     _that.$router.push(item.path);
-    UserStore.getStoreMenuItemId(item.index);
+    UserStore.storeActionLeftMenuMapId(item.index);
   }
 
   /**
@@ -111,11 +103,11 @@ export default class TagBar extends Vue {
    *  @param {Object} item                 -关闭后的当前标签
    *  @param {Object} delItem              -要关闭的标签
    * 
-   *  @param {String} getStoreMenuItemId   -更新INDEX
-   *  @param {Array}  getStoreTagsItem     -更新TAG数组标签
+   *  @param {String} storeActionLeftMenuMapId   -更新INDEX
+   *  @param {Array}  storeActionTagsListMap     -更新TAG数组标签
    */
   closeTags(index: any) {
-    let _that = this;
+    const _that = this;
     const delItem = _that.tagsList.splice(index, 1)[0];
     const item = _that.tagsList[index] ? _that.tagsList[index] : _that.tagsList[index - 1];
     if (item) {
@@ -123,41 +115,41 @@ export default class TagBar extends Vue {
     } else {
       _that.$router.push('/');
     }
-    UserStore.getStoreMenuItemId(item.index);
-    UserStore.getStoreTagsItem(_that.tagsList);
+    UserStore.storeActionLeftMenuMapId(item.index);
+    UserStore.storeActionTagsListMap(_that.tagsList);
   }
 
   /**
    *  关闭【全部】标签
    * 
-   *  @param {String} getStoreMenuItemId  -【缓存】更新INDEX
-   *  @param {Array} getStoreTagsItem     -【缓存】更新TAG数组标签
+   *  @param {String} storeActionLeftMenuMapId  -【缓存】更新INDEX
+   *  @param {Array} storeActionTagsListMap     -【缓存】更新TAG数组标签
    */
   closeAll() {
-    let _that = this;
-    let arr = _that.tagsList;
+    const _that = this;
+    const arr = _that.tagsList;
     _that.$router.push('/');
-    let arrFilter = arr.filter(ele => ele.index === '');
+    const arrFilter = arr.filter(ele => ele.index === '');
     _that.tagsList = arrFilter;
     
-    UserStore.getStoreMenuItemId('');
-    UserStore.getStoreTagsItem(arrFilter);
+    UserStore.storeActionLeftMenuMapId('');
+    UserStore.storeActionTagsListMap(arrFilter);
   }
 
   /**
    *  关闭【其他】标签
    * 
-   *  @param {String} getStoreMenuItemId  -【缓存】更新INDEX
-   *  @param {Array} getStoreTagsItem     -【缓存】更新TAG数组标签
+   *  @param {String} storeActionLeftMenuMapId  -【缓存】更新INDEX
+   *  @param {Array} storeActionTagsListMap     -【缓存】更新TAG数组标签
    */
   closeOther() {
-    let _that = this;
+    const _that = this;
     const curItem = _that.tagsList.filter(item => {
       return item.path === _that.$route.fullPath;
     })
     _that.tagsList = curItem;
-    UserStore.getStoreMenuItemId(curItem[0].index);
-    UserStore.getStoreTagsItem(curItem);
+    UserStore.storeActionLeftMenuMapId(curItem[0].index);
+    UserStore.storeActionTagsListMap(curItem);
   }
 
   /**
@@ -166,14 +158,14 @@ export default class TagBar extends Vue {
    * 
    *  @param {Array}  sessionRouterMap     -【缓存】左侧NAV数组
    *  @param {String} sessionRouterId      -【缓存】左侧NAV数组INDEX
-   *  @param {String} getStoreTagsItem     -【缓存】TAG数组标签
+   *  @param {String} storeActionTagsListMap     -【缓存】TAG数组标签
    */
   setTags(route: any) {
-    let _that = this;
-    let data = _that.tagsList;
-    let sessionRouterMap: any = sessionData('get', 'HasSessionMenuItem', '');
-    let sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
-    let tagsId: string = _that.tagsId ? _that.tagsId : sessionRouterId;
+    const _that = this;
+    const data = _that.tagsList;
+    const sessionRouterMap: any = sessionData('get', 'HasSessionMenuItem', '');
+    const sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
+    const tagsId: string = _that.tagsId ? _that.tagsId : sessionRouterId;
     if (_that.tagsList.length == 0) {
       _that.tagsList.push({
         title: route.meta.title,
@@ -199,7 +191,7 @@ export default class TagBar extends Vue {
       
     }
     _that.$emit("tags", _that.tagsList);
-    UserStore.getStoreTagsItem(_that.tagsList);
+    UserStore.storeActionTagsListMap(_that.tagsList);
   }
 
   handleTags(command: any) {

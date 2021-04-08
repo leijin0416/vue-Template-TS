@@ -1,3 +1,5 @@
+import Layout from '@/layout/Init.vue';
+
 const getComponentSMin = (name: any) => () =>
   import(`@/views/${name}.vue`);
 
@@ -30,14 +32,14 @@ export const subMenuRouters: any = [
     path: '/',
     name: 'Index',
     redirect: '/index',
-    component: (resolve) => require(['@/layout/Init'], resolve),
-    meta: { title: '管理模块' },
+    component: Layout,
+    meta: { title: '首页' },
     children: [
       {
         path: '/index',
         name: 'welcome',
         component: () => import('@/views/index.vue'),
-        meta: { title: '管理模块' }
+        meta: { title: '首页' }
       },
     ]
   },
@@ -51,15 +53,57 @@ export const subMenuRouters: any = [
  */
 export const dynamicRouter: any = [
   {
-    path: '/user/info',
-    name: 'userInfo',
-    component: getComponentMMin('system', 'centre'),
-    meta: { title: '用户信息' }
+    path: '/user/list',
+    name: 'userList',
+    component: getComponentMMin('User', 'userList'),
+    meta: { title: '用户列表' }
   },
   {
-    path: '/user/property',
-    name: 'userProperty',
-    component: getComponentMMin('system', 'jurisdiction'),
-    meta: { title: '用户资产' }
+    path: '/user/grade',
+    name: 'userGrade',
+    component: getComponentMMin('User', 'userGrade'),
+    meta: { title: '等级列表' }
+  },
+  {
+    path: '/contract/list',
+    name: 'contractList',
+    component: getComponentMMin('Contract', 'contractList'),
+    meta: { title: '合约列表' }
+  },
+  {
+    path: '/contract/tack',
+    name: 'contractTackList',
+    component: getComponentMMin('Contract', 'contractTackList'),
+    meta: { title: '合约任务列表' }
+  },
+  {
+    path: '/contract/activity',
+    name: 'contractActivity',
+    component: getComponentMMin('Contract', 'activityList'),
+    meta: { title: '合约限时折扣列表' }
+  },
+  {
+    path: '/coupon/list',
+    name: 'contractCoupon',
+    component: getComponentMMin('Coupon', 'couponList'),
+    meta: { title: '优惠券列表' }
+  },
+  {
+    path: '/extension',
+    name: 'Extension',
+    component: getComponentMMin('Extension', 'index'),
+    meta: { title: '用户推广图' }
+  },
+  {
+    path: '/system/route',
+    name: 'systemRoute',
+    component: getComponentMMin('System', 'route'),
+    meta: { title: '路由配置' }
+  },
+  {
+    path: '/system/user',
+    name: 'systemUser',
+    component: getComponentMMin('System', 'administrators'),
+    meta: { title: '管理员列表' }
   }
 ];

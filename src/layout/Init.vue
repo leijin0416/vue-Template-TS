@@ -6,10 +6,8 @@
     <div class="content-box" :class="{'content-collapse':collapse}">
       <TagBar></TagBar>
       <div class="content">
-        <transition name="move" mode="out-in">
-          <keep-alive :include="tagsList">
-            <router-view></router-view>
-          </keep-alive>
+        <transition name="component-fade" mode="out-in">
+          <router-view></router-view>
         </transition>
       </div>
     </div>
@@ -17,20 +15,11 @@
 </template>
 
 <script lang="ts">
-import {
-  Component,
-  Inject,
-  Provide,
-  Emit,
-  Prop,
-  Vue,
-  Watch
-} from "vue-property-decorator";
+import { Component, Inject, Provide, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import HeaderBar from './HeaderBar.vue';
 import NavBar from './NavBar.vue';
 import TagBar from './TagBar.vue';
 import Event from '@/utils/Event';
-import { sessionData } from "@/filters/storage";
 
 type IndexData = {
   collapses: boolean;
