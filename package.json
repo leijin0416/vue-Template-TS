@@ -20,6 +20,7 @@
 		"js-md5": "^0.7.3",
 		"nprogress": "^0.2.0",
 		"scrollreveal": "^4.0.9",
+		"v-charts": "^1.19.0",
 		"v-viewer": "^1.5.1",
 		"vue": "^2.6.9",
 		"vue-class-component": "^7.2.6",

@@ -7,11 +7,6 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { UserListStore } from '@/store/private/PageUserList';
-import { AdminSystemStore } from '@/store/private/AdminIstrators';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
-import { MessageTips } from '@/filters/MessageTips';
-import { webGetAdminRegisterAdd } from '@/api/index';
 
 @Component({
   components: {

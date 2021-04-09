@@ -1,5 +1,5 @@
 import echarts from 'echarts';
-import 'echarts/map/js/china.js';
+// import 'echarts/map/js/china.js';
 
 /**
  * 图标折叠
