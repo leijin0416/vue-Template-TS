@@ -28,7 +28,7 @@ export default class Index extends Vue {
     }
     
     // console.log(sessionRouterMap);
-  }
+  };
   
   // 刷新路由
 	onUserAddRoutes () {

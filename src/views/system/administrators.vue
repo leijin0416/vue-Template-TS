@@ -4,7 +4,7 @@
     <el-row>
       <el-col :span="24">
         <div class="v-button-box">
-          <el-button type="primary" size="small" icon="el-icon-plus" class="v-btn" @click="onAddsClick">添加管理员账号</el-button>
+          <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="v-btn" @click="onAddsClick">添加管理员账号</el-button>
           <el-button type="info" size="small" icon="el-icon-refresh" class="v-btn" @click="onRefreshClick" circle />
         </div>
         <ElTable :tableData="tableData"
@@ -35,7 +35,7 @@
       :append-to-body="true"
       :visible.sync="dialogFormVisible">
       <div slot="title" class="el-dialog__title" v-if="dialogFormType">添加管理员账号</div>
-      <div slot="title" class="el-dialog__title" v-else>修改合约</div>
+      <div slot="title" class="el-dialog__title" v-else>修改管理员账号</div>
       <div class="v-form-box">
         <el-row>
           <el-col :span="15">
@@ -66,8 +66,8 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { AdminSystemStore } from '@/store/private/AdminIstrators';
+import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
 import { webGetAdminRegisterAdd, webGetAdminPageDisable, webGetAdminContractUpdate, webGetAdminContractDelte } from '@/api/index';
 
@@ -83,7 +83,7 @@ type IndexData = {
     ElTable
   },
 })
-export default class UserList extends Vue {
+export default class administrators extends Vue {
   // 分页器
   private param: IndexData = {
     page: 1,
@@ -133,13 +133,14 @@ export default class UserList extends Vue {
 
   private dialogFormType:boolean = true;
   private dialogFormVisible:boolean = false;
-  private formData: any = {
+  private formData = {
     userName: '',
+    password: '',
     contractId: '',
     lotAmount: '',
-  }
+  };
 
-  private rules: any  = {
+  private rules = {
     userName: [
       { required: true, message: '请输入管理员用户名', trigger: 'blur' },
       {
@@ -159,7 +160,7 @@ export default class UserList extends Vue {
         trigger: 'blur'
       },
     ],
-  }
+  };
 
   // 获取数据
   get getContractList() {
@@ -188,7 +189,7 @@ export default class UserList extends Vue {
 
   // 生命周期
   mounted () {
-  }
+  };
 
   // 重置
   private resetForm(formName) {
@@ -293,7 +294,7 @@ export default class UserList extends Vue {
         return false;
       }
     });
-  };
+  }
 
   // 确认提交
   private async onDialogFormClick() {
@@ -311,13 +312,11 @@ export default class UserList extends Vue {
         this.onRefreshClick();
         this.resetForm('ruleForm');
       }, null);
+
     } else {
-      let { contractId, contractCost, lotAmount, lotPrice } = this.formData;
+      let { contractId, } = this.formData;
       const res: any = await webGetAdminContractUpdate({
         'contractId': contractId,
-        'contractCost': contractCost,
-        'lotAmount': lotAmount,
-        'lotPrice': lotPrice,
       })
       MessageTips(res, true, true, '修改成功', item => {
         this.onRefreshClick();

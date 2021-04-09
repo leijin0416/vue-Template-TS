@@ -1,26 +1,24 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators'
 import store from '../index'
-import { webGetAdminPageUserList, webGetAdminPageUserLevelList } from "@/api/index"
+import { webGetAdminPageUserList, webGetAdminPageUserLevelList, webGetAdminPageUserAuditList } from "@/api/index"
 
-//暴露接口
 export interface IterUserListState {
   userPageList: any,
   userPageRowInfo: any,
-  userPageLevelList: any
+  userPageLevelList: any,
+  userPageAuditList: any
 }
-//这里配置仓库的一些基础配置
 @Module({
   name: "userList",
   dynamic: true,
   store
 })
 export default class UserList extends VuexModule implements IterUserListState {
-  // 这里是仓库所具有的一些属性
   userPageList = <any>{};
   userPageRowInfo = <any>{};
   userPageLevelList = <any>{};
+  userPageAuditList = <any>{};
 
-  // 使用get修饰，代替了以前的getters
   get getUserPageList() {
     return this.userPageList
   }
@@ -29,6 +27,9 @@ export default class UserList extends VuexModule implements IterUserListState {
   }
   get getUserLevelList() {
     return this.userPageLevelList
+  }
+  get getUserAuditList() {
+    return this.userPageAuditList
   }
 
   
@@ -44,7 +45,7 @@ export default class UserList extends VuexModule implements IterUserListState {
     // commit('SET_MutationPageUserList', data)
   }
   @Action
-  public async storeActionPageUserRowInfo(item: object) {  // 表格 -用户详情
+  public async storeActionPageUserRowInfo(item: object) {  // 用户注册表格 -详情
     this.SET_MutationPageUserRowInfo(item)
   }
   @Action
@@ -53,6 +54,16 @@ export default class UserList extends VuexModule implements IterUserListState {
     if (res.data.code === 200) {
       let data = res.data
       this.SET_MutationPageUserLevelList(data)
+      // console.log(res);
+      
+    } else console.log(res);
+  }
+  @Action
+  public async storeActionPageUserAuditList(item: object) {  // 用户审核列表
+    let res: any = await webGetAdminPageUserAuditList(item)
+    if (res.data.code === 200) {
+      let data = res.data
+      this.SET_MutationPageUserAuditList(data)
       // console.log(res);
       
     } else console.log(res);
@@ -71,7 +82,11 @@ export default class UserList extends VuexModule implements IterUserListState {
   private SET_MutationPageUserLevelList(item: any) {
     this.userPageLevelList = item;
   }
+  @Mutation
+  private SET_MutationPageUserAuditList(item: any) {
+    this.userPageAuditList = item;
+  }
 
 }
-//暴露仓库
+
 export const UserListStore = getModule(UserList)

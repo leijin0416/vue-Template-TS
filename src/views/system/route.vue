@@ -1,4 +1,5 @@
 <template>
+  <!-- 路由配置 -->
   <div class="container">
     <el-row>
       <el-col :span="8">
@@ -8,34 +9,121 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Inject, Provide, Emit, Prop, Vue, Watch } from 'vue-property-decorator';
-import { removeHTMLTag } from '@/filters/index';
+<script lang="ts">
+import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
+import { UserListStore } from '@/store/private/PageUserList';
+import { AdminSystemStore } from '@/store/private/AdminIstrators';
+import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { MessageTips } from '@/filters/MessageTips';
+import { webGetAdminRegisterAdd } from '@/api/index';
 
-
+import ElTable from "@/components/ElTable/index.vue";
 import ElTree from "@/components/ElTree/index.vue";
+
+type IndexData = {
+  page: number,
+  pageSize: number,
+};
 
 @Component({
   components: {
     ElTree,
   },
 })
-export default class Index extends Vue {
-  mounted () {
-    this.Hello();
+export default class routes extends Vue {
+  // 分页器
+  private param: IndexData = {
+    page: 1,
+    pageSize: 12,
+  };
+  private totalCount: number = 1;  // 表格总数
+  private tableData: object = [];  // 表格数据
+  private tableColumnData: object = [
+    {
+      type: 'selection',
+    },
+    {
+      prop: 'levelName',
+      label: '等级名称',
+      width: 'auto',
+    },
+    {
+      prop: 'levelShortName',
+      label: '阶级',
+      width: 'auto',
+    },
+    {
+      prop: 'levelCondition',
+      label: '描述',
+      width: '320',
+    },
+    {
+      prop: 'standAchievement',
+      label: '达标业绩',
+      width: 'auto',
+    },
+    {
+      prop: 'directPush',
+      label: '直推最高人数',
+      width: 'auto',
+    },
+    {
+      slot: 'operateTagLevelType', //内容slot
+    },
+    {
+      prop: 'teamRewardRatio',
+      label: '团队奖励比例/%',
+      width: 'auto',
+    },
+    {
+      prop: 'bonusRewardRatio',
+      label: '全球分红奖励比例/%',
+      width: 'auto',
+    },
+    {
+      slot: 'operateButton', //内容slot
+    },
+  ]; // 表格行头
+
+  // 获取数据
+  get getUserLevelList() {
+    return UserListStore.getUserLevelList
+  };
+
+  // 监听数据列表
+  @Watch('getUserLevelList', { deep: true })
+  userPageChange(newValue: any) {
+    // console.log(newValue)
+  };
+
+  // 生命周期
+  created() {
+  };
+
+  // 生命周期
+  mounted () {};
+
+  // 复选框
+  private handleSelectionChange(val) {
+    console.log(val);
   }
-  created () {
-    console.log('object :>> ', '123');
+
+  // 分页
+  private handleCurrentChange(val) {
+    this.param.page = val
+    UserListStore.storeActionPageUserLevelList(this.param);
+    // console.log(this.param);
   }
-  Hello () {
-    let dd = removeHTMLTag("<script>dd&nbsp/123*** <12script>");
-    console.log(dd);
+
+  // 刷新
+  private onRefreshClick() {
+    UserListStore.storeActionPageUserLevelList(this.param);
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 .container {
-  min-height: 800px;
+  min-height: 700px;
 }
 </style>

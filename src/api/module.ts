@@ -33,6 +33,10 @@ export const webGetAdminPageUserInvestmentTaskBuy = params => service.post('/adm
 export const webGetAdminPageUserLevelList = params => service.post('/admin/api/ping-user-level/pageUserLevelList', params);
 
 
+// 用户审核列表
+export const webGetAdminPageUserAuditList = params => service.post('/admin/api/ping-kyc/pageKycList', params);
+
+
 // 合约列表
 export const webGetAdminContractList = params => service.post('/admin/api/ping-contract/pageContractList', params);
 // 添加合约列表
@@ -63,16 +67,12 @@ export const webGetAdminContractActivityDelte = params => service.post('/admin/a
 export const webGetAdminContractActivityId = params => service.post('/admin/api/ping-contract/contractList', params);
 
 
-// 消费券列表
-export const webGetAdminCouponList = params => service.post('/admin/api/ping-coupon/pageCouponList', params);
-// 添加消费券列表
-export const webGetAdminCouponAdd = params => service.post('/admin/api/ping-coupon/addCoupon', params);
-// 修改消费券列表
-export const webGetAdminCouponUpdate = params => service.post('/admin/api/ping-coupon/updateCoupon', params);
-// 删除消费券列表
-export const webGetAdminCouponDelte = params => service.post('/admin/api/ping-coupon/delCoupon', params);
-
-
+// 用户提币列表
+export const webGetAdminAssetsCarryList = params => service.post('/admin/api/ping-withdraw-order/withdrawOrderList', params);
+// 手动提币
+export const webGetAdminAssetsCarryManual = params => service.post('/admin/api/ping-withdraw-order/manualWithdraw', params);
+// 提币审核
+export const webGetAdminAssetsCarryExamine = params => service.post('/admin/api/ping-withdraw-order/examine', params);
 
 // 权限ID
 export const webGetAdminUserFindRoleById = params => service.post('/api/admin/findRoleById', params);

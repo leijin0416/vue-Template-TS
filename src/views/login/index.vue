@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <section class="section reveal-top">
+    <section class="section">
       <h3 class="v-h3">管理后台</h3>
       <el-form 
         :model="ruleForm"
@@ -35,27 +35,27 @@ import { MessageTips } from '@/filters/MessageTips';
 import { webGetAdminUserLogin, webGetAdminUserFindRoleById } from "@/api/index";
 
 import { regBlank } from '@/filters/splitRegex';
-import { TreeForeach } from '@/filters/common';
-import { scrollRevealEffect } from "@/filters/common";
+import { TreeForeach, scrollRevealEffect } from '@/filters/common';
 import { childrenRouter } from '@/mock/childrenRouter';
 
 type IndexData = {
   userName: string,
   pass: string,
 };
+
 @Component({
   components: {},
 })
-export default class loginPage extends Vue {
+export default class login extends Vue {
   // 动画
-  private scrollReveal = scrollReveal()
+  private scrollReveal = scrollReveal();
   // 定义input
   private ruleForm: IndexData = {
     userName: '',
     pass: ''
-  }
+  };
   private loadingType: boolean = false;
-  // 请求环境
+  // 请求环境 本地/线上
   private LocalStatus: boolean = false;
   /**
    * 表单验证
@@ -68,7 +68,7 @@ export default class loginPage extends Vue {
     } else {
       callback();
     }
-  }
+  };
   validatePass(rule: any, value: string, callback: Function) {
     if (value === '') {
       callback(new Error('请输入密码'));
@@ -79,7 +79,7 @@ export default class loginPage extends Vue {
     } else {
       callback();
     }
-  }
+  };
   validatePass2 = (rule: any, value: string, callback: Function) => {
     if (value === '') {
       callback(new Error('请再次输入密码'));
@@ -88,7 +88,7 @@ export default class loginPage extends Vue {
     } else {
       callback();
     }
-  }
+  };
 
   /** 
    *  验证规则
@@ -99,11 +99,18 @@ export default class loginPage extends Vue {
   private rules = {
     userName: [ { required: true, validator: this.validateuserName, trigger: 'blur' }],
     pass: [ { required: true, validator: this.validatePass, trigger: 'blur' } ],
-  }
+  };
 
-	mounted() {
+  mounted() {
     let revealTop = scrollRevealEffect(500, 'right', false, false, '400px');
     this.scrollReveal.reveal('.reveal-top', revealTop);
+  }
+
+  // 重置
+  resetForm(formName) {
+    const _that = this;
+    const ref: any = _that.$refs[formName];
+    ref.resetFields();
   }
 
   /** 
@@ -146,6 +153,7 @@ export default class loginPage extends Vue {
     // const roleId = subMenuUserId.data.data.roleId;
     // console.log(subMenuUserId);
     if (type) {
+      // this.loadingType = false;
       UserStore.storeActionUserName(subMenuUserId.data.data.userName);
       UserStore.storeActionToken(subMenuUserId.data.data.token);  // 用户Token
       // 调用resetRouter方法，把原来的路由替换  【位置关系】
@@ -207,13 +215,6 @@ export default class loginPage extends Vue {
         this.loadingType = false;
       }, null);
     }
-  }
-
-  // 重置
-  resetForm(formName) {
-    const _that = this;
-    const ref: any = _that.$refs[formName];
-    ref.resetFields();
   }
 }
 </script>

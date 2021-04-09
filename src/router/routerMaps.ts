@@ -59,40 +59,34 @@ export const dynamicRouter: any = [
     meta: { title: '用户列表' }
   },
   {
-    path: '/user/grade',
-    name: 'userGrade',
-    component: getComponentMMin('User', 'userGrade'),
-    meta: { title: '等级列表' }
+    path: '/user/audit',
+    name: 'userAudit',
+    component: getComponentMMin('User', 'userAudit'),
+    meta: { title: '用户审核列表' }
   },
   {
-    path: '/contract/list',
-    name: 'contractList',
-    component: getComponentMMin('Contract', 'contractList'),
-    meta: { title: '合约列表' }
+    path: '/assets/recharge',
+    name: 'userAssetsRecharge',
+    component: getComponentMMin('UserAssets', 'userRecharge'),
+    meta: { title: '充币列表' }
   },
   {
-    path: '/contract/tack',
-    name: 'contractTackList',
-    component: getComponentMMin('Contract', 'contractTackList'),
-    meta: { title: '合约任务列表' }
+    path: '/assets/carry',
+    name: 'userAssetsCarry',
+    component: getComponentMMin('UserAssets', 'userCarry'),
+    meta: { title: '提币列表' }
   },
   {
-    path: '/contract/activity',
-    name: 'contractActivity',
-    component: getComponentMMin('Contract', 'activityList'),
-    meta: { title: '合约限时折扣列表' }
-  },
-  {
-    path: '/coupon/list',
-    name: 'contractCoupon',
-    component: getComponentMMin('Coupon', 'couponList'),
-    meta: { title: '优惠券列表' }
+    path: '/assets/turn',
+    name: 'userAssetsTurn',
+    component: getComponentMMin('UserAssets', 'userTurn'),
+    meta: { title: '转账列表' }
   },
   {
     path: '/extension',
-    name: 'Extension',
+    name: 'extensionList',
     component: getComponentMMin('Extension', 'index'),
-    meta: { title: '用户推广图' }
+    meta: { title: '用户推广图列表' }
   },
   {
     path: '/system/route',

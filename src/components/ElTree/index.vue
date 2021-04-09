@@ -2,7 +2,7 @@
   <div class="component">
     <el-tree
       ref="tree"
-      :data="childrenRouters"
+      :data="childrenRouterData"
       show-checkbox
       node-key="id"
       :default-expanded-keys="defaultExpandedKeys"
@@ -30,11 +30,18 @@ import { sessionData } from '@/filters/storage';
 
 import { childrenRouter } from '@/mock/childrenRouter';
 
+type IndexData = {
+  children: string,
+  label: string,
+  icon: string,
+  leaf: string,
+};
+
 @Component({
   components: {},
 })
 export default class tree extends Vue {
-  private childrenRouters: any = [
+  private childrenRouterData = [
     {
       id: 0,
       title: '全部路由',
@@ -43,15 +50,15 @@ export default class tree extends Vue {
       leaf: false
     }
   ];
-  private defaultProps: any = {
+  private defaultProps: IndexData = {
     children: 'children',
     label: 'title',
     icon: 'icon',
     leaf: 'leaf'
   };
 
-  private defaultCheckedKeys: any = [];    // 默认勾选的节点的 key 的数组 [0]
-  private defaultExpandedKeys: any = [0];  // 默认展开的节点的 key 的数组
+  private defaultCheckedKeys = [];    // 默认勾选的节点的 key 的数组 [0]
+  private defaultExpandedKeys = [0];  // 默认展开的节点的 key 的数组
 
   // 生命周期
   mounted () {}

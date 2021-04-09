@@ -74,7 +74,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')" :disabled="loadingType">立即提交</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType">立即注册</el-button>
             <el-button @click="resetForm('ruleForm')" v-if="getUserRowInfoType === 1">重置</el-button>
           </el-form-item>
         </el-form>
@@ -88,12 +88,14 @@ import { Component, Provide, Vue, Watch } from "vue-property-decorator";
 import { UserListStore } from '@/store/private/PageUserList';
 import { MessageTips } from '@/filters/MessageTips';
 import { webGetAdminPageUserRegister, webGetAdminPageUserUpdateUser } from "@/api/index";
+// import { error } from "node:console";
+// import { sessionData } from "@/filters/storage";
 
 @Component({
   components: {},
 })
-export default class UserList extends Vue {
-  private ruleForm: any = {
+export default class userRegister extends Vue {
+  private ruleForm = {
     address: '',
     birthday: '',
     email: '',
@@ -112,7 +114,7 @@ export default class UserList extends Vue {
   };
 
   private loadingType: boolean = false;
-  private rules: any = {
+  private rules = {
     address: [
       { required: true, message: '请输入地址', trigger: 'blur' },
     ],
@@ -187,6 +189,15 @@ export default class UserList extends Vue {
     }
   };
 
+  // 生命周期
+  mounted() {
+    if (JSON.stringify(this.getUserRowInfo) != "{}") {
+      this.ruleForm = this.getUserRowInfo;
+      this.getUserRowInfoType = 0;
+      // console.log(this.getUserRowInfo);
+    }
+  };
+
   // 注册
   private submitForm(formName) {
     let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
@@ -205,7 +216,7 @@ export default class UserList extends Vue {
     const _that = this;
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.resetFields();
-  };
+  }
 
   // 注册提交
   private async submitFormClick() {
@@ -238,16 +249,6 @@ export default class UserList extends Vue {
       }, errors => {
         this.loadingType = false;
       });
-    }
-  }
-
-  // 生命周期
-  mounted() {
-    // 是否有值
-    if (JSON.stringify(this.getUserRowInfo) != "{}") {
-      this.ruleForm = this.getUserRowInfo;
-      this.getUserRowInfoType = 0;
-      // console.log(this.getUserRowInfo);
     }
   }
 }

@@ -14,7 +14,7 @@
               <el-input type="text" v-model="param.userName" size="small" clearable></el-input>
             </el-form-item>
             <el-button type="primary" @click="submitSearchForm('ruleSearchForm')" size="small" icon="el-icon-search" class="v-btn" >搜 索</el-button>
-            <el-button @click="resetSearchForm('ruleSearchForm')" size="small" icon="el-icon-refresh-left" class="v-btn">重置</el-button>
+            <el-button @click="resetSearchForm('ruleSearchForm')" size="small" icon="el-icon-refresh-left" class="v-btn">重 置</el-button>
           </el-form>
         </div>
         <div class="v-button-box">
@@ -124,10 +124,10 @@
         <div class="weui-flex">
           <div class="weui-flex-hd">实名审核</div>
           <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.kycStatus === 1">已通过</el-tag>
+            <el-tag v-if="drawerRowData.kycStatus === 1">审核通过</el-tag>
             <el-tag type="info" v-else-if="drawerRowData.kycStatus === 0">待审核</el-tag>
-            <el-tag type="danger" v-else-if="drawerRowData.kycStatus === 2">已拒绝</el-tag>
-            <el-tag type="info" v-else>未实名</el-tag>
+            <el-tag type="danger" v-else-if="drawerRowData.kycStatus === 2">审核拒绝</el-tag>
+            <el-tag type="info" v-else>暂未实名</el-tag>
           </div>
         </div>
         <div class="weui-flex">
@@ -269,11 +269,11 @@
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
-import { sessionData } from '@/filters/storage';
-import { IndexUserListData } from '@/types/views/index.interface';
 import { UserListStore } from '@/store/private/PageUserList';
 import { ContractListStore } from '@/store/private/PageContractList';
 import { webGetAdminPageUserAtive, webGetAdminPageUserBlockedAccount, webGetAdminPageUserBuyContract, webGetAdminPageUserRemainingAccount, webGetAdminPageUserInvestmentTaskBuy } from "@/api/index";
+import { IndexUserListData } from '@/types/views/index.interface';
+import { sessionData } from '@/filters/storage';
 
 import ElTable from "@/components/ElTable/index.vue";
 import UserRegister from "./userRegister.vue";
@@ -290,7 +290,7 @@ type IndexData = {
     UserRegister
   },
 })
-export default class UserList extends Vue {
+export default class userList extends Vue {
   // 分页器
   private param: IndexData = {
     page: 1,
@@ -337,13 +337,13 @@ export default class UserList extends Vue {
     },
   ]; // 表格行头
 
-  private drawerRightType: boolean = false  // 弹窗
-  private drawerRegisterType: boolean = false  // 弹窗
-  private drawerRowData: object = {}  // 弹窗内容
-  private loadingType: boolean = false   //  加载
-  private Disabled: boolean = false  //  禁止
+  private drawerRightType: boolean = false;     // 个人信息弹窗
+  private drawerRegisterType: boolean = false;  // 表格按钮弹窗
+  private drawerRowData: object = {};      // 弹窗内容
+  private loadingType: boolean = false;   //  加载
+  private Disabled: boolean = false;      //  禁止
 
-  private formOptions: any = []
+  private formOptions: any = [];
   private dialogFormType:boolean = true;
   private dialogFormVisible:boolean = false;
   private formData: any = {
@@ -352,7 +352,7 @@ export default class UserList extends Vue {
     userName: '',
   }
 
-  private userOpenTaskData: any = []
+  private userOpenTaskData: any = [];
   private userTaskAmount: number | string = '0';  // 可投数量
   private formUserOpenTask: {
     // 装饰器名称
@@ -381,7 +381,7 @@ export default class UserList extends Vue {
         trigger: 'blur'
       }
     ]
-  }
+  };
 
   // 获取数据
   get getUserPageList() {
@@ -473,13 +473,14 @@ export default class UserList extends Vue {
       }
     });
   }
+  
   private resetSearchForm(formName) {
     Object.keys(this.param).forEach(key => {
       if(key == 'userName') this.param[key] = ''
     });
     UserListStore.storeActionPageUserList(this.param);
     // console.log(this.param);
-  };
+  }
 
   // 刷新
   private onRefreshClick() {
@@ -648,7 +649,7 @@ export default class UserList extends Vue {
         return false;
       }
     });
-  };
+  }
 
   // 清空表单对象
   private onObjectKeys(id: number) {
@@ -714,7 +715,10 @@ export default class UserList extends Vue {
 </script>
 
 <style lang='scss' scoped>
-/deep/.el-tag {padding: 0 20px;}
+/deep/.el-tag {
+  min-width: 90px;
+  text-align: center;
+}
 /deep/.el-button span {margin-left: 3px;}
 .container {
   min-height: 800px;
@@ -741,10 +745,6 @@ export default class UserList extends Vue {
     border-top: 1px solid #eee;
     .weui-flex-hd {min-width: 120px;font-size: 12px; color: #666;}
   }
-  .el-tag {
-    min-width: 90px;
-    text-align: center;
-  }
 }
 
 // 表格头部搜索
@@ -752,11 +752,11 @@ export default class UserList extends Vue {
   border-bottom: 1px solid #eee;
   /deep/.el-form--inline .el-form-item, .v-btn {
     vertical-align: middle;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
   .v-btn {margin-left: 15px;}
 }
 .v-button-box {
-  padding-top: 10px;
+  padding-top: 15px;
 }
 </style>

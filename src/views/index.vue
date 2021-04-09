@@ -19,7 +19,7 @@ export default class UserList extends Vue {
 
   // 生命周期
   mounted () {
-  }
+  };
 }
 </script>
 <style lang="scss" scoped>

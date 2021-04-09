@@ -1,5 +1,5 @@
 <template>
-  <!-- 等级列表 -->
+  <!-- 充币列表 -->
   <div class="container">
     <el-row>
       <el-col :span="24">
@@ -8,9 +8,9 @@
           :totalCount="totalCount"
           @handleSelectionChange="handleSelectionChange"
           @handleCurrentChange="handleCurrentChange">
-          <el-table-column slot="operateTagLevelType" label="全球分红" align="center" width="140">
+          <el-table-column slot="operateTagTradeType" label="交易类型" align="center" width="140">
             <template slot-scope="scope">
-              <el-tag>{{scope.row.levelType === 1 ? '需要' : '不需要'}}</el-tag>
+              <el-tag>{{scope.row.levelType === 1 ? '充值' : '转账'}}</el-tag>
             </template>
           </el-table-column>
         </ElTable>
@@ -39,7 +39,7 @@ type IndexData = {
     ElTable
   },
 })
-export default class userGrade extends Vue {
+export default class userRecharge extends Vue {
   // 分页器
   private param: IndexData = {
     page: 1,
@@ -52,45 +52,32 @@ export default class userGrade extends Vue {
       type: 'selection',
     },
     {
-      prop: 'levelName',
-      label: '等级名称',
+      prop: 'userId',
+      label: '用户ID',
       width: 'auto',
     },
     {
-      prop: 'levelShortName',
-      label: '阶级',
+      prop: 'txId',
+      label: '交易ID',
       width: 'auto',
     },
     {
-      prop: 'levelCondition',
-      label: '描述',
+      prop: 'tradeId',
+      label: '交易流水号',
       width: '320',
     },
     {
-      prop: 'standAchievement',
-      label: '达标业绩',
+      prop: 'address',
+      label: '交易地址',
       width: 'auto',
     },
     {
-      prop: 'directPush',
-      label: '直推最高人数',
+      prop: 'amount',
+      label: '交易金额',
       width: 'auto',
     },
     {
-      slot: 'operateTagLevelType', //内容slot
-    },
-    {
-      prop: 'teamRewardRatio',
-      label: '团队奖励比例/%',
-      width: 'auto',
-    },
-    {
-      prop: 'bonusRewardRatio',
-      label: '全球分红奖励比例/%',
-      width: 'auto',
-    },
-    {
-      slot: 'operateButton', //内容slot
+      slot: 'operateTagTradeType', //内容slot
     },
   ]; // 表格行头
 
@@ -112,7 +99,7 @@ export default class userGrade extends Vue {
 
   // 生命周期
   created() {
-    UserListStore.storeActionPageUserLevelList(this.param);
+    // UserListStore.storeActionPageUserLevelList(this.param);
   };
 
   // 生命周期
