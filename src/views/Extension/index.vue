@@ -9,6 +9,9 @@
       </el-tooltip>
     </div>
     <TreeChart :json="treeData" @click-node="onNodeClick" />
+    <div>
+      <Echarts />
+    </div>
     <el-drawer
       :visible.sync="drawerType"
       :show-close="false"
@@ -64,10 +67,12 @@ import { MessageTips } from '@/filters/MessageTips';
 import { sessionData } from '@/filters/storage';
 
 import TreeChart from "vue-tree-chart";
+import Echarts from "@/components/Echarts/index.vue";
 
 @Component({
   components: {
-    TreeChart
+    TreeChart,
+    Echarts,
   },
 })
 export default class Extension extends Vue {

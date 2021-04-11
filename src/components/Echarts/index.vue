@@ -1,6 +1,6 @@
 <template>
   <!-- 折线图 -->
-  <div class="container">
+  <div class="v-echarts-main">
     <div class="v-echarts" id="myChart" :style="{width: screenWidth+'px'}"></div>
   </div>
 </template>
@@ -19,17 +19,18 @@ export default class myChart extends Vue {
 
   // 生命周期
   created() {
-    this.screenWidth = document.body.clientWidth;
-    window.onresize = () => {
-      return (() => {
-        this.screenWidth = document.body.clientWidth;
-      })();
-    }
-    this.initChart();
   };
 
   // 生命周期
-  mounted () {};
+  mounted () {
+    // this.screenWidth = document.body.clientWidth;
+    // window.onresize = () => {
+    //   return (() => {
+    //     this.screenWidth = document.body.clientWidth;
+    //   })();
+    // }
+    this.initChart();
+  };
 
   /**
    *  挂载
@@ -47,11 +48,11 @@ export default class myChart extends Vue {
 </script>
 
 <style lang='scss' scoped>
-.container {
+.v-echarts-main {
   min-height: 700px;
   .v-echarts {
-    width: 100%;
-    height: 600px;
+    width: 50%;
+    height: 400px;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="login">
-    <section class="section">
-      <h3 class="v-h3">管理后台</h3>
+    <section class="section reveal-top">
+      <h2 class="v-h2">管理后台</h2>
       <el-form 
         :model="ruleForm"
         status-icon 
@@ -16,8 +16,8 @@
         <el-form-item label="密码" prop="pass">
           <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
         </el-form-item>
-        <div style="text-align:center">
-          <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType" size="medium">登录</el-button>
+        <div class="v-btn-box" >
+          <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType" size="medium" class="v-btn">登录</el-button>
         </div>
       </el-form>
     </section>
@@ -27,16 +27,17 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import scrollReveal from 'scrollreveal';
-import { Component, Vue, Watch, Provide} from 'vue-property-decorator';
+import { Component, Vue, Watch, Provide } from 'vue-property-decorator';
 import { dynamicRouter, subMenuRouters } from '@/router/routerMaps';
 import router, { resetRouter } from '@/router/index';
 import { UserStore } from '@/store/private/user';
 import { MessageTips } from '@/filters/MessageTips';
-import { webGetAdminUserLogin, webGetAdminUserFindRoleById } from "@/api/index";
-
 import { regBlank } from '@/filters/splitRegex';
 import { TreeForeach, scrollRevealEffect } from '@/filters/common';
+
 import { childrenRouter } from '@/mock/childrenRouter';
+import { webGetAdminUserLogin, webGetAdminUserFindRoleById } from "@/api/index";
+
 
 type IndexData = {
   userName: string,
@@ -223,7 +224,7 @@ export default class login extends Vue {
 .login {
   position: relative;
   height: 100%;
-  background-color: #eee;
+  background: url("../../assets/img/login_bg.png") center center / cover no-repeat;
 }
 .section {
   position: absolute;
@@ -237,11 +238,10 @@ export default class login extends Vue {
   transform: translate(-50%, -40%);
   /deep/.el-button--medium {padding: 10px 60px;}
 }
-.v-h3 { padding-bottom: 30px; text-align: center; }
-.skip-h5{
-  display: block;
-  color:#00a0e9;
-  padding-top:15px;
-  font-size: 12px;
+.v-h2 { padding-bottom: 30px; text-align: center; }
+.v-btn-box {
+  margin-top: 30px;
+  text-align: center;
+  .v-btn {padding: 10px 80px;}
 }
 </style>

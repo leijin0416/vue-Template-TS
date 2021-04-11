@@ -1,16 +1,17 @@
-import echarts from 'echarts';
+// import echarts from 'echarts';
 // import 'echarts/map/js/china.js';
+const echarts = require('echarts');
 
 /**
  * 图标折叠
  */
-const install = function (Vue) {
+const install = function (Vue: any) {
   Object.defineProperties(Vue.prototype, {
     $chart: {
       get() {
         return {
           // 画一条简单的线
-          lineFold: function (id, xAxisData, xAxisName, xAxisNameTwo) {
+          lineFold: function (id: string, xAxisData: any, xAxisName: string, xAxisNameTwo: string) {
             this.chart = echarts.init(document.getElementById(id) as any);
             this.chart.clear();
 
@@ -100,7 +101,7 @@ const install = function (Vue) {
                   }
                 }
               ],
-              series: [
+              series: [  // 数据源
                 {
                   name: xAxisName,
                   type: 'line',

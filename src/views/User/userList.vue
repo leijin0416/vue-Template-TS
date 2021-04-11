@@ -398,15 +398,18 @@ export default class userList extends Vue {
   @Watch('getUserPageList', { deep: true })
   userPageChange(newValue: any) {
     let list = newValue.data.list;
-    // console.log(list);
-    
-    list.forEach( el => {
-      el.birthdayTime = FormatCurrentTime("YYYY-mm-dd",el.birthday)
-      el.formatTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS",el.createTime)
-    });
-    
-    this.tableData = list;
-    this.totalCount = newValue.data.total;
+    if(list.length > 0) {
+      let obj = deepCloneData(list);
+      // console.log(list);
+      
+      obj.forEach( el => {
+        el.birthdayTime = FormatCurrentTime("YYYY-mm-dd",el.birthday)
+        el.formatTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS",el.createTime)
+      });
+      
+      this.tableData = obj;
+      this.totalCount = newValue.data.total;
+    }
     // console.log(newValue)
   };
 
