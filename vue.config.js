@@ -54,7 +54,7 @@ switch (isDev) {
 
 const isDevCS = {
   '/admin': {
-    target: "http://103.100.210.42:10086",
+    target: "baseUrl",
     changeOrigin: true,
     wx: true,
     pathRewrite: {

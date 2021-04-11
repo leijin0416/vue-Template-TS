@@ -15,14 +15,14 @@
 [图片查看器 Viewer.js](https://blog.csdn.net/liang_wf/article/details/102561670)
 
 ```html
-<viewer images="https://ivmg-blog.csdnimg.cn/20190523204045118.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMwNjY5ODMz,size_16,color_FFFFFF,t_70" v-viewer="{movable: false, toolbar: false,}">
-    <div class="v-viewer">
-        <img class="img"
-            src="https://img-blog.csdnimg.cn/20190523204045118.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMwNjY5ODMz,size_16,color_FFFFFF,t_70"
-            title="点击查看大图"
-            alt="chats.png">
-    </div>
-</viewer>
+https://segmentfault.com/a/1190000016374702?utm_source=sf-similar-article
+
+https://segmentfault.com/a/1190000011574698?utm_source=sf-similar-article
+
+https://blog.csdn.net/qq_41810005/article/details/90764271
+
+https://blog.csdn.net/mutouafangzi/article/details/78963639?utm_medium=distribute.pc_relevant_download.none-task-blog-2~default~BlogCommendFromBaidu~default-20.nonecase&dist_request_id=1328769.42031.16175177928193631&depth_1-utm_source=distribute.pc_relevant_download.none-task-blog-2~default~BlogCommendFromBaidu~default-20.nonecas
+
 ```
 
 ---
