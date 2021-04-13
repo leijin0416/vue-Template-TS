@@ -1,7 +1,7 @@
 <template>
   <!-- 折线图 -->
   <div class="v-echarts-main">
-    <div class="v-echarts" id="myChart" :style="{width: screenWidth+'px'}"></div>
+    <div class="v-echarts" id="myChart" ></div>
   </div>
 </template>
 

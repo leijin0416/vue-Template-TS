@@ -36,8 +36,10 @@ const messages = {
   }
 }
 
-// this.$i18n.locale
-// fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'zh',
+/**
+ * 切换：this.$i18n.locale
+ * fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'zh',
+ */
 const locale: any =  sessionData('get', 'accessLocaleI18n', '') || 'en';
 const i18n = new VueI18n({
   locale: locale,

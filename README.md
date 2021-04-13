@@ -12,9 +12,8 @@
  | ——
 [【Git】Element UI Pro3.0](https://github.com/qidaizhe11/element-pro) <br> [【Git】2.1 tower1229 -Tree树形结构](https://github.com/tower1229) | [【掘金】vue-element-admin 登录权限校验](https://juejin.im/post/6894635161326256141) [权限校验 2](https://juejin.cn/post/6844904040598339598) <br> [【Git】2.0 -前端内参 面经](https://github.com/coffe1891/frontend-hard-mode-interview)
 
-[图片查看器 Viewer.js](https://blog.csdn.net/liang_wf/article/details/102561670)
-
 ```html
+
 https://segmentfault.com/a/1190000016374702?utm_source=sf-similar-article
 
 https://segmentfault.com/a/1190000011574698?utm_source=sf-similar-article

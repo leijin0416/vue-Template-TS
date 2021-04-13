@@ -5,7 +5,7 @@ import store from './store';
 import i18n from './locale';
 import filters from './filters';
 
-import Viewer from 'v-viewer';
+import Viewer from 'v-viewer';     // 引入图片查看器
 import myECharts from "./components/Echarts/echarts";   // 挂载图表
 // import 'babel-polyfill';  // 用于实现浏览器不支持原生功能的代码
 // import ElementUI from 'element-ui';
@@ -17,16 +17,14 @@ import './assets/styles/css/main.css';
 import './assets/styles/common.scss';
 import 'viewerjs/dist/viewer.css';
 
-Vue.use(myECharts);
-/**
- *  引入图片查看器
- */
+Vue.config.productionTip = false;
+sessionStorage.setItem('accessLocaleI18n', 'zhCN');  // 设置语言包
+
 Vue.use(Viewer);
 Viewer.setDefaults({});
-sessionStorage.setItem('accessLocaleI18n', 'zhCN');  // 设置语言包
+Vue.use(myECharts);
 // Vue.use(ElementUI);
 
-Vue.config.productionTip = false;
 
 // 全局过滤器
 Object.keys(filters).forEach(filterName => {
