@@ -54,7 +54,7 @@ switch (isDev) {
 
 const isDevCS = {
   '/admin': {
-    target: "baseUrl",
+    target: baseUrl,
     changeOrigin: true,
     wx: true,
     pathRewrite: {
