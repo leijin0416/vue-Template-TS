@@ -103,7 +103,7 @@ export default class login extends Vue {
   };
 
   mounted() {
-    let revealTop = scrollRevealEffect(500, 'right', false, false, '400px');
+    let revealTop = scrollRevealEffect(400, 'right', false, false, '600px');
     this.scrollReveal.reveal('.reveal-top', revealTop);
   }
 
