@@ -5,6 +5,7 @@
 node_modules/
 dist/
 备份/
+/common/axios.ts
 
 # local env files
 .env.local
