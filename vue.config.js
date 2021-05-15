@@ -50,10 +50,10 @@ const cdn = {
 let baseUrl = "";   // 这里是一个默认的url，可以没有
 switch (isDev) {
   case 'development':
-    baseUrl = "http://192.168.1.103:10086"  // 这里是本地的请求url
+    baseUrl = "http://192.168.1.xxxx:10086"  // 这里是本地的请求url
     break
   case 'production':
-    baseUrl = "http://xxx.251.248.230:10086"   // 生产环境url
+    baseUrl = "http://185.251.248.xxxx:10086"   // 生产环境url
     break
 }
 let isDevCS = {

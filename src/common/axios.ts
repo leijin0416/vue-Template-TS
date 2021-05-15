@@ -7,16 +7,16 @@ import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 let baseUrl = '';
 switch (process.env.NODE_ENV) {
   case "development":
-    baseUrl = "http://192.168.1.105:10086"
+    baseUrl = "http://192.168.1.xxxx:10086"
     break
   case "production":
-    baseUrl = "http://23.111.163.146:10086"
+    baseUrl = "http://23.111.163.xxxx:10086"
     break
 }
 /**
  *  const VUE_APP_URL = process.env.VUE_APP_URL;
  *  axiosConfig.headers.AuthType = 'WEB';
- *  超时重新请求配置
+ *  超时重新请求配置 146
  */
 const axiosConfig: AxiosRequestConfig = {
   baseURL: baseUrl,
