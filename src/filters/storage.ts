@@ -5,14 +5,13 @@
  *  @param obj          存入的内容，可以是任意类型
  *
  *  @param localData('set', 'localeCut', val);  -调用方式
+ * 
+ *  参数说明：
+ *  localStorage.getItem(key):    获取指定key本地存储的值
+ *  localStorage.setItem(key,value)： 将value存储到key字段
+ *  localStorage.removeItem(key): 删除指定key本地存储的值
  */
-const localData = (method: any, name: any, obj: any) => {
-    /*
-     * 参数说明：
-     * localStorage.getItem(key):    获取指定key本地存储的值
-     * localStorage.setItem(key,value)： 将value存储到key字段
-     * localStorage.removeItem(key): 删除指定key本地存储的值
-     * */
+const localData = (method: string, name: string, obj: any) => {
     switch (method) {
         case 'get':
             if (localStorage.getItem(name + '_obj')) {
@@ -44,7 +43,7 @@ const localData = (method: any, name: any, obj: any) => {
  *
  *  @param sessionData('set', 'localeCut', val);  -调用方式
  */
-const sessionData = (method: any, name: any, obj: any) => {
+const sessionData = (method: string, name: string, obj: any) => {
     switch (method) {
         case 'get':
             if (sessionStorage.getItem(name + '_obj')) {

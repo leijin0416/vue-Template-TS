@@ -4,13 +4,22 @@ import { sessionData } from '@/filters/storage';
 import CryptoJS from './cryptoJS';  // 加密
 import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 
+let baseUrl = '';
+switch (process.env.NODE_ENV) {
+  case "development":
+    baseUrl = "http://192.168.1.105:10086"
+    break
+  case "production":
+    baseUrl = "http://23.111.163.146:10086"
+    break
+}
 /**
  *  const VUE_APP_URL = process.env.VUE_APP_URL;
  *  axiosConfig.headers.AuthType = 'WEB';
  *  超时重新请求配置
  */
 const axiosConfig: AxiosRequestConfig = {
-  baseURL: '',
+  baseURL: baseUrl,
   timeout: 5000,
   withCredentials: true,
 };
@@ -24,7 +33,7 @@ const service = axios.create(axiosConfig);
  *  config.data.hash = md5((new Date()).valueOf() + config.data.func);
  * 
  *  config.data = {
-      data: CryptoJS.Encrypt(JSON.stringify(config.data))  // 文本数据交换格式
+      data: CryptoJS.ECBEncrypt(JSON.stringify(config.data))  // 文本数据交换格式
     }
  */
 service.interceptors.request.use(
@@ -33,6 +42,11 @@ service.interceptors.request.use(
     // tslint:disable-next-line:no-unused-expression
     token && (config.headers.Authorization = token);  // token
     config.headers.AuthType = 'WEB';
+    config.headers['content-Type'] = "application/json;charset=utf-8";
+    config.headers['Accept-Language'] = sessionStorage.getItem('accessLocaleI18n') || 'zh-CN';
+
+    // config.data = CryptoJS.RSAEncrypt(JSON.stringify(config.data))  // 文本数据交换格式
+    
 
     return config;
 
@@ -47,11 +61,15 @@ service.interceptors.request.use(
  *     Decrypt解密
  *     getRealJsonData -去掉双引号，转化json格式
  * 
- *  response.data = getRealJsonData(CryptoJS.Decrypt(response.data.data));
+ *  response.data = getRealJsonData(CryptoJS.ECBDecrypt(response.data.data));
  */
 service.interceptors.response.use(
   response => {
-    // console.log(response);
+    // if(response.data !== null) response.data = CryptoJS.RSADecrypt(response.data);
+    // console.log(CryptoJS.RSADecrypt(response.data));
+    // console.log(sessionData('get', 'HasSessionLocale', ''));
+    
+    
     if (response.data.code === 401120) {
       sessionData('clean', 'HasSessionToken', '');
       sessionData('clean', 'HasSessionUserId', '');
@@ -61,7 +79,7 @@ service.interceptors.response.use(
       sessionData('clean', 'HasSessionTagsMap', '');
 
       Message.error({
-        message: '您的登录信息已失效，请重新登录',
+        message: window['vm'].$t('Hlin.您的登录信息已失效'),
         duration: 3000,
         onClose: () => {
           window.location.reload();

@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <section class="section reveal-top">
-      <h2 class="v-h2">管理后台</h2>
+      <h2 class="v-h2">{{ $t('Hlin.PingPay') }}</h2>
       <el-form 
         :model="ruleForm"
         status-icon 
@@ -10,16 +10,27 @@
         label-width="80px"
         label-position="left"
         class="demo-ruleForm">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="ruleForm.userName"></el-input>
+        <el-form-item :label="$t('Hlin.用户名')" prop="userName">
+          <el-input v-model="ruleForm.userName" />
         </el-form-item>
-        <el-form-item label="密码" prop="pass">
-          <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+        <el-form-item :label="$t('Hlin.密码')" prop="pass">
+          <el-input type="password" v-model="ruleForm.pass" autocomplete="off" show-password />
         </el-form-item>
         <div class="v-btn-box" >
-          <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType" size="medium" class="v-btn">登录</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType" size="medium" class="v-btn">{{ $t('Hlin.登录') }}</el-button>
         </div>
       </el-form>
+      <div class="v-language-box">
+        <div class="weui-flex">
+          <div class="weui-flex-hd"><i class="el-icon-thumb"></i> {{ $t('Hlin.语言') }}</div>
+          <div class="weui-flex-bd">
+            <el-radio-group v-model="radioLocale" @change="onRadioChange">
+              <el-radio label="zh-CN">{{ $t('Hlin.简体中文') }}</el-radio>
+              <!-- <el-radio label="en-US">{{ $t('Hlin.English') }}</el-radio> -->
+            </el-radio-group>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -36,12 +47,11 @@ import { regBlank } from '@/filters/splitRegex';
 import { TreeForeach, scrollRevealEffect } from '@/filters/common';
 
 import { childrenRouter } from '@/mock/childrenRouter';
-import { webGetAdminUserLogin, webGetAdminUserFindRoleById } from "@/api/index";
-
+import { webGetAdminUserLogin, webGetAdminUserFindRoleById, webGetAdminRSAAuthKey } from "@/api/index";
 
 type IndexData = {
-  userName: string,
-  pass: string,
+  userName: string;
+  pass: string
 };
 
 @Component({
@@ -55,37 +65,46 @@ export default class login extends Vue {
     userName: '',
     pass: ''
   };
+  
+  private radioLocale: string = 'zh-CN';
   private loadingType: boolean = false;
   // 请求环境 本地/线上
-  private LocalStatus: boolean = false;
+  private LocalStatus: boolean = true;
   /**
    * 表单验证
    */
   validateuserName = (rule: any, value: string, callback: Function) => {
     if (value === '') {
-      callback(new Error('请输入用户名'));
+      const text = window['vm'].$t('Hlin.请输入用户名');
+      callback(new Error(text));
     } else if (!regBlank.test(value)) {
-      callback(new Error('请勿输入空格字符'));
+      const text = window['vm'].$t('Hlin.请勿输入空字符');
+      callback(new Error(text));
     } else {
       callback();
     }
   };
   validatePass(rule: any, value: string, callback: Function) {
     if (value === '') {
-      callback(new Error('请输入密码'));
+      const text = window['vm'].$t('Hlin.请输入密码');
+      callback(new Error(text));
     } else if (value.length < 6) {
-      callback(new Error('密码不能小于6位'));
+      const text = window['vm'].$t('Hlin.密码不能小于6位');
+      callback(new Error(text));
     } else if (!regBlank.test(value)) {
-      callback(new Error('请勿输入空格字符'));
+      const text = window['vm'].$t('Hlin.请勿输入空字符');
+      callback(new Error(text));
     } else {
       callback();
     }
   };
   validatePass2 = (rule: any, value: string, callback: Function) => {
     if (value === '') {
-      callback(new Error('请再次输入密码'));
+      const text = window['vm'].$t('Hlin.请再次输入密码');
+      callback(new Error(text));
     } else if (value !== this.ruleForm.pass) {
-      callback(new Error('两次输入密码不一致!'));
+      const text = window['vm'].$t('Hlin.两次输入密码不一致');
+      callback(new Error(text));
     } else {
       callback();
     }
@@ -102,9 +121,33 @@ export default class login extends Vue {
     pass: [ { required: true, validator: this.validatePass, trigger: 'blur' } ],
   };
 
+  // 生命周期
+  created() {
+    let getLocaleI18n = sessionStorage.getItem('accessLocaleI18n');
+    if(getLocaleI18n !== null) {
+      this.radioLocale = getLocaleI18n;
+    } else {
+      sessionStorage.setItem('accessLocaleI18n', 'zh-CN');
+    }
+  };
+  
+  // 生命周期
   mounted() {
-    let revealTop = scrollRevealEffect(400, 'right', false, false, '600px');
+    let revealTop = scrollRevealEffect(360, 'right', false, false, '600px');
     this.scrollReveal.reveal('.reveal-top', revealTop);
+  };
+
+
+  onRadioChange() {
+    sessionStorage.setItem('accessLocaleI18n', this.radioLocale); // 设置语言包
+    this.$message.success({
+      message: window['vm'].$t('Hlin.切换成功'),
+      duration: 3000,
+      onClose: () => {
+        window.location.reload();
+      }
+    })
+    // console.log(this.radioLocale);
   }
 
   // 重置
@@ -144,23 +187,22 @@ export default class login extends Vue {
   async submitFormClick() {
     let { userName, pass } = this.ruleForm;
     let md5s = md5(pass).toUpperCase();
-    let subMenuUserId = await webGetAdminUserLogin({
+    let subMenuUser = await webGetAdminUserLogin({
       'userName': userName,
-      'password': md5s,
+      'password': pass,
     });
-    let type: any = MessageTips(subMenuUserId, false, true, '', null, item => {
+    let type = MessageTips(subMenuUser, false, true, '', null, item => {
       this.loadingType = false;
     });
-    // const roleId = subMenuUserId.data.data.roleId;
-    // console.log(subMenuUserId);
+    // console.log(subMenuUser);
     if (type) {
+      const roleId = subMenuUser.data.data.userId;
       // this.loadingType = false;
-      UserStore.storeActionUserName(subMenuUserId.data.data.userName);
-      UserStore.storeActionToken(subMenuUserId.data.data.token);  // 用户Token
+      UserStore.storeActionUserName(subMenuUser.data.data.userName);
+      UserStore.storeActionToken(subMenuUser.data.data.token);  // 用户Token
       // 调用resetRouter方法，把原来的路由替换  【位置关系】
       resetRouter();
-
-      this.submitFormRoleId(1);
+      this.submitFormRoleId(roleId);
     }
   }
 
@@ -171,13 +213,15 @@ export default class login extends Vue {
    *  @TreeForeach            递归遍历
    */
   async submitFormRoleId(roleId: number) {
-    let routersMapList = subMenuRouters;  // 本地路由
+    let routersMapList = subMenuRouters;  // 本地挂载路由
     if (this.LocalStatus) {
       // 后台路由
-      let subMenuRoleId = await webGetAdminUserFindRoleById({
-        'roleId': roleId,
+      let subMenu = await webGetAdminUserFindRoleById({
+        'adminId': roleId,
       });
-      MessageTips(subMenuRoleId, true, true, '登录成功，正在跳转', item => {
+      // console.log(subMenu);
+      const text = window['vm'].$t('Hlin.登录成功');
+      MessageTips(subMenu, true, true, text, item => {
         let dynamicMapList = dynamicRouter;  // 本地路由
         
         TreeForeach(item.data.data, tree => { // 权限递归
@@ -192,13 +236,13 @@ export default class login extends Vue {
         router.addRoutes(routersMapList);
         this.$router.push({path: '/'});
         this.loadingType = false;
-        // console.log(item);
       }, null);
 
     } else {
       // 本地路由
       let data = { data: { code: 200 } }
-      MessageTips(data, true, true, '登录成功，正在跳转', item => {
+      const text = window['vm'].$t('Hlin.登录成功');
+      MessageTips(data, true, true, text, item => {
         let dynamicMapList = dynamicRouter;
         
         TreeForeach(childrenRouter, tree => {  // 权限递归
@@ -230,9 +274,9 @@ export default class login extends Vue {
   position: absolute;
   left: 50%;
   top: 40%;
-  width:400px;
-  box-shadow: 1px 1px 5px #ddd;
-  padding:20px;
+  width: 430px;
+  box-shadow: 1px 1px 10px #ddd;
+  padding:30px;
   border-radius: 10px;
   background-color: #fff;
   transform: translate(-50%, -40%);
@@ -240,8 +284,14 @@ export default class login extends Vue {
 }
 .v-h2 { padding-bottom: 30px; text-align: center; }
 .v-btn-box {
-  margin-top: 30px;
+  margin-top: 40px;
   text-align: center;
   .v-btn {padding: 10px 80px;}
+}
+.v-language-box {
+  padding-top: 20px;
+  .weui-flex-hd {
+    min-width: 80px;
+  }
 }
 </style>

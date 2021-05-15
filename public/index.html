@@ -1,43 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <!-- 启用360浏览器的极速模式(webkit) -->
-        <meta name="renderer" content="webkit">
-        <!-- 避免IE使用兼容模式 -->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="MobileOptimized" content="width">
-        <meta name="HandheldFriendly" content="true">
-        <title></title>
-        <meta data-vue-meta="ssr" name="keywords" content="一呼百应，企业采购，工业品采购">
-        <meta data-vue-meta="ssr" name="description"
-            content="“工业品采购上xxxx!”">
-        <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-        <!-- 使用CDN的CSS文件 -->
-        <% for (var i in htmlWebpackPlugin.options.cdn &&
-            htmlWebpackPlugin.options.cdn.css) { %>
-            <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
-        <% } %>
-        <!-- 使用CDN的CSS文件 -->
-    </head>
-    <body>
-        <noscript>
-            <strong>Please enable it to continue.</strong>
-        </noscript>
-        <div id="app"></div>
-        <!-- 使用CDN的JS文件 -->
-        <% for (var i in htmlWebpackPlugin.options.cdn &&
-            htmlWebpackPlugin.options.cdn.js) { %>
-            <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
-        <% } %>
-        <!-- 使用CDN的JS文件 -->
-        <script>
-            let locale = sessionStorage.getItem('accessLocaleI18n');   // 设置语言包
-            if(locale === 'en') ELEMENT.locale(ELEMENT.lang.en);
-            else ELEMENT.locale(ELEMENT.lang.zhCN);
-            console.log(locale);
-        </script>
-    </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!-- 启用360浏览器的极速模式(webkit) -->
+  <meta name="renderer" content="webkit">
+  <!-- 避免IE使用兼容模式 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="MobileOptimized" content="width">
+  <meta name="HandheldFriendly" content="true">
+  <title></title>
+  <meta data-vue-meta="ssr" name="keywords" content="PingPay, Pay">
+  <meta data-vue-meta="ssr" name="description" content="“PingPay!”">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+
+  <!-- 使用CDN的CSS文件 -->
+  <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>
+    <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
+  <% } %>
+  <!-- 使用CDN的CSS文件 -->
+</head>
+
+<body>
+  <noscript>
+    <strong>Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- 使用CDN的JS文件 -->
+  <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+    <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+  <% } %>
+  <!-- 使用CDN的JS文件 -->
+  
+  <script>
+    let locale = sessionStorage.getItem('accessLocaleI18n');   // 设置语言包
+    if (locale === 'en') ELEMENT.locale(ELEMENT.lang.en);
+    else ELEMENT.locale(ELEMENT.lang.zhCN);
+    // console.log(locale);
+  </script>
+</body>
+
 </html>

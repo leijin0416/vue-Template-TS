@@ -106,16 +106,18 @@ export default class TagBar extends Vue {
    *  @param {String} storeActionLeftMenuMapId   -更新INDEX
    *  @param {Array}  storeActionTagsListMap     -更新TAG数组标签
    */
-  closeTags(index: any) {
+  closeTags(index: number) {
     const _that = this;
     const delItem = _that.tagsList.splice(index, 1)[0];
     const item = _that.tagsList[index] ? _that.tagsList[index] : _that.tagsList[index - 1];
     if (item) {
       delItem.path === _that.$route.fullPath && _that.$router.push(item.path);
+      UserStore.storeActionLeftMenuMapId(item.index);
     } else {
       _that.$router.push('/');
+      UserStore.storeActionLeftMenuMapId('');
     }
-    UserStore.storeActionLeftMenuMapId(item.index);
+    // console.log(index);
     UserStore.storeActionTagsListMap(_that.tagsList);
   }
 

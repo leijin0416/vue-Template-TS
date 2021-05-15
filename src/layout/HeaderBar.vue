@@ -2,9 +2,10 @@
   <div class="headerBar">
     <!-- 折叠按钮 -->
     <div class="collapse-btn" @click="collapseChage">
-      <i class="el-icon-s-fold"></i>
+      <i class="el-icon-s-unfold" v-if="collapse"></i>
+      <i class="el-icon-s-fold" v-else></i>
     </div>
-    <div class="logo">信息直通车</div>
+    <div class="logo">PingPay 后台管理系统</div>
     <div class="header-right">
       <div class="header-user-con">
         <!-- 全屏显示 -->
@@ -27,19 +28,14 @@
         <!-- 用户头像 -->
         <div class="user-avator">
           <img src="@/assets/img/logo-tx.jpg" class="v-img" />
-          <span class="v-text">{{name}}</span>
         </div>
         <!-- 用户名下拉菜单 -->
-        <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-          <span class="el-dropdown-link">
-            {{username}}
-            <i class="el-icon-caret-bottom"></i>
+        <el-dropdown class="user-name" @command="handleCommand">
+          <span class="el-dropdown-link v-text">
+            {{name}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="loginHome">回到首页</el-dropdown-item>
-            <!-- <a href="">
-              <el-dropdown-item>刷新页面</el-dropdown-item>
-            </a> -->
             <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -87,7 +83,8 @@ export default class HeaderBar extends Vue {
 
   @Watch("getUserName", { immediate: true, deep: true })
   onChangeValue(newVal: any, oldVal: any) {
-    this.name = newVal;
+    if(newVal) this.name = newVal;
+    else this.name = sessionData('get', 'HasSessionUserName', '');
     // console.log(newVal);
   }
 
@@ -234,6 +231,9 @@ export default class HeaderBar extends Vue {
 
   .user-name {
     margin-left: 10px;
+    .v-text {
+      font-size: 16px;
+    }
   }
 
   .user-avator {
@@ -249,9 +249,6 @@ export default class HeaderBar extends Vue {
       margin-right: 5px;
       border-radius: 50%;
       border: 1px solid rgba(255, 255, 255, .3);
-    }
-    .v-text {
-      font-size: 16px;
     }
   }
 

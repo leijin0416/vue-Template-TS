@@ -6,6 +6,7 @@ const getComponentSMin = (name: any) => () =>
 const getComponentMMin = (name: any, component: any) => () =>
   import(`@/views/${name}/${component}.vue`);
 
+
 /**
  * meta 可配置参数
  * @param displayNavBar 是否需要底部导航
@@ -22,6 +23,7 @@ export const constantRouterMaps = [
     meta: { title: '登录_后台管理平台' }
   },
 ];
+
 
 /**
  *  需要添加 -动态挂载路由1
@@ -56,48 +58,42 @@ export const dynamicRouter: any = [
     path: '/user/list',
     name: 'userList',
     component: getComponentMMin('User', 'userList'),
-    meta: { title: '用户列表' }
+    meta: { title: '用户列表', permission: [] }
   },
   {
     path: '/user/audit',
     name: 'userAudit',
     component: getComponentMMin('User', 'userAudit'),
-    meta: { title: '用户审核列表' }
-  },
-  {
-    path: '/assets/recharge',
-    name: 'userAssetsRecharge',
-    component: getComponentMMin('UserAssets', 'userRecharge'),
-    meta: { title: '充币列表' }
-  },
-  {
-    path: '/assets/carry',
-    name: 'userAssetsCarry',
-    component: getComponentMMin('UserAssets', 'userCarry'),
-    meta: { title: '提币列表' }
-  },
-  {
-    path: '/assets/turn',
-    name: 'userAssetsTurn',
-    component: getComponentMMin('UserAssets', 'userTurn'),
-    meta: { title: '转账列表' }
-  },
-  {
-    path: '/extension',
-    name: 'extensionList',
-    component: getComponentMMin('Extension', 'index'),
-    meta: { title: '用户推广图列表' }
+    meta: { title: '用户审核列表', permission: [] }
   },
   {
     path: '/system/route',
     name: 'systemRoute',
     component: getComponentMMin('System', 'route'),
-    meta: { title: '路由配置' }
+    meta: { title: '路由配置列表', permission: [] }
+  },
+  {
+    path: '/system/role',
+    name: 'systemList',
+    component: getComponentMMin('System', 'roleList'),
+    meta: { title: '用户角色列表', permission: [] }
   },
   {
     path: '/system/user',
     name: 'systemUser',
     component: getComponentMMin('System', 'administrators'),
-    meta: { title: '管理员列表' }
-  }
+    meta: { title: '管理员列表', permission: [] }
+  },
+  {
+    path: '/information/notice',
+    name: 'informationsNoticeList',
+    component: getComponentMMin('Informations', 'noticeList'),
+    meta: { title: '公告列表', permission: [] }
+  },
+  {
+    path: '/information/banner',
+    name: 'informationsBannerList',
+    component: getComponentMMin('Informations', 'bannerList'),
+    meta: { title: '轮播图列表', permission: [] }
+  },
 ];

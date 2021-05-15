@@ -1,13 +1,29 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators'
 import store from '../index'
-import { webGetAdminContractList, webGetAdminContractTaskList, webGetAdminContractActivityList, webGetAdminContractActivityId, webGetAdminPageUserOpenTaskList } from "@/api/index"
+import { 
+  webGetAdminContractList, 
+  webGetAdminContractTaskList, 
+  webGetAdminContractActivityList, 
+  webGetAdminContractActivityId, 
+  webGetAdminCouponList, 
+  webGetAdminPageUserOpenTaskList, 
+  webGetAdminContractOpenTask, 
+  webGetAdminPageContractStatisticsList, 
+  webGetAdminPageContractStatisticsUserList,
+  webGetAdminPageUserContractTaskList
+} from "@/api/index"
 
 export interface IterContractListState {
-  contractList: any,
-  contractTaskList: any,
-  contractActivityList: any,
+  contractList: any;
+  contractTaskList: any;
+  contractActivityList: any;
   contractActivityId: any,
-  userOpenTaskList: any
+  couponList: any;
+  userOpenTaskList: any;
+  contractOpenTask: any;
+  contractStatisticsList: any;
+  contractStatisticsUserList: any,
+  userContractTaskList: any
 }
 @Module({
   name: "contractList",
@@ -19,7 +35,15 @@ export default class ContractList extends VuexModule implements IterContractList
   contractTaskList = <any>{};
   contractActivityList = <any>{};
   contractActivityId = <any>{};
+  contractOpenTask = <any>{};
+
+  contractStatisticsList = <any>{};
+  contractStatisticsUserList = <any>{};
+
   userOpenTaskList = <any>{};
+  couponList = <any>{};
+
+  userContractTaskList = <any>{};
 
   get getContractList() {
     return this.contractList
@@ -33,10 +57,27 @@ export default class ContractList extends VuexModule implements IterContractList
   get getContractActivityId() {
     return this.contractActivityId
   }
+  get getContractOpenTask() {
+    return this.contractOpenTask
+  }
+
   get getUserOpenTaskList() {
     return this.userOpenTaskList
   }
+  get getCouponList() {
+    return this.couponList
+  }
 
+  get getCouponStatisticsList() {
+    return this.contractStatisticsList
+  }
+  get getCouponStatisticsUserList() {
+    return this.contractStatisticsUserList
+  }
+  
+  get getUserContractTaskList() {
+    return this.userContractTaskList
+  }
   
   @Action
   public async storeActionContractList(item: object) {
@@ -89,6 +130,59 @@ export default class ContractList extends VuexModule implements IterContractList
       
     } else console.log(res);
   }
+  @Action
+  public async storeActionContractOpenTask(item: object) {
+    let res: any = await webGetAdminContractOpenTask(item)  // 开启合约任务列表
+    if (res.data.code === 200) {
+      let data = res.data
+      this.SET_MutationContractOpenTask(data)
+      // console.log(res);
+      
+    } else console.log(res);
+  }
+
+  @Action
+  public async storeActionContractStatisticsList(item: object) {
+    let res: any = await webGetAdminPageContractStatisticsList(item)  // 合约任务统计列表
+    if (res.data.code === 200) {
+      let data = res.data
+      this.SET_MutationContractStatisticsList(data)
+      // console.log(res);
+      
+    } else console.log(res);
+  }
+  @Action
+  public async storeActionContractStatisticsUserList(item: object) {
+    let res: any = await webGetAdminPageContractStatisticsUserList(item)  // 任务统计列表
+    if (res.data.code === 200) {
+      let data = res.data
+      this.SET_MutationContractStatisticsUserList(data)
+      // console.log(res);
+      
+    } else console.log(res);
+  }
+
+  @Action
+  public async storeActionUserContractTaskList(item: object) {
+    let res: any = await webGetAdminPageUserContractTaskList(item)  // 用户任务统计列表
+    if (res.data.code === 200) {
+      let data = res.data
+      this.SET_MutationUserContractTaskList(data)
+      // console.log(res);
+      
+    } else console.log(res);
+  }
+
+  @Action
+  public async storeActionCouponList(item: object) {
+    let res: any = await webGetAdminCouponList(item)  // 优惠券列表
+    if (res.data.code === 200) {
+      let data = res.data
+      this.SET_MutationCouponList(data)
+      // console.log(res);
+      
+    } else console.log(res);
+  }
 
   @Mutation
   private SET_MutationContractList(item: any) {
@@ -110,6 +204,28 @@ export default class ContractList extends VuexModule implements IterContractList
   @Mutation
   private SET_MutationUserOpenTaskList(item: any) {
     this.userOpenTaskList = item;
+  }
+
+  @Mutation
+  private SET_MutationCouponList(item: any) {
+    this.couponList = item;
+  }
+  @Mutation
+  private SET_MutationContractOpenTask(item: any) {
+    this.contractOpenTask = item;
+  }
+  @Mutation
+  private SET_MutationContractStatisticsList(item: any) {
+    this.contractStatisticsList = item;
+  }
+  @Mutation
+  private SET_MutationContractStatisticsUserList(item: any) {
+    this.contractStatisticsUserList = item;
+  }
+  
+  @Mutation
+  private SET_MutationUserContractTaskList(item: any) {
+    this.userContractTaskList = item;
   }
 
 }

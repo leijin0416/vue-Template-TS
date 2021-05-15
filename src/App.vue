@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<!-- v-wechat-title="$route.meta.title" -->
-    <router-view />
+    <router-view v-wechat-title="$t('Hlin.'+ $route.meta.title)" />
 	</div>
 </template>
 
@@ -26,7 +26,7 @@ export default class Index extends Vue {
       UserStore.storeActionRouterMap(JSON.parse(sessionRouterMap));
       console.log(`【刷新】再次执行路由${routersMapList}`);
     }
-    
+    // sessionData('set', 'HasSessionLocale', 'zh');
     // console.log(sessionRouterMap);
   };
   

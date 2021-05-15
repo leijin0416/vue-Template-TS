@@ -1,24 +1,49 @@
 <template>
+  <!-- 用户列表 -->
   <div class="container">
     <el-row>
       <el-col :span="24">
         <div class="v-header-search">
           <el-form
             ref="ruleSearchForm"
-            label-width="100px"
+            label-width="auto"
             class="demo-form-inline"
-            :inline="true" 
+            :inline="true"
             :rules="rules"
             :model="param">
-            <el-form-item label="用户名">
+            <el-form-item :label="$t('Ult.用户状态')">
+              <el-select v-model="param.status" :placeholder="$t('Ult.请选择')" size="small">
+                <el-option
+                  v-for="item in formOptionsStatus"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('Ult.账号激活')">
+              <el-select v-model="param.active" :placeholder="$t('Ult.请选择')" size="small">
+                <el-option
+                  v-for="item in formOptionsActive"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('Ult.用户名')">
               <el-input type="text" v-model="param.userName" size="small" clearable></el-input>
             </el-form-item>
-            <el-button type="primary" @click="submitSearchForm('ruleSearchForm')" size="small" icon="el-icon-search" class="v-btn" >搜 索</el-button>
-            <el-button @click="resetSearchForm('ruleSearchForm')" size="small" icon="el-icon-refresh-left" class="v-btn">重 置</el-button>
+            <el-form-item :label="$t('Ult.推荐人')">
+              <el-input type="text" v-model="param.invitationUserName" size="small" clearable></el-input>
+            </el-form-item>
+            <el-button type="primary" @click="submitSearchForm('ruleSearchForm')" size="small" icon="el-icon-search" class="v-btn" >{{ $t('Ult.搜索') }}</el-button>
+            <el-button @click="resetSearchForm('ruleSearchForm')" size="small" icon="el-icon-refresh-left" class="v-btn">{{ $t('Ult.重置') }}</el-button>
           </el-form>
         </div>
         <div class="v-button-box">
-          <el-button type="primary" size="small" icon="el-icon-user" class="v-btn" @click="onRegisterClick">注册用户</el-button>
+          <el-button type="primary" size="small" icon="el-icon-user" class="v-btn" @click="onRegisterClick">{{ $t('Ult.注册用户') }}</el-button>
+          <el-button type="info" size="small" icon="el-icon-chat-dot-round" class="v-btn" @click="onMessageNotificationClick" plain>{{ $t('Ult.消息通知') }}</el-button>
           <el-button type="info" size="small" icon="el-icon-refresh" class="v-btn" @click="onRefreshClick" circle />
         </div>
         <!-- 表格 -->
@@ -28,49 +53,43 @@
           @handleSelectionChange="handleSelectionChange"
           @handleCurrentChange="handleCurrentChange">
           <!-- 内容部分-操作 -->
-          <el-table-column slot="operateTagStatus" label="用户状态" align="center">
+          <el-table-column slot="operateTagStatus" :label="$t('Ult.用户状态')" align="center" width="auto" >
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status === 1 ? true : false"
-                active-text="正常"
-                inactive-text="已禁止"
+                :active-text="$t('Ult.正常')"
+                :inactive-text="$t('Ult.已禁止')"
                 @change="handleOpenClick(scope.row, 1)">
               </el-switch>
             </template>
           </el-table-column>
 
-          <!-- <el-table-column slot="operateTagRegister" label="注册方式" width="150" align="center">
-            <template slot-scope="scope">
-              <el-tag>{{scope.row.registerType === 1 ? '个人注册' : '邮箱注册'}}</el-tag>
-            </template>
-          </el-table-column> -->
-
-          <el-table-column slot="operateTagActive" label="账号激活" align="center">
+          <el-table-column slot="operateTagActive" :label="$t('Ult.账号激活')" align="center" width="auto" >
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.active === 1 ? true : false"
-                active-text="已激活"
-                inactive-text="未激活"
+                :active-text="$t('Ult.已激活')"
+                :inactive-text="$t('Ult.未激活')"
                 @change="handleOpenClick(scope.row, 2)">
               </el-switch>
             </template>
           </el-table-column>
 
-          <el-table-column slot="operateTagKyc" label="实名审核" width="150" align="center">
+          <el-table-column slot="operateTagKyc" :label="$t('Ult.实名认证')" width="150" align="center">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.kycStatus === 1">通过</el-tag>
-              <el-tag type="info" v-else-if="scope.row.kycStatus === 0">待审核</el-tag>
-              <el-tag type="danger" v-else-if="scope.row.kycStatus === 2">拒绝</el-tag>
-              <el-tag type="info" v-else>未实名认证</el-tag>
+              <el-tag v-if="scope.row.kycStatus === 1">{{ $t('Ult.认证通过') }}</el-tag>
+              <el-tag type="info" v-else-if="scope.row.kycStatus === 0">{{ $t('Ult.待审核') }}</el-tag>
+              <el-tag type="danger" v-else-if="scope.row.kycStatus === 2">{{ $t('Ult.认证拒绝') }}</el-tag>
+              <el-tag type="info" v-else>{{ $t('Ult.未认证') }}</el-tag>
             </template>
           </el-table-column>
           
-          <el-table-column slot="operateButton" label="操作" align='center' width="220">
+          <el-table-column slot="operateButton" :label="$t('Ult.操作')" align='center' width="auto">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="handleRowClick(scope.row)">查看</el-button>
-              <el-button type="text" size="small" @click="handleRowModifyClick(scope.row)">修改</el-button>
-              <el-button type="text" size="small" @click="handleRowContractClick(scope.row)" icon="el-icon-notebook-2" v-if="scope.row.contractRecordStatus  === 1">购买合约</el-button>
-              <el-button type="text" size="small" @click="handleRowTaskClick(scope.row)" icon="el-icon-set-up" class="v-btn-yellow" v-if="scope.row.type === 2 && scope.row.contractRecordStatus === 0 && scope.row.remainingSum > 0 && scope.row.active === 1">预投任务</el-button>
+              <el-button type="text" size="small" @click="handleRowClick(scope.row)">{{ $t('Ult.查看') }}</el-button>
+              <el-button type="text" size="small" @click="handleRowModifyClick(scope.row)" icon="el-icon-edit-outline">{{ $t('Ult.修改') }}</el-button>
+              <el-button type="text" size="small" @click="handleRowContractClick(scope.row)" icon="el-icon-notebook-2" v-if="scope.row.contractRecordStatus  === 1">{{ $t('Ult.购买合约') }}</el-button>
+              <el-button type="text" size="small" @click="handleRowTaskClick(scope.row)" icon="el-icon-set-up" class="v-btn-yellow" v-if="scope.row.type === 2 && scope.row.contractRecordStatus === 0 && scope.row.remainingSum > 0 && scope.row.active === 1">{{ $t('Ult.预投任务') }}</el-button>
             </template>
           </el-table-column>
         </ElTable>
@@ -78,120 +97,134 @@
     </el-row>
     <!-- 左侧弹窗 -->
     <el-drawer
-      title="个人信息"
+      @close="onDrawerClose"
+      :title="$t('Ult.个人信息')"
+      :show-close="false"
       :append-to-body="true"
       :visible.sync="drawerRightType"
       direction="rtl"
       size="40%" >
+      <!-- 注册/修改 模块 -->
       <div v-if="drawerRegisterType">
-        <UserRegister />
+        <UserRegister
+          @getUserRegisterFormClick="getUserRegisterFormClick" />
       </div>
       <div class="content" v-else>
         <div class="weui-flex">
-          <div class="weui-flex-hd">用户ID</div>
+          <div class="weui-flex-hd">{{ $t('Ult.用户ID') }}</div>
           <div class="weui-flex-bd">{{drawerRowData.userId}}</div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">用户名</div>
+          <div class="weui-flex-hd">{{ $t('Ult.用户名') }}</div>
           <div class="weui-flex-bd">{{drawerRowData.userName}}</div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">用户邀请码</div>
+          <div class="weui-flex-hd">{{ $t('Ult.用户邀请码') }}</div>
           <div class="weui-flex-bd">{{drawerRowData.userCode}}</div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">用户等级</div>
-          <div class="weui-flex-bd">{{drawerRowData.levelShortName}}</div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">已购合约名称</div>
-          <div class="weui-flex-bd">{{drawerRowData.contractName ? drawerRowData.contractName : '无'}}</div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">用户状态</div>
+          <div class="weui-flex-hd">{{ $t('Ult.推荐码') }}</div>
           <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.status === 1">正常</el-tag>
-            <el-tag type="danger" v-else>禁止</el-tag>
+            <span v-if="drawerRowData.invitationUserCode === '-1'">{{$t('Ult.暂无')}}</span>
+            <span v-else>{{drawerRowData.invitationUserCode}}</span>
           </div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">账户激活</div>
+          <div class="weui-flex-hd">{{ $t('Ult.推荐人') }}</div>
           <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.active === 1">已激活</el-tag>
-            <el-tag type="danger" v-else>未激活</el-tag>
+            <span>{{drawerRowData.invitationUserName}}</span>
           </div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">实名审核</div>
+          <div class="weui-flex-hd">{{ $t('Ult.已购合约名称') }}</div>
           <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.kycStatus === 1">审核通过</el-tag>
-            <el-tag type="info" v-else-if="drawerRowData.kycStatus === 0">待审核</el-tag>
-            <el-tag type="danger" v-else-if="drawerRowData.kycStatus === 2">审核拒绝</el-tag>
-            <el-tag type="info" v-else>暂未实名</el-tag>
+            <span v-if="!drawerRowData.contractName">{{$t('Ult.暂无')}}</span>
+            <span v-else>{{drawerRowData.contractName}}</span>
           </div>
         </div>
         <div class="weui-flex">
+          <div class="weui-flex-hd">{{ $t('Ult.用户等级') }}</div>
+          <div class="weui-flex-bd">
+            <el-tag>{{drawerRowData.levelShortName}}</el-tag>
+          </div>
+        </div>
+        <div class="weui-flex">
+          <div class="weui-flex-hd">{{ $t('Ult.用户状态') }}</div>
+          <div class="weui-flex-bd">
+            <el-tag v-if="drawerRowData.status === 1">{{ $t('Ult.正常') }}</el-tag>
+            <el-tag type="danger" v-else>{{ $t('Ult.已禁止') }}</el-tag>
+          </div>
+        </div>
+        <div class="weui-flex">
+          <div class="weui-flex-hd">{{ $t('Ult.账号激活') }}</div>
+          <div class="weui-flex-bd">
+            <el-tag v-if="drawerRowData.active === 1">{{ $t('Ult.已激活') }}</el-tag>
+            <el-tag type="danger" v-else>{{ $t('Ult.未激活') }}</el-tag>
+          </div>
+        </div>
+        <div class="weui-flex">
+          <div class="weui-flex-hd">{{ $t('Ult.是否为子账户') }}</div>
+          <div class="weui-flex-bd">
+            <el-tag v-if="drawerRowData.sonAccount === 1">{{ $t('Ult.是') }}</el-tag>
+            <el-tag type="danger" v-else>{{ $t('Ult.否') }}</el-tag>
+          </div>
+        </div>
+        <div class="weui-flex">
+          <div class="weui-flex-hd">{{ $t('Ult.通知类型') }}</div>
+          <div class="weui-flex-bd">
+            <el-tag v-if="drawerRowData.isOpenNotice === 1">{{ $t('Ult.开启') }}</el-tag>
+            <el-tag type="danger" v-else>{{ $t('Ult.禁止') }}</el-tag>
+          </div>
+        </div>
+        <div class="weui-flex">
+          <div class="weui-flex-hd">{{ $t('Ult.实名认证') }}</div>
+          <div class="weui-flex-bd">
+            <el-tag v-if="drawerRowData.kycStatus === 1">{{ $t('Ult.认证通过') }}</el-tag>
+            <el-tag type="info" v-else-if="drawerRowData.kycStatus === 0">{{ $t('Ult.待审核') }}</el-tag>
+            <el-tag type="danger" v-else-if="drawerRowData.kycStatus === 2">{{ $t('Ult.认证拒绝') }}</el-tag>
+            <el-tag type="info" v-else>{{ $t('Ult.未认证') }}</el-tag>
+          </div>
+        </div>
+        <!-- <div class="weui-flex">
           <div class="weui-flex-hd">注册方式</div>
           <div class="weui-flex-bd">
             <el-tag v-if="drawerRowData.registerType === 1">公众注册</el-tag>
             <el-tag v-else>个人注册</el-tag>
           </div>
-        </div>
+        </div> -->
         <div class="weui-flex">
-          <div class="weui-flex-hd">通知类型</div>
-          <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.isOpenNotice === 1">开启</el-tag>
-            <el-tag type="danger" v-else>禁止</el-tag>
+          <div class="weui-flex-hd">{{ $t('Ult.证件类型') }}</div>
+          <div class="weui-flex-bd" v-if="drawerRowData.identityCardType != 0">
+            <el-tag v-if="drawerRowData.identityCardType === 1">{{ $t('Ult.身份证') }}</el-tag>
+            <el-tag v-else>{{ $t('Ult.护照') }}</el-tag>
           </div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">推荐码</div>
-          <div class="weui-flex-bd">{{drawerRowData.invitationUserCode != -1 ? drawerRowData.invitationUserCode : '无'}}</div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">推荐人用户名</div>
-          <div class="weui-flex-bd">{{drawerRowData.invitationUserName != -1 ? drawerRowData.invitationUserName : '无'}}</div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">是否为子账户</div>
-          <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.sonAccount === 1">是</el-tag>
-            <el-tag type="danger" v-else>否</el-tag>
-          </div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">证件类型</div>
-          <div class="weui-flex-bd">
-            <el-tag>{{drawerRowData.identityCardType === 1 ? '身份证' : '护照'}}</el-tag>
-          </div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">证件号码</div>
-          <div class="weui-flex-bd">{{drawerRowData.identityCard}}</div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">用户全名</div>
+          <div class="weui-flex-hd">{{ $t('Ult.真实姓名') }}</div>
           <div class="weui-flex-bd">{{drawerRowData.fullName}}</div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">用户地址</div>
-          <div class="weui-flex-bd">{{drawerRowData.address}}</div>
+          <div class="weui-flex-hd">{{ $t('Ult.证件号码') }}</div>
+          <div class="weui-flex-bd">
+            <span v-if="drawerRowData.identityCard === '-1'">{{$t('Ult.暂无')}}</span>
+            <span v-else>{{drawerRowData.identityCard}}</span>
+          </div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">用户邮箱</div>
+          <div class="weui-flex-hd">{{ $t('Ult.用户邮箱') }}</div>
           <div class="weui-flex-bd">{{drawerRowData.email}}</div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">用户电话</div>
+          <div class="weui-flex-hd">{{ $t('Ult.用户电话') }}</div>
           <div class="weui-flex-bd">{{drawerRowData.phone}}</div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">用户生日</div>
+          <div class="weui-flex-hd">{{ $t('Ult.用户生日') }}</div>
           <div class="weui-flex-bd">{{drawerRowData.birthdayTime}}</div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">创建时间</div>
-          <div class="weui-flex-bd">{{drawerRowData.formatTime}}</div>
+          <div class="weui-flex-hd">{{ $t('Ult.创建时间') }}</div>
+          <div class="weui-flex-bd">{{drawerRowData.createTime}}</div>
         </div>
       </div>
     </el-drawer>
@@ -199,8 +232,8 @@
       :append-to-body="true"
       :visible.sync="dialogFormVisible"
       @close="onObjectKeys(0)" >
-      <div slot="title" class="el-dialog__title" v-if="dialogFormType">购买预投任务</div>
-      <div slot="title" class="el-dialog__title" v-else>购买合约</div>
+      <div slot="title" class="el-dialog__title" v-if="dialogFormType">{{ $t('Ult.购买预投任务') }}</div>
+      <div slot="title" class="el-dialog__title" v-else>{{ $t('Ult.购买合约') }}</div>
       <div class="v-form-box">
         <el-row>
           <el-col :span="15" v-if="dialogFormType">
@@ -210,15 +243,15 @@
               class="demo-ruleForm"
               :rules="rules"
               :model="formUserOpenTask">
-              <el-form-item label="用户ID">
+              <el-form-item :label="$t('Ult.用户ID')">
                 <el-input type="text" v-model="formUserOpenTask.userId" size="medium" disabled></el-input>
               </el-form-item>
-              <el-form-item label="预投数量" prop="investmentAmount">
+              <el-form-item :label="$t('Ult.预投数量')" prop="investmentAmount">
                 <el-input type="number" v-model="formUserOpenTask.investmentAmount" size="medium" ></el-input>
-                <i class="el-icon-bank-card" style="font-size: 18px; vertical-align: middle; margin-bottom: 3px; color:#409eff;" /> 余额: {{formUserOpenTask.amount}}
+                <i class="el-icon-bank-card" style="font-size: 18px; vertical-align: middle; margin-bottom: 3px; color:#409eff;" /> {{ $t('Ult.余额') }}: {{formUserOpenTask.amount}}
               </el-form-item>
-              <el-form-item label="任务周期">
-                <el-select v-model="formUserOpenTask.taskCycle" placeholder="请选择" @change="onChangeSelect" >
+              <el-form-item :label="$t('Ult.任务周期')">
+                <el-select v-model="formUserOpenTask.taskCycle" :placeholder="$t('Ult.请选择')" @change="onChangeSelect" >
                   <el-option
                     v-for="item in userOpenTaskData"
                     :key="item.taskCycle"
@@ -226,7 +259,7 @@
                     :value="item.taskCycle">
                   </el-option>
                 </el-select>
-                <p><i class="el-icon-coin" style="font-size: 18px; vertical-align: middle; margin-bottom: 3px; color:#409eff;" /> 剩余可投数量：{{userTaskAmount}}</p>
+                <p><i class="el-icon-coin" style="font-size: 18px; vertical-align: middle; margin-bottom: 3px; color:#409eff;" /> {{ $t('Ult.剩余可投数量') }}: {{userTaskAmount}}</p>
               </el-form-item>
             </el-form>
           </el-col>
@@ -237,14 +270,14 @@
               class="demo-ruleForm"
               :rules="rules"
               :model="formData">
-              <el-form-item label="用户名">
-                <el-input type="text" v-model="formData.userName" size="medium" disabled></el-input>
+              <el-form-item :label="this.$t('Ult.用户ID')">
+                <el-input v-model="formData.userId" size="medium" disabled></el-input>
               </el-form-item>
-              <el-form-item label="用户ID">
-                <el-input type="text" v-model="formData.userId" size="medium" disabled></el-input>
+              <el-form-item :label="this.$t('Ult.用户名')">
+                <el-input v-model="formData.userName" size="medium" disabled></el-input>
               </el-form-item>
-              <el-form-item label="合约名称">
-                <el-select v-model="formData.contractId" placeholder="请选择">
+              <el-form-item :label="this.$t('Ult.合约名称')">
+                <el-select v-model="formData.contractId" :placeholder="this.$t('Ult.请选择')">
                   <el-option
                     v-for="item in formOptions"
                     :key="item.value"
@@ -259,7 +292,50 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <!-- <el-button @click="resetForm('ruleForm')" v-if="dialogFormType">重置</el-button> -->
-        <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType" >确 定</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType" >{{ $t('Ult.确定') }}</el-button>
+      </div>
+    </el-dialog>
+    <!-- 消息通知 -->
+    <el-dialog
+      :append-to-body="true"
+      :visible.sync="dialogNoticeFormVisible" >
+      <div slot="title" class="el-dialog__title" >{{ $t('Ult.消息通知') }}</div>
+      <div class="v-form-box">
+        <el-row>
+          <el-col :span="15" >
+            <el-form
+              ref="ruleNoticeForm"
+              label-width="130px"
+              class="demo-ruleForm"
+              :rules="rulesNotice"
+              :model="formNotice">
+              <el-form-item :label="$t('Ult.通知类型')" prop="type" >
+                <el-radio-group v-model="formNotice.type" @change="onNoticeChange">
+                  <el-radio label="1" >{{ $t('Ult.全部') }}</el-radio>
+                  <el-radio label="0" >{{ $t('Ult.部分') }}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item :label="$t('Ult.标题')" prop="title">
+                <el-input type="text" v-model="formNotice.title" size="medium" ></el-input>
+              </el-form-item>
+              <el-form-item :label="$t('Ult.消息')" prop="message">
+                <el-input type="text" v-model="formNotice.message" size="medium" ></el-input>
+              </el-form-item>
+              <el-form-item :label="$t('Ult.发送时间')" prop="dataTime">
+                <el-date-picker
+                  v-model="formNotice.dataTime"
+                  type="datetime"
+                  :placeholder="$t('Ult.请选择')"
+                  value-format="timestamp">
+                </el-date-picker>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <!-- <el-button @click="resetForm('ruleNoticeForm')" v-if="dialogFormType">重置</el-button> -->
+        <el-button type="primary" @click="submitNoticeForm('ruleNoticeForm')" :loading="loadingType" >{{ $t('Ult.确定') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -269,19 +345,29 @@
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
+import { sessionData } from '@/filters/storage';
+import { IndexUserListData } from '@/types/views/index.interface';
 import { UserListStore } from '@/store/private/PageUserList';
 import { ContractListStore } from '@/store/private/PageContractList';
-import { webGetAdminPageUserAtive, webGetAdminPageUserBlockedAccount, webGetAdminPageUserBuyContract, webGetAdminPageUserRemainingAccount, webGetAdminPageUserInvestmentTaskBuy } from "@/api/index";
-import { IndexUserListData } from '@/types/views/index.interface';
-import { sessionData } from '@/filters/storage';
+import { 
+  webGetAdminPageUserAtive, 
+  webGetAdminPageUserBlockedAccount, 
+  webGetAdminPageUserBuyContract, 
+  webGetAdminPageUserRemainingAccount, 
+  webGetAdminPageUserInvestmentTaskBuy,
+  webGetAdminSendNotice
+} from "@/api/index";
 
 import ElTable from "@/components/ElTable/index.vue";
 import UserRegister from "./userRegister.vue";
 
 type IndexData = {
-  page: number,
-  pageSize: number,
-  userName: string,
+  page: number;
+  pageSize: number;
+  userName: string;
+  invitationUserName: string;
+  status: string;
+  active: string;
 };
 
 @Component({
@@ -296,7 +382,30 @@ export default class userList extends Vue {
     page: 1,
     pageSize: 12,
     userName: '',
+    invitationUserName: '',
+    status: '',
+    active: ''
   };
+  private formOptionsStatus: object = [
+    {
+      label: window['vm'].$t('Ult.正常'),
+      value: '1'
+    },
+    {
+      label: window['vm'].$t('Ult.已禁止'),
+      value: '0'
+    },
+  ]
+  private formOptionsActive: object = [
+    {
+      label: window['vm'].$t('Ult.已激活'),
+      value: '1'
+    },
+    {
+      label: window['vm'].$t('Ult.未激活'),
+      value: '0'
+    },
+  ]
 
   private totalCount: number = 1;  // 表格总数
   private tableData: object = [];  // 表格数据
@@ -306,20 +415,18 @@ export default class userList extends Vue {
     },
     {
       prop: 'userName',
-      label: '用户名',
+      label: window['vm'].$t('Ult.用户名'),
+      width: 'auto',
     },
     {
       prop: 'userCode',
-      label: '用户邀请码',
-      width: '150',
+      label: window['vm'].$t('Ult.用户邀请码'),
+      width: 'auto',
     },
     {
       prop: 'invitationUserName',
-      label: '推荐人用户名',
-      width: '150',
-    },
-    {
-      slot: 'operateTagKyc',
+      label: window['vm'].$t('Ult.推荐人'),
+      width: 'auto',
     },
     {
       slot: 'operateTagStatus',
@@ -328,9 +435,9 @@ export default class userList extends Vue {
       slot: 'operateTagActive',
     },
     {
-      prop: 'formatTime',
-      label: '创建时间',
-      width: 'auto',
+      prop: 'createTime',
+      label: window['vm'].$t('Ult.创建时间'),
+      width: '165',
     },
     {
       slot: 'operateButton', //内容slot
@@ -364,28 +471,57 @@ export default class userList extends Vue {
     userId: "",
     taskCycle: "",
     investmentAmount: "",
-    amount: 0,
+    amount: 0
   };
 
-  private rules: any  = {
+  // 消息通知
+  private dialogNoticeFormVisible: boolean = false;
+  private noticeFormNameMap: any = [];
+  private formNotice = {
+    message: '',
+    title: '',
+    type: '',
+    userName: '',
+    dataTime: '',
+    userType: 'APP'
+  }
+
+  private rules = {
     investmentAmount: [
-      { required: true, message: '请输入预投数量', trigger: 'blur' },
+      { required: true, message: window['vm'].$t('Ult.请输入预投数量'), trigger: 'blur' },
     ],
     limitAmount: [
-      { required: true, message: '请输入身份证号', trigger: 'blur' },
-      { min: 15, max: 18, message: '请如实填写18位号码', trigger: 'blur' },
+      { required: true, message: window['vm'].$t('Ult.请输入身份证号'), trigger: 'blur' },
+      { min: 18, max: 19, message: window['vm'].$t('Ult.请填写18位数字号码'), trigger: 'blur' },
       {
         required: true,
         pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
-        message: '请输入正确的身份证号码',
+        message: window['vm'].$t('Ult.请输入正确的身份证号码'),
         trigger: 'blur'
       }
     ]
   };
 
+  private rulesNotice = {
+    message: [
+      { required: true, message: window['vm'].$t('Ult.请输入消息'), trigger: 'blur' },
+    ],
+    title: [
+      { required: true, message: window['vm'].$t('Ult.请输入标题'), trigger: 'blur' },
+    ],
+    type: [
+      { required: true, message: window['vm'].$t('Ult.请选择通知类型'), trigger: 'change' },
+    ],
+    dataTime: [
+      { required: true, message: window['vm'].$t('Ult.请选择时间'), trigger: 'change' },
+    ],
+  };
+
   // 获取数据
   get getUserPageList() {
-    return UserListStore.getUserPageList
+    if(UserListStore.getUserPageList.code === 200) {
+      return UserListStore.getUserPageList
+    }
   };
   get getContractActivityId() {
     return ContractListStore.getContractActivityId
@@ -396,19 +532,17 @@ export default class userList extends Vue {
 
   // 监听数据列表
   @Watch('getUserPageList', { deep: true })
-  userPageChange(newValue: any) {
+  userPageChange(newValue) {
     let list = newValue.data.list;
-    // console.log(list);
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
-        el.birthdayTime = FormatCurrentTime("YYYY-mm-dd",el.birthday)
-        el.formatTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS",el.createTime)
+        el.birthdayTime = FormatCurrentTime("YYYY-mm-dd", el.birthday)
+        el.createTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime)
       });
-      
       this.tableData = obj;
-    } else { this.tableData = list;}
-      this.totalCount = newValue.data.total;
+    } else {this.tableData = list;}
+    this.totalCount = newValue.data.total;
     // console.log(newValue)
   };
 
@@ -416,14 +550,12 @@ export default class userList extends Vue {
    *  监听用户- 合约名称列表
    */
   @Watch('getContractActivityId', { deep: true })
-  contractActivityId(newValue: any) {
+  contractActivityId(newValue) {
     let list = newValue.data;
-    // console.log(list);
     list.forEach( el => {
       el.value = el.contractId
       el.label = el.contractName
     });
-
     this.formOptions = list;
     // console.log(newValue)
   };
@@ -432,15 +564,14 @@ export default class userList extends Vue {
    *  监听用户- 合约任务周期列表
    */
   @Watch('getUserOpenTaskList', { deep: true })
-  userOpenTaskList(newValue: any) {
+  userOpenTaskList(newValue) {
     const list = newValue.data;
     this.userOpenTaskData = list;
-    // console.log(list);
     // console.log(newValue)
   };
 
   @Watch('param', { deep: true })
-  paramChange(newValue: any) {
+  paramChange(newValue) {
     // console.log(newValue)
   };
 
@@ -453,6 +584,17 @@ export default class userList extends Vue {
   // 生命周期
   mounted () {};
 
+  // 左侧弹窗关闭
+  private onDrawerClose() {
+    const row = {};
+    // if(this.drawerRegisterType) UserListStore.storeActionPageUserRowInfo(row);
+  }
+
+  // 注册/修改 表单成功回调刷新
+  private getUserRegisterFormClick(id) {
+    UserListStore.storeActionPageUserList(this.param);
+  }
+
   // 获取剩余可投数量
   private onChangeSelect(event) {
     let data = this.userOpenTaskData;  // 任务周期列表
@@ -463,6 +605,68 @@ export default class userList extends Vue {
     });
   }
 
+  // 刷新
+  private onRefreshClick() {
+    UserListStore.storeActionPageUserList(this.param);
+  }
+
+  // 复选框
+  private handleSelectionChange(data) {
+    this.noticeFormNameMap = data;
+    // console.log(data);
+  }
+  // 分页
+  private handleCurrentChange(val) {
+    const _that = this;
+    _that.param.page = val
+    UserListStore.storeActionPageUserList(_that.param);
+    // console.log(this.param);
+  }
+  
+  // 操作按钮  -查看
+  private handleRowClick(row: IndexUserListData) {
+    const _that = this;
+    const obj = deepCloneData(row);
+    _that.drawerRightType = true;
+    _that.drawerRegisterType = false;
+    _that.drawerRowData = obj;
+    // console.log(obj);
+  }
+
+  // 注册
+  private onRegisterClick() {
+    const _that = this;
+    const row = {
+      ids: 1
+    };
+    _that.drawerRightType = true;
+    _that.drawerRegisterType = true;
+    UserListStore.storeActionPageUserRowInfo(row);
+  }
+
+  // 修改
+  private handleRowModifyClick(row: IndexUserListData) {
+    const _that = this;
+    const obj = deepCloneData(row);
+    UserListStore.storeActionPageUserRowInfo(obj);
+    _that.drawerRightType = true;
+    _that.drawerRegisterType = true;
+    // console.log(row);
+  }
+
+  // 重置
+  private resetForm(formName) {
+    const _that = this;
+    const ref: any = _that.$refs[formName];
+    ref.resetFields();
+  }
+  private resetSearchForm(formName) {
+    Object.keys(this.param).forEach(key => {
+      if(key == 'userName' || key == 'invitationUserName' || key == 'status' || key == 'active') this.param[key] = '';
+    });
+    UserListStore.storeActionPageUserList(this.param);
+    // console.log(this.param);
+  }
   // 搜索
   private submitSearchForm(formName) {
     let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
@@ -475,76 +679,75 @@ export default class userList extends Vue {
       }
     });
   }
-  
-  private resetSearchForm(formName) {
-    Object.keys(this.param).forEach(key => {
-      if(key == 'userName') this.param[key] = ''
+
+  // 发送通知-弹窗
+  private onMessageNotificationClick() {
+    this.dialogNoticeFormVisible = true;
+  }
+
+  // 发送通知-部分用户
+  private onNoticeChange(val) {
+    // console.log(val);
+    if(val === '0' && this.noticeFormNameMap.length === 0) {
+      this.$message.error({
+        message: window['vm'].$t('Ult.请先勾选用户'),
+        duration: 3000,
+        onClose: () => {
+          this.resetForm('ruleNoticeForm');
+          this.dialogNoticeFormVisible = false;
+        }
+      })
+    }
+  }
+
+  private submitNoticeForm(formName) {
+    let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
+    this.loadingType = true;
+    ref.validate((valid) => {
+      if (valid) {
+        this.onDialogNoticeFormClick();
+      } else {
+        this.loadingType = false;
+        console.log('error submit!!');
+        return false;
+      }
     });
-    UserListStore.storeActionPageUserList(this.param);
-    // console.log(this.param);
   }
 
-  // 刷新
-  private onRefreshClick() {
-    UserListStore.storeActionPageUserList(this.param);
-  }
-  
-  // 操作按钮  -查看
-  private handleRowClick(row: IndexUserListData) {
-    const _that = this;
-    const obj = deepCloneData(row);
-    _that.$nextTick(() => {
-      _that.drawerRightType = true;
-      _that.drawerRegisterType = false;
-      _that.drawerRowData = obj;
+  // 通知提交
+  private async onDialogNoticeFormClick() {
+    let nameMap = this.noticeFormNameMap;
+    let userName: any = [];
+    nameMap.forEach( el => {
+      userName.push(el.userName);
+    });
+    let { message, title, dataTime, type, userType } = this.formNotice;
+    
+    const res = await webGetAdminSendNotice({
+      'message': message,
+      'title': title,
+      'dataTime': dataTime,
+      'type': type,
+      'userType': userType,
+      'userName': userName.toString(),
     })
-    // console.log(obj);
-  }
-
-  // 注册
-  private onRegisterClick() {
-    const _that = this;
-    const row = {};
-    UserListStore.storeActionPageUserRowInfo(row);
-    _that.$nextTick(() => {
-      _that.drawerRightType = true;
-      _that.drawerRegisterType = true;
-    })
-  }
-
-  // 修改
-  private handleRowModifyClick(row: IndexUserListData) {
-    const _that = this;
-    const obj = deepCloneData(row);
-    UserListStore.storeActionPageUserRowInfo(obj);
-    _that.$nextTick(() => {
-      _that.drawerRightType = true;
-      _that.drawerRegisterType = true;
-    })
-    // console.log(row);
-  }
-
-  // 分页
-  private handleCurrentChange(val) {
-    const _that = this;
-    _that.$nextTick(() => {
-      _that.param.page = val
-    })
-    UserListStore.storeActionPageUserList(_that.param);
-    // console.log(this.param);
-  }
-
-  // 复选框
-  private handleSelectionChange(val) {
-    console.log(val);
+    const text = window['vm'].$t('Ult.发送成功')
+    MessageTips(res, true, true, text, item => {
+      this.loadingType = false;
+      this.resetForm('ruleNoticeForm');
+    }, err => {
+      this.loadingType = false;
+    });
   }
 
   // 表格Switch操作 确认框
   private handleOpenClick(row, id) {
     const _that = this;
-    _that.$confirm('此操作将执行重要信息, 是否继续?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    const text1 = window['vm'].$t('Ult.此操作将删除该条信息');
+    const text2 = window['vm'].$t('Ult.提示');
+    _that.$confirm(text1, text2, {
+      confirmButtonText: window['vm'].$t('Ult.确定'),
+      cancelButtonText: window['vm'].$t('Ult.取消'),
       type: 'warning',
     }).then(() => {
       if (id === 1) {
@@ -565,9 +768,9 @@ export default class userList extends Vue {
         userId: row.userId
       }
       // console.log(params);
-      
-      let res: any = await webGetAdminPageUserAtive(params)
-      MessageTips(res, true, true, '修改成功', item => {
+      const res = await webGetAdminPageUserAtive(params)
+      const text = window['vm'].$t('Ult.激活成功')
+      MessageTips(res, true, true, text, item => {
         UserListStore.storeActionPageUserList(this.param);
       }, null);
     } else {
@@ -575,10 +778,9 @@ export default class userList extends Vue {
         active: 0,
         userId: row.userId
       }
-      // console.log(params);
-      
-      let res: any = await webGetAdminPageUserAtive(params)
-      MessageTips(res, true, true, '修改成功', item => {
+      const res = await webGetAdminPageUserAtive(params)
+      const text = window['vm'].$t('Ult.锁定成功')
+      MessageTips(res, true, true, text, item => {
         UserListStore.storeActionPageUserList(this.param);
       }, null);
 
@@ -593,10 +795,9 @@ export default class userList extends Vue {
         status: 1,
         userId: row.userId
       }
-      
-      let res: any = await webGetAdminPageUserBlockedAccount(params)
-      // console.log(res);
-      MessageTips(res, true, true, '修改状态成功', item => {
+      const res = await webGetAdminPageUserBlockedAccount(params)
+      const text = window['vm'].$t('Ult.修改成功')
+      MessageTips(res, true, true, text, item => {
         UserListStore.storeActionPageUserList(this.param);
       }, null);
     } else {
@@ -604,8 +805,9 @@ export default class userList extends Vue {
         status: 0,
         userId: row.userId
       }
-      let res: any = await webGetAdminPageUserBlockedAccount(params)
-      MessageTips(res, true, true, '修改状态成功', item => {
+      const res = await webGetAdminPageUserBlockedAccount(params)
+      const text = window['vm'].$t('Ult.禁止成功')
+      MessageTips(res, true, true, text, item => {
         UserListStore.storeActionPageUserList(this.param);
       }, null);
     }
@@ -614,7 +816,7 @@ export default class userList extends Vue {
   // 用户预投任务
   private async handleRowTaskClick(row) {
     let { userId } = row;
-    let res: any = await webGetAdminPageUserRemainingAccount({'userId': userId});  // 用户余额
+    let res = await webGetAdminPageUserRemainingAccount({'userId': userId});  // 用户余额
     ContractListStore.storeActionUserOpenTaskList({'userId': userId});  // 任务列表
     // console.log(res);
     if (res.data.code === 200) {
@@ -681,14 +883,15 @@ export default class userList extends Vue {
         }, 3000);
       } else {
         // 任务
-        let res: any = await webGetAdminPageUserInvestmentTaskBuy({
+        let res = await webGetAdminPageUserInvestmentTaskBuy({
           'userId': userId,
           'taskCycle': taskCycle,
           'investmentAmount': investmentAmount,
         })
         // console.log(res);
         
-        MessageTips(res, true, true, '预投成功', item => {
+        const text = window['vm'].$t('Ult.预投成功')
+        MessageTips(res, true, true, text, item => {
           this.onRefreshClick();
           this.onObjectKeys(1);
           this.loadingType = false;
@@ -699,12 +902,13 @@ export default class userList extends Vue {
     } else {
       // 合约
       let { userId, contractId } = this.formData;
-      let res: any = await webGetAdminPageUserBuyContract({
+      let res = await webGetAdminPageUserBuyContract({
         'userId': userId,
         'contractId': contractId,
       })
       // console.log(res);
-      MessageTips(res, true, true, '购买成功', item => {
+      const text = window['vm'].$t('Ult.购买成功')
+      MessageTips(res, true, true, text, item => {
         this.onRefreshClick();
         this.onObjectKeys(2);
         this.loadingType = false;
@@ -722,14 +926,7 @@ export default class userList extends Vue {
   text-align: center;
 }
 /deep/.el-button span {margin-left: 3px;}
-.container {
-  min-height: 800px;
-  /deep/.el-switch__label {color: #909399;}
-  /deep/.el-switch__label.is-active {
-    font-weight: bold;
-    color: #409EFF;
-  }
-}
+// drawer 弹窗
 /deep/.el-drawer__header {
   margin-bottom: 15px;
   font-size: 18px;
@@ -748,10 +945,23 @@ export default class userList extends Vue {
     .weui-flex-hd {min-width: 120px;font-size: 12px; color: #666;}
   }
 }
+// dialog 弹窗
+/deep/.el-dialog__body {
+  min-height: 300px;
+}
 
+.container {
+  min-height: 800px;
+  /deep/.el-switch__label {color: #909399;}
+  /deep/.el-switch__label.is-active {
+    font-weight: bold;
+    color: #409EFF;
+  }
+}
 // 表格头部搜索
 .v-header-search {
   border-bottom: 1px solid #eee;
+  /deep/.el-form-item__label {padding-left: 12px;}
   /deep/.el-form--inline .el-form-item, .v-btn {
     vertical-align: middle;
     margin-bottom: 15px;

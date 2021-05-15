@@ -10,7 +10,7 @@ Vue.use(Router);
 
 const createRouter = () => new Router({
   routes: constantRouterMaps,
-  mode: 'history',  // hash
+  mode: 'history',  // hash  history
 });
 
 const router: any = createRouter();
@@ -28,9 +28,7 @@ const LOGIN_PAGE_NAME = 'Login';
 router.beforeEach((to: any, from, next) => {
   document.title = to.meta.title;    // 改变每次页面的标题
   const token = sessionData('get', 'HasSessionToken', '');
-  // console.log(to);
-  // console.log(from);
-  // console.log(token);
+  // console.log(`${to}__${from}__${token}`);
   
   if (to.path !== from.path) NProgress.start();  // 进度条
   if (token !== null) next();

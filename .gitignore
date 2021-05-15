@@ -1,7 +1,9 @@
+# OS X
 .DS_Store
-/node_modules
-/dist
-/备份
+
+node_modules/
+dist/
+备份/
 
 # local env files
 .env.local
@@ -20,3 +22,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+*.zip
+*.rar
+*.tar.gz
+*.lock

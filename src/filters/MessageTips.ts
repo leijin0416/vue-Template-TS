@@ -2,10 +2,10 @@ import { Message } from 'element-ui';
 
 /**
  * Message 消息提示
- * @res 数据
- * @success true | false 是否需要
- * @error true | false  是否需要
- * @text 提示文本
+ * @res    数据
+ * @success     true | false 是否需要
+ * @error       true | false  是否需要
+ * @text        提示文本
  * @successFun  成功回调
  * @errorFun    失败回调
  */

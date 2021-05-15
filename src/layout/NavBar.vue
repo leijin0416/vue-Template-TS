@@ -15,25 +15,27 @@
         <template v-if="item.children && item.children.length > 0">
           <el-submenu :index="item.index" :key="item.index" :route="item.router" >
             <template slot="title">
-              <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
+              <i :class="item.icon"></i>
+              <span slot="title">{{ activeLocale === 'zh-CN' ? item.title : item.titleEn }}</span>
             </template>
             <!-- 三级 children -->
             <template v-for="subItem in item.children">
               <el-submenu v-if="subItem.children && subItem.children.length > 0" :index="subItem.index" :key="subItem.index" :route="subItem.router">
                 <template slot="title">{{ subItem.title }}</template>
                 <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.index" :route="threeItem.router" >
-                  {{ threeItem.title }}
+                  <span>{{ activeLocale === 'zh-CN' ? threeItem.title : threeItem.titleEn }}</span>
                 </el-menu-item>
               </el-submenu>
-              <el-menu-item v-else :index="subItem.index" :key="subItem.index" :route="subItem.router" >
-                {{ subItem.title }}
+              <el-menu-item :index="subItem.index" :key="subItem.index" :route="subItem.router" v-else >
+                {{ activeLocale === 'zh-CN' ? subItem.title : subItem.titleEn }}
               </el-menu-item>
             </template>
           </el-submenu>
         </template>
         <template v-else>
           <el-menu-item :index="item.index" :key="item.index" :route="item.router" >
-            <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
+            <i :class="item.icon"></i>
+            <span slot="title">{{ activeLocale === 'zh-CN' ? item.title : item.titleEn }}</span>
           </el-menu-item>
         </template>
       </template>
@@ -147,6 +149,7 @@ export default class NavBar extends Vue {
   private navMenuData: any = [];
   private collapse: boolean = false;
   private activeIndex: string = '';
+  private activeLocale: string = '';
 
   // computed -计算 get 用法
   get onRoutes(): any {
@@ -164,33 +167,37 @@ export default class NavBar extends Vue {
     const _that = this;
     if (newVal === '') _that.activeIndex = '';
     else _that.activeIndex = newVal;
-    console.log(`【监听】NAVs数组路由INDEX：${newVal}`);
+    console.log(`【监听】NavsLeft 路由index：${newVal}`);
   }
 
   created() {
     const _that = this;
     const sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
     // 获取并循环 左侧路由数组
-    const data: any = sessionData('get', 'HasSessionRouterMap', '');
-    const navbarData: any = JSON.parse(data);
+    const routerData: any = sessionData('get', 'HasSessionRouterMap', '');
+    const navbarData: any = JSON.parse(routerData);
+    // console.log(navbarData);
+    let getLocaleI18n = sessionStorage.getItem('accessLocaleI18n');
+    if(getLocaleI18n !== null) {
+      this.activeLocale = getLocaleI18n;
+    }
+    
     if (sessionRouterId != null) _that.activeIndex = sessionRouterId;
     if (navbarData) {
       navbarData.forEach( el => {
         let data = el.children;
-        el.icon = el.type;
-        el.index = el.id; // 父标识
+        el.index = el.menuId;       // 父标识
         if (data.length > 0) {
           data.forEach( (cd, j) => {
             let size = Number(j) + 1;
-            let num = el.id + '-' + size;
+            let num = el.menuId + '-' + size;
             cd.index = num.toString();  // 子标识
-            // console.log(typeof cd.index);
           });
         }
       });
       // console.log(navbarData);
       _that.navMenuData = navbarData;
-      UserStore.storeActionMenuMap(navbarData);
+      UserStore.storeActionMenuMap(navbarData);   // 缓存菜单
     };
     
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏

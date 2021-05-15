@@ -1,29 +1,5 @@
 # TS + Element + VUE2.0
 
-标签|内容
-:-|:-:
-| [【biaochenxuying】1025 看看看](https://github.com/biaochenxuying/blog/issues/25)
-| ——
-[vuex-class 如何使用](https://blog.csdn.net/qq_33447462/article/details/85251527) | [【模板】 06/19](https://github.com/livelyPeng/vue-cli3-tpl) <br/> [【模板】 06/22](https://github.com/Jack-Star-T/Vue3.0-typescript/tree/master/src)
-[vscode 的注释](https://segmentfault.com/q/1010000013367208) <br/> [TS 规范](https://juejin.im/post/5c173a84f265da610e7ffe44#heading-6)  | [Vue2.x对比Composition API写法](https://juejin.im/post/5e9d81b851882573866ba89c)
- | ——
-[【VUEX私有】vuex-module-decorators](https://blog.csdn.net/SkelleBest/article/details/102971817) | [【1.0】vue-property-decorator 用法 详细](https://blog.csdn.net/sllailcp/article/details/102542796/)
-[【Git】 案例](https://github.com/chengxintuan/vue-typescript-project/blob/master/src/page/todo/todo.ts) <br/> [【Git】1.1 slailcp -form表单校验](https://github.com/slailcp/vue-cli3/blob/master/src/pc-project/views/login/index.vue) | ——
- | ——
-[【Git】Element UI Pro3.0](https://github.com/qidaizhe11/element-pro) <br/> [【Git】2.1 tower1229 -Tree树形结构](https://github.com/tower1229) | [【掘金】vue-element-admin 登录权限校验](https://juejin.im/post/6894635161326256141) [权限校验 2](https://juejin.cn/post/6844904040598339598) <br/> [【Git】2.0 -前端内参 面经](https://github.com/coffe1891/frontend-hard-mode-interview)
-
-```html
-
-https://segmentfault.com/a/1190000016374702?utm_source=sf-similar-article
-
-https://segmentfault.com/a/1190000011574698?utm_source=sf-similar-article
-
-https://blog.csdn.net/qq_41810005/article/details/90764271
-
-https://blog.csdn.net/mutouafangzi/article/details/78963639?utm_medium=distribute.pc_relevant_download.none-task-blog-2~default~BlogCommendFromBaidu~default-20.nonecase&dist_request_id=1328769.42031.16175177928193631&depth_1-utm_source=distribute.pc_relevant_download.none-task-blog-2~default~BlogCommendFromBaidu~default-20.nonecas
-
-```
-
 ---
 
 ## vue2.5后增加了对ts的支持
@@ -48,7 +24,7 @@ https://blog.csdn.net/mutouafangzi/article/details/78963639?utm_medium=distribut
 - 环境文件放置根目录下
 - 关于打包配置路径,请修改vue.config.js文件下的输出地址
 - 除了 `baseUrl` 和 `NODE_ENV` 其他环境变量使用 VUE_APP 开头
-- 另外还设定本地运行环境`local`,你可以在项目拉取下来后补充 `.env.development.local` 文件,并添加如下信息并替换你自己所在服务器的域名及端口;
+- 另外还设定本地运行环境`local`,可以在项目拉取下来后补充 `.env.development.local` 文件,并添加如下信息并替换你自己所在服务器的域名及端口;
 例如 :
     NODE_ENV='development'
     VUE_APP_URL='http://localhost:8080'  

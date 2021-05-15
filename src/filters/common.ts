@@ -1,5 +1,5 @@
 // 递归遍历
-const TreeForeach =  (tree: any, func: any) => {
+const TreeForeach =  (tree, func) => {
   if (!tree || typeof tree !== 'object') return null;
   tree.forEach((data: { children: any; }) => {
     if (typeof data.children === 'object' && data.children.length > 0) {
@@ -11,7 +11,7 @@ const TreeForeach =  (tree: any, func: any) => {
 };
 
 // 去重
-const FormatArrMapHas = (tree: any) => {
+const FormatArrMapHas = (tree) => {
   let map = new Map();
   for (let item of tree) {
     if (!map.has(item.title)) {
@@ -21,24 +21,34 @@ const FormatArrMapHas = (tree: any) => {
   return [...map.values()];
 };
 
-// 转换时间
+/**
+ * @param {*} time  时间戳
+ * 
+ * @param {*} Y  年
+ * @param {*} m  月
+ * @param {*} d  日
+ * @param {*} H  时
+ * @param {*} M  分
+ * @param {*} S  秒
+ * @returns 
+ */
 const FormatCurrentTime = (fmt, time) => {
   let date = new Date(time)
   let ret;
   const opt = {
-      "Y+": date.getFullYear().toString(),        // 年
-      "m+": (date.getMonth() + 1).toString(),     // 月
-      "d+": date.getDate().toString(),            // 日
-      "H+": date.getHours().toString(),           // 时
-      "M+": date.getMinutes().toString(),         // 分
-      "S+": date.getSeconds().toString()          // 秒
+      "Y+": date.getFullYear().toString(),
+      "m+": (date.getMonth() + 1).toString(),
+      "d+": date.getDate().toString(),
+      "H+": date.getHours().toString(),
+      "M+": date.getMinutes().toString(),
+      "S+": date.getSeconds().toString()
       // 有其他格式化字符需求可以继续添加，必须转化成字符串
   };
   for (let k in opt) {
-      ret = new RegExp("(" + k + ")").exec(fmt);
-      if (ret) {
-          fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-      };
+    ret = new RegExp("(" + k + ")").exec(fmt);
+    if (ret) {
+      fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+    };
   };
   return fmt;
 }

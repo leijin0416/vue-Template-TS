@@ -4,7 +4,7 @@
       <img src="@/assets/img/icon-404_bg.png" alt="404.png">
     </div>
     <div class="ivu-ahover">
-      <router-link tag="a" to="/login" class="ahover">重新登录</router-link>
+      <router-link tag="a" to="/login" class="ahover">{{ $t('Hlin.重新登录') }}</router-link>
     </div>
   </div>
 </template>

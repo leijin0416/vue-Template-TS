@@ -25,40 +25,44 @@ const cdn = {
     'vue-i18n': 'VueI18n',
     'element-ui': 'ELEMENT',
     'scrollReveal': 'ScrollReveal',
+    'xlsx': 'xlsx',
+    'echarts': 'echarts'
   },
   css: [
 		'https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/theme-chalk/index.css',
+    'https://cdn.bootcdn.net/ajax/libs/viewerjs/1.5.0/viewer.min.css'
 	],
   js: [
     'https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.min.js',
     'https://cdn.bootcdn.net/ajax/libs/vue-router/3.2.0/vue-router.min.js',
     'https://cdn.bootcdn.net/ajax/libs/vuex/3.2.0/vuex.min.js',
-		'https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js',
+		'https://cdn.bootcdn.net/ajax/libs/axios/0.18.0/axios.min.js',
     "https://cdn.bootcdn.net/ajax/libs/vue-i18n/8.9.0/vue-i18n.min.js",
 		'https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/index.js',
     "https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/locale/en.min.js",
     "https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/locale/zh-CN.min.js",
-    "https://cdn.bootcdn.net/ajax/libs/scrollReveal.js/4.0.9/scrollreveal.min.js"
+    "https://cdn.bootcdn.net/ajax/libs/scrollReveal.js/4.0.9/scrollreveal.min.js",
+    "https://cdn.bootcdn.net/ajax/libs/xlsx/0.16.9/xlsx.core.min.js",
+    "https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0/echarts.min.js"
   ]
 }
 
 let baseUrl = "";   // 这里是一个默认的url，可以没有
 switch (isDev) {
   case 'development':
-    baseUrl = "http://192.168.1.101:10086"  // 这里是本地的请求url
+    baseUrl = "http://192.168.1.103:10086"  // 这里是本地的请求url
     break
   case 'production':
-    baseUrl = "http://xxx.100.210.42:10086"   // 生产环境url
+    baseUrl = "http://xxx.251.248.230:10086"   // 生产环境url
     break
 }
-
-const isDevCS = {
-  '/admin': {
-    target: "http://103.100.210.42:10086",
+let isDevCS = {
+  '/api': {
+    target: baseUrl,
     changeOrigin: true,
     wx: true,
     pathRewrite: {
-      "^/admin": "/"
+      "^/api": "/"
     }
   }
 }
@@ -66,16 +70,18 @@ const isDevCS = {
 /**
  *  production：生产环境，development：开发环境
     config.mode = process.env.NODE_ENV
+    
+    devServer: {
+      open: false,
+      https: false,
+      proxy: baseUrl
+    },
  */
 module.exports = {
+  publicPath: isDev === 'production' ? '/' : '/',
   runtimeCompiler: true,
   productionSourceMap: devNeedCdn,
   lintOnSave: false,
-  devServer: {
-    open: false,
-    https: false,
-    proxy: isDevCS
-  },
   chainWebpack: (config) => {
     // ============注入cdn start============
     config.plugin('html').tap(args => {
