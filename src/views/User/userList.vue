@@ -345,10 +345,8 @@
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
-import { sessionData } from '@/filters/storage';
 import { IndexUserListData } from '@/types/views/index.interface';
 import { UserListStore } from '@/store/private/PageUserList';
-import { ContractListStore } from '@/store/private/PageContractList';
 import { 
   webGetAdminPageUserAtive, 
   webGetAdminPageUserBlockedAccount, 
@@ -357,6 +355,7 @@ import {
   webGetAdminPageUserInvestmentTaskBuy,
   webGetAdminSendNotice
 } from "@/api/index";
+import { sessionData } from '@/filters/storage';
 
 import ElTable from "@/components/ElTable/index.vue";
 import UserRegister from "./userRegister.vue";
@@ -524,10 +523,12 @@ export default class userList extends Vue {
     }
   };
   get getContractActivityId() {
-    return ContractListStore.getContractActivityId
+    // return ContractListStore.getContractActivityId
+    return []
   };
   get getUserOpenTaskList() {
-    return ContractListStore.getUserOpenTaskList
+    // return ContractListStore.getUserOpenTaskList
+    return []
   };
 
   // 监听数据列表
@@ -578,7 +579,6 @@ export default class userList extends Vue {
   // 生命周期
   created() {
     UserListStore.storeActionPageUserList(this.param);    // 用户列表
-    ContractListStore.storeActionContractActivityId({});  // 合约列表
   };
 
   // 生命周期
@@ -817,16 +817,13 @@ export default class userList extends Vue {
   private async handleRowTaskClick(row) {
     let { userId } = row;
     let res = await webGetAdminPageUserRemainingAccount({'userId': userId});  // 用户余额
-    ContractListStore.storeActionUserOpenTaskList({'userId': userId});  // 任务列表
     // console.log(res);
     if (res.data.code === 200) {
-      this.$nextTick(() => {
-        this.formUserOpenTask.userId = row.userId;
-        this.formUserOpenTask.amount = res.data.data;
-        this.dialogFormVisible = true;
-        this.dialogFormType = true;
-        // console.log(this.formUserOpenTask.amount);
-      })
+      this.formUserOpenTask.userId = row.userId;
+      this.formUserOpenTask.amount = res.data.data;
+      this.dialogFormVisible = true;
+      this.dialogFormType = true;
+      // console.log(this.formUserOpenTask.amount);
     } else {
       MessageTips(res, false, true, '', null, null);
     }

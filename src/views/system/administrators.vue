@@ -91,7 +91,7 @@ import { AdminSystemStore } from '@/store/private/AdminIstrators';
 import { UserStore } from '@/store/private/user';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
-import { webGetAdminRegisterAdd, webGetAdminPageDisable, webGetAdminContractUpdate, webGetAdminContractDelte, webGetAdminPageList } from '@/api/index';
+import { webGetAdminRegisterAdd, webGetAdminPageDisable, webGetAdminPageList } from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
 import ExportExcels from "@/components/ExportExcels/index.vue";

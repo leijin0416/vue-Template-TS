@@ -38,7 +38,7 @@ import { Component, Provide, Vue, Watch, Emit, Prop } from 'vue-property-decorat
 import { AdminSystemStore } from '@/store/private/AdminIstrators';
 import { sessionData } from '@/filters/storage';
 
-import { childrenRouter } from '@/mock/childrenRouter';
+import { childrenRouterMap } from '@/mock/childrenRouter';
 
 type IndexData = {
   children: string;

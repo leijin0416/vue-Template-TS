@@ -46,8 +46,8 @@ import { MessageTips } from '@/filters/MessageTips';
 import { regBlank } from '@/filters/splitRegex';
 import { TreeForeach, scrollRevealEffect } from '@/filters/common';
 
-import { childrenRouter } from '@/mock/childrenRouter';
-import { webGetAdminUserLogin, webGetAdminUserFindRoleById, webGetAdminRSAAuthKey } from "@/api/index";
+import { childrenRouterMap } from '@/mock/childrenRouter';
+import { webGetAdminUserLogin, webGetAdminUserFindRoleById } from "@/api/index";
 
 type IndexData = {
   userName: string;
@@ -223,16 +223,18 @@ export default class login extends Vue {
       const text = window['vm'].$t('Hlin.登录成功');
       MessageTips(subMenu, true, true, text, item => {
         let dynamicMapList = dynamicRouter;  // 本地路由
+        let treesData = item.data.data;
         
-        TreeForeach(item.data.data, tree => { // 权限递归
+        TreeForeach(treesData, tree => { // 权限递归
           dynamicMapList.forEach( el => {
-            if(tree.router === el.path) {
+            if(tree.router == el.path) {
               routersMapList[0].children.push(el);
             }
+            
           });
         });
 
-        UserStore.storeActionRouterMap(item.data.data);
+        UserStore.storeActionRouterMap(treesData);
         router.addRoutes(routersMapList);
         this.$router.push({path: '/'});
         this.loadingType = false;
@@ -245,7 +247,7 @@ export default class login extends Vue {
       MessageTips(data, true, true, text, item => {
         let dynamicMapList = dynamicRouter;
         
-        TreeForeach(childrenRouter, tree => {  // 权限递归
+        TreeForeach(childrenRouterMap, tree => {  // 权限递归
           dynamicMapList.forEach( el => {
             if(tree.router === el.path) {
               // console.log(el);
@@ -254,7 +256,7 @@ export default class login extends Vue {
           });
         });
 
-        UserStore.storeActionRouterMap(childrenRouter);
+        UserStore.storeActionRouterMap(childrenRouterMap);
         router.addRoutes(routersMapList);
         this.$router.push({path: '/'});
         this.loadingType = false;

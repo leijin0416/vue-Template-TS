@@ -1,6 +1,6 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators'
 import store from '../index'
-import { webGetAdminPageList, webGetAdminMenuTreeList, webGetAdminMenuRightList, webGetAdminMenuRoleList, webGetAdminPageSysJournalList, webGetAdminEditionList } from "@/api/index"
+import { webGetAdminPageList, webGetAdminMenuTreeList, webGetAdminMenuRightList, webGetAdminMenuRoleList, webGetAdminPageSysJournalList, } from "@/api/index"
 
 //暴露接口
 export interface IterAdminSystemListState {
@@ -9,8 +9,6 @@ export interface IterAdminSystemListState {
   adminMenuRightList: any;
   adminMenuRoleList: any;
   adminRoleChildrenMenuId: any;
-  adminSysJournalList: object;
-  adminSysEditionList: object
 }
 
 export interface ResponseData {
@@ -32,8 +30,6 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
   adminMenuRightList = <any>{};
   adminMenuRoleList = <any>{};
   adminRoleChildrenMenuId = <any>{};
-  adminSysJournalList = <ResponseData>{};
-  adminSysEditionList = <ResponseData>{};
 
   // 使用get修饰，代替了以前的getters
   get getAdminSystemPageList() {
@@ -52,12 +48,6 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     return this.adminRoleChildrenMenuId
   }
   
-  get getAdminSysJournalList() {
-    return this.adminSysJournalList
-  }
-  get getAdminSysEditionList() {
-    return this.adminSysEditionList
-  }
 
   @Action
   public async storeActionAdminPageList(item: object) {  // 管理员列表
@@ -108,29 +98,6 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     this.SET_MutationAdminRoleChildrenMenuId(item)
     // commit('SET_MutationAdminPageList', data)
   }
-  
-  @Action
-  public async storeActionAdminSysJournalList(item: object) {  // 系统日志列表
-    let res = await webGetAdminPageSysJournalList(item)
-    if (res.data.code === 200) {
-      let data = res.data
-      this.SET_MutationAdminSysJournalList(data)
-      // console.log(res);
-      
-    } else console.log(res);
-    // commit('SET_MutationAdminPageList', data)
-  }
-  @Action
-  public async storeActionAdminSysEditionList(item: object) {  // 版本升级列表
-    let res = await webGetAdminEditionList(item)
-    if (res.data.code === 200) {
-      let data = res.data
-      this.SET_MutationAdminSysEditionList(data)
-      // console.log(res);
-      
-    } else console.log(res);
-    // commit('SET_MutationAdminPageList', data)
-  }
 
   @Mutation
   private SET_MutationAdminPageList(item: any) {
@@ -155,17 +122,6 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
   @Mutation
   private SET_MutationAdminRoleChildrenMenuId(item: any) {
     this.adminRoleChildrenMenuId = item;
-    // sessionData('set', 'HasSessionToken', item);
-  }
-
-  @Mutation
-  private SET_MutationAdminSysJournalList(item: ResponseData) {
-    this.adminSysJournalList = item;
-    // sessionData('set', 'HasSessionToken', item);
-  }
-  @Mutation
-  private SET_MutationAdminSysEditionList(item: ResponseData) {
-    this.adminSysEditionList = item;
     // sessionData('set', 'HasSessionToken', item);
   }
   
