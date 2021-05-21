@@ -108,14 +108,17 @@ export default class TagBar extends Vue {
    */
   closeTags(index: number) {
     const _that = this;
-    const delItem = _that.tagsList.splice(index, 1)[0];
+    const delItem = _that.tagsList.splice(index, 1)[0]; // 关闭当前并跳转到上一个
     const item = _that.tagsList[index] ? _that.tagsList[index] : _that.tagsList[index - 1];
-    if (item) {
+    if (item && _that.$route.fullPath) {
       delItem.path === _that.$route.fullPath && _that.$router.push(item.path);
       UserStore.storeActionLeftMenuMapId(item.index);
+    } else if (item) {
+      UserStore.storeActionLeftMenuMapId(item.index);
+
     } else {
       _that.$router.push('/');
-      UserStore.storeActionLeftMenuMapId('');
+      // UserStore.storeActionLeftMenuMapId('');
     }
     // console.log(index);
     UserStore.storeActionTagsListMap(_that.tagsList);
