@@ -118,6 +118,7 @@
 <script lang="ts">
 import scrollReveal from 'scrollreveal';
 import countTo from 'vue-count-to';
+
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
 import { sessionData } from '@/filters/storage';
 import { TreeForeach, scrollRevealEffect } from '@/filters/common';
@@ -206,6 +207,7 @@ export default class UserList extends Vue {
   private handleTabsClick() {}
 }
 </script>
+
 <style lang="scss" scoped>
 .container {
   position: relative;

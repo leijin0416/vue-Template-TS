@@ -7,6 +7,7 @@
         :class="{'active': isActive(item.path)}"
         :key="index" >
         <span class="tags-li-title" @click="onTagsClick(item)">{{item.title}}</span>
+
         <span class="tags-li-icon" v-if="item.name === 'Index'">
           <i class="el-icon-s-opportunity"></i>
         </span>
@@ -31,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Provide, Emit, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue, Watch, Inject, Provide, Emit, Prop } from "vue-property-decorator";
 import { UserStore } from '@/store/private/user';
 import { sessionData } from "@/filters/storage";
 import { TreeForeach, FormatArrMapHas } from '@/filters/common';
@@ -49,6 +50,7 @@ type IndexData = {
 export default class TagBar extends Vue {
   private tagsList: any = [];
   private tagsId: any = '';
+  private activeLocale: string = 'zh-CN';
 
   // computed -计算 get 用法
   get showTags(): any {
@@ -74,9 +76,13 @@ export default class TagBar extends Vue {
     const sessionMenuItem: any = sessionData('get', 'HasSessionTagsMap', '');
     if (sessionMenuItem !== null) {
       _that.tagsList = JSON.parse(sessionMenuItem);
-      // console.log(sessionMenuItem);
     } else {
       _that.setTags(_that.$route);
+    }
+
+    const getLocaleI18n = sessionStorage.getItem('accessLocaleI18n');
+    if(getLocaleI18n !== null) {
+      this.activeLocale = getLocaleI18n;
     }
   }
   
@@ -90,9 +96,8 @@ export default class TagBar extends Vue {
     return path === _that.$route.fullPath;
   }
 
-  // 跳转路由
+  // 点击标签跳转路由
   onTagsClick(item) {
-    // console.log(item);
     const _that = this;
     _that.$router.push(item.path);
     UserStore.storeActionLeftMenuMapId(item.index);
@@ -100,35 +105,42 @@ export default class TagBar extends Vue {
 
   /**
    *  关闭【单个】标签
-   *  @param {Object} item                 -关闭后的当前标签
+   *  @param {Object} item                 -关闭后的当前新的标签信息
    *  @param {Object} delItem              -要关闭的标签
+   *  @param {Object} fullPath             -新的地址
    * 
    *  @param {String} storeActionLeftMenuMapId   -更新INDEX
-   *  @param {Array}  storeActionTagsListMap     -更新TAG数组标签
+   *  @param {Array}  storeActionTagsListMap     -更新TAG数组标签集合
    */
   closeTags(index: number) {
     const _that = this;
-    const delItem = _that.tagsList.splice(index, 1)[0]; // 关闭当前并跳转到上一个
-    const item = _that.tagsList[index] ? _that.tagsList[index] : _that.tagsList[index - 1];
-    if (item && _that.$route.fullPath) {
-      delItem.path === _that.$route.fullPath && _that.$router.push(item.path);
-      UserStore.storeActionLeftMenuMapId(item.index);
-    } else if (item) {
-      UserStore.storeActionLeftMenuMapId(item.index);
 
-    } else {
-      _that.$router.push('/');
-      // UserStore.storeActionLeftMenuMapId('');
+    const delItem = _that.tagsList.splice(index, 1)[0];  // 关闭当前并跳转到上一个
+    const item = _that.tagsList[index] ? _that.tagsList[index] : _that.tagsList[index - 1];
+    
+    if(index != 0) {
+      const type = this.isActive(delItem.path);  // 判断是否是高亮的标签，是则跳转上一条
+      if (type) {
+        delItem.path === _that.$route.fullPath && _that.$router.push(item.path);
+        UserStore.storeActionLeftMenuMapId(item.index);
+        console.log('123');
+        
+      }
     }
-    // console.log(index);
     UserStore.storeActionTagsListMap(_that.tagsList);
+    
+    // console.log(this.isActive(delItem.path));
+    // console.log(delItem.path);
+    // console.log(item);
+    // console.log(_that.$route.fullPath);
+    // console.log(_that.tagsList[index]);
   }
 
   /**
    *  关闭【全部】标签
    * 
    *  @param {String} storeActionLeftMenuMapId  -【缓存】更新INDEX
-   *  @param {Array} storeActionTagsListMap     -【缓存】更新TAG数组标签
+   *  @param {Array} storeActionTagsListMap     -【缓存】更新TAG数组标签集合
    */
   closeAll() {
     const _that = this;
@@ -145,7 +157,7 @@ export default class TagBar extends Vue {
    *  关闭【其他】标签
    * 
    *  @param {String} storeActionLeftMenuMapId  -【缓存】更新INDEX
-   *  @param {Array} storeActionTagsListMap     -【缓存】更新TAG数组标签
+   *  @param {Array} storeActionTagsListMap     -【缓存】更新TAG数组标签集合
    */
   closeOther() {
     const _that = this;
@@ -161,9 +173,9 @@ export default class TagBar extends Vue {
    *  添加标签
    *  @param {String} route  -路由的数据
    * 
-   *  @param {Array}  sessionRouterMap     -【缓存】左侧NAV数组
-   *  @param {String} sessionRouterId      -【缓存】左侧NAV数组INDEX
-   *  @param {String} storeActionTagsListMap     -【缓存】TAG数组标签
+   *  @param {Array}  sessionRouterMap           -【缓存】左侧NAV数组集合
+   *  @param {String} sessionRouterId            -【缓存】左侧NAV数组INDEX
+   *  @param {Array} storeActionTagsListMap      -【缓存】TAG数组标签集合
    */
   setTags(route: any) {
     const _that = this;
@@ -173,6 +185,7 @@ export default class TagBar extends Vue {
     const tagsId: string = _that.tagsId ? _that.tagsId : sessionRouterId;
     if (_that.tagsList.length == 0) {
       _that.tagsList.push({
+        titleEn: route.meta.titleEn,
         title: route.meta.title,
         path: route.fullPath,
         index: '',
@@ -186,6 +199,7 @@ export default class TagBar extends Vue {
         if (tree.index === tagsId) {
           data.push({
             title: tree.title,
+            titleEn: tree.titleEn,
             path: tree.router,
             name: tree.remarks,
             index: tree.index,
@@ -220,10 +234,12 @@ export default class TagBar extends Vue {
     width: 100%;
     height: 100%;
     font-size: 0;
+    overflow: hidden;
   }
 
   .tags-li {
     cursor: pointer;
+    position: relative;
     display: inline-block;
     padding: 7px 12px;
     margin-left: 5px;
@@ -262,20 +278,34 @@ export default class TagBar extends Vue {
   
   .tags-li-title {
     float: left;
+    min-width: 50px;
     max-width: 80px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-right: 5px;
+    margin-right: 10px;
     color: #666;
   }
 
   .tags-li.active .tags-li-title {
     color: #fff;
   }
+  .tags-li-icon {
+    z-index: 999;
+    position: absolute;
+    top: 2px;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    .el-icon-close {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 
   .tags-close-box {
-    z-index: 10;
+    z-index: 99;
     position: absolute;
     right: 0;
     top: 0;
