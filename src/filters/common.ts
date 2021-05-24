@@ -1,14 +1,14 @@
 // 递归遍历
 const TreeForeach =  (tree, func) => {
   if (!tree || typeof tree !== 'object') return null;
-  tree.forEach((data: { children: any; }) => {
+  tree.forEach((data: { children: any }) => {
     if (typeof data.children === 'object' && data.children.length > 0) {
       TreeForeach(data.children, func);   // 函数调用函数自身
     } else {
       func(data);                         // 递归出口
     }
-  });
-};
+  })
+}
 
 // 去重
 const FormatArrMapHas = (tree) => {
@@ -18,8 +18,8 @@ const FormatArrMapHas = (tree) => {
       map.set(item.title, item);
     }
   }
-  return [...map.values()];
-};
+  return [...map.values()]
+}
 
 /**
  * @param {*} time  时间戳
@@ -35,14 +35,14 @@ const FormatArrMapHas = (tree) => {
 const FormatCurrentTime = (fmt, time) => {
   let date = new Date(time)
   let ret;
-  const opt = {
-      "Y+": date.getFullYear().toString(),
-      "m+": (date.getMonth() + 1).toString(),
-      "d+": date.getDate().toString(),
-      "H+": date.getHours().toString(),
-      "M+": date.getMinutes().toString(),
-      "S+": date.getSeconds().toString()
-      // 有其他格式化字符需求可以继续添加，必须转化成字符串
+  let opt = {
+    "Y+": date.getFullYear().toString(),
+    "m+": (date.getMonth() + 1).toString(),
+    "d+": date.getDate().toString(),
+    "H+": date.getHours().toString(),
+    "M+": date.getMinutes().toString(),
+    "S+": date.getSeconds().toString()
+    // 有其他格式化字符需求可以继续添加，必须转化成字符串
   };
   for (let k in opt) {
     ret = new RegExp("(" + k + ")").exec(fmt);
@@ -50,10 +50,13 @@ const FormatCurrentTime = (fmt, time) => {
       fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
     };
   };
-  return fmt;
+  return fmt
 }
 
-// 定义一个深拷贝函数  接收目标target参数
+/**
+ * 定义一个深拷贝函数  接收目标target参数
+ * 
+ */
 const deepCloneData = (target: any) => {
   // 定义一个变量
   let result;
@@ -63,8 +66,8 @@ const deepCloneData = (target: any) => {
     if (Array.isArray(target)) {
       result = []; // 将result赋值为一个数组，并且执行遍历
       for (let i in target) {
-          // 递归克隆数组中的每一项
-          result.push(deepCloneData(target[i]))
+        // 递归克隆数组中的每一项
+        result.push(deepCloneData(target[i]))
       }
       // 判断如果当前的值是null的话；直接赋值为null
     } else if(target===null) {
@@ -84,7 +87,7 @@ const deepCloneData = (target: any) => {
     result = target;
   }
   // 返回最终结果
-  return result;
+  return result
 }
 
 /**
@@ -119,4 +122,20 @@ const deepCloneData = (target: any) => {
   return item
 }
 
-export { TreeForeach, FormatArrMapHas, FormatCurrentTime, deepCloneData };
+/**
+ * 暴露函数  去除HTML tag
+ */
+export function removeHTMLTag(str: any) {
+  str = str.replace(/<\/?[^>]*>/g, ''); //去除HTML tag
+  str = str.replace(/\s+/g, ''); //去除多余空行
+  str = str.replace(/&nbsp;/ig, ''); //去掉&nbsp;
+
+  return str
+}
+
+export { 
+  TreeForeach, 
+  FormatArrMapHas, 
+  FormatCurrentTime, 
+  deepCloneData 
+}

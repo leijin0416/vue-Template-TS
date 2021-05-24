@@ -1,10 +1,12 @@
-import Layout from '@/layout/Init.vue';
+import Layout from '@/layout/Init.vue'
 
-const getComponentSMin = (name: any) => () =>
-  import(`@/views/${name}.vue`);
-
-const getComponentMMin = (name: any, component: any) => () =>
-  import(`@/views/${name}/${component}.vue`);
+/** 
+ *  动态路由加载 
+ *  const getComponentMMin = (name: any, component: any) => () => import(`@/views/${name}/${component}.vue`);
+ */
+const getComponentMMin = (name: any, component: any) => {
+  return (resolve: any) => require([`@/views/${name}/${component}.vue`], resolve)
+}
 
 
 /**

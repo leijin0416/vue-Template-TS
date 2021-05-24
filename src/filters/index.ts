@@ -7,7 +7,7 @@
 const formatFloat = (val: any, pos = 2) => {
   let f = parseFloat(val);
   if (isNaN(f)) {
-    return false;
+    return false
   }
   f = Math.round(val * Math.pow(10, pos)) / Math.pow(10, pos); // pow 幂
   let s = f.toString();
@@ -19,18 +19,17 @@ const formatFloat = (val: any, pos = 2) => {
   while (s.length <= rs + pos) {
     s += '0';
   }
-  return s;
-};
+  return s
+}
 
 /**
  * 手机号格式化
  * @param String phone | 180****9230
  */
 const formatPhone = (phone: any) => {
-  // tslint:disable-next-line:no-parameter-reassignment
   phone = phone.toString();
-  return phone.substr(0, 3) + '****' + phone.substr(7, 11);
-};
+  return phone.substr(0, 3) + '****' + phone.substr(7, 11)
+}
 
 /**
  * 4位一空格（格式化银行卡）
@@ -38,9 +37,9 @@ const formatPhone = (phone: any) => {
  */
 const formatBank = (val: any) => {
   if (val) {
-    return val.toString().replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
+    return val.toString().replace(/\s/g, '').replace(/(.{4})/g, '$1 ')
   }
-};
+}
 
 /**
  * 千分位格式化
@@ -57,8 +56,8 @@ const toThousands = (val: any) => {
   if (num) {
     result = num + result;
   }
-  return result;
-};
+  return result
+}
 
 /**
  * 格式化时长
@@ -67,37 +66,19 @@ const realFormatSecond = (second: any) => {
   let secondType = typeof second;
 
   if (secondType === 'number' || secondType === 'string') {
-    // tslint:disable-next-line: radix
     let parseInts = parseInt(second);
-    // tslint:disable-next-line:no-parameter-reassignment
     second = parseInts;
 
     let hours = Math.floor(second / 3600);
-    // tslint:disable-next-line:no-parameter-reassignment
     second = second - hours * 3600;
     let mimute = Math.floor(second / 60);
-    // tslint:disable-next-line:no-parameter-reassignment
     second = second - mimute * 60;
-    return hours + ':' + ('0' + mimute).slice(-2) + ':' + ('0' + second).slice(-2);
+
+    return hours + ':' + ('0' + mimute).slice(-2) + ':' + ('0' + second).slice(-2)
 
   } else {
-    return '0:00:00';
+    return '0:00:00'
   }
-};
-
-/**
- * 暴露函数
- *
- * 去除HTML tag
- */
-export function removeHTMLTag(str: any) {
-  // tslint:disable-next-line:no-parameter-reassignment
-  str = str.replace(/<\/?[^>]*>/g, ''); //去除HTML tag
-  // tslint:disable-next-line:no-parameter-reassignment
-  str = str.replace(/\s+/g, ''); //去除多余空行
-  // tslint:disable-next-line:no-parameter-reassignment
-  str = str.replace(/&nbsp;/ig, ''); //去掉&nbsp;
-  return str;
 }
 
 /**
@@ -105,27 +86,23 @@ export function removeHTMLTag(str: any) {
  * @return file
  */
 const getImageUrlBase = (file: any) => {
-  // tslint:disable-next-line:only-arrow-functions
   return new Promise(function (resolve, reject) {
     let files = file;
     let reader = new FileReader();
     let imgResult;
     if (typeof files !== 'object') return;
     reader.readAsDataURL(files);
-    // tslint:disable-next-line:only-arrow-functions
     reader.onload = function () {
       imgResult = reader.result;
     };
-    // tslint:disable-next-line:only-arrow-functions
     reader.onerror = function (error) {
       reject(error);
     };
-    // tslint:disable-next-line:only-arrow-functions
     reader.onloadend = function () {
       resolve(imgResult);
     };
-  });
-};
+  })
+}
 
 /**
  * 保存图片
@@ -143,7 +120,31 @@ const saveImageFile = (data: any, fileName: any) => {
   const event = document.createEvent('MouseEvents');
   event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
   save_link.dispatchEvent(event);
-};
+}
+
+/**
+ * 将科学计数法转换成小数  item.money | scientificToNumber
+ * @param num 0E-10 数值类型
+ */
+const scientificToNumber = (num: number) => {
+	var str = num.toString();
+	var reg = /^(\d+)(e)([\-]?\d+)$/;
+	var arr, len,
+		zero = '';
+
+	/*6e7或6e+7 都会自动转换数值*/
+	if (!reg.test(str)) {
+		return num;
+	} else {
+		/*6e-7 需要手动转换*/
+		arr = reg.exec(str);
+		len = Math.abs(arr[3]) - 1;
+		for (var i = 0; i < len; i++) {
+			zero += '0';
+		}
+		return '0.' + zero + arr[1];
+	}
+}
 
 export default {
   formatFloat,
@@ -153,4 +154,5 @@ export default {
   realFormatSecond,
   getImageUrlBase,
   saveImageFile,
-};
+  scientificToNumber
+}
