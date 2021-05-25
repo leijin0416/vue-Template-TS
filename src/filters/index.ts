@@ -90,6 +90,7 @@ const getImageUrlBase = (file: any) => {
     let files = file;
     let reader = new FileReader();
     let imgResult;
+    
     if (typeof files !== 'object') return;
     reader.readAsDataURL(files);
     reader.onload = function () {
@@ -114,12 +115,12 @@ const getImageUrlBase = (file: any) => {
  */
 const saveImageFile = (data: any, fileName: any) => {
   const save_link: any = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-  save_link.href = data;
-  save_link.download = fileName;
+    save_link.href = data;
+    save_link.download = fileName;
 
   const event = document.createEvent('MouseEvents');
-  event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-  save_link.dispatchEvent(event);
+    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    save_link.dispatchEvent(event);
 }
 
 /**
@@ -127,9 +128,9 @@ const saveImageFile = (data: any, fileName: any) => {
  * @param num 0E-10 数值类型
  */
 const scientificToNumber = (num: number) => {
-	var str = num.toString();
-	var reg = /^(\d+)(e)([\-]?\d+)$/;
-	var arr, len,
+	let str = num.toString();
+	let reg = /^(\d+)(e)([\-]?\d+)$/;
+	let arr, len,
 		zero = '';
 
 	/*6e7或6e+7 都会自动转换数值*/
@@ -139,10 +140,10 @@ const scientificToNumber = (num: number) => {
 		/*6e-7 需要手动转换*/
 		arr = reg.exec(str);
 		len = Math.abs(arr[3]) - 1;
-		for (var i = 0; i < len; i++) {
+		for (let i = 0; i < len; i++) {
 			zero += '0';
 		}
-		return '0.' + zero + arr[1];
+		return '0.' + zero + arr[1]
 	}
 }
 

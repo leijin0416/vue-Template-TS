@@ -22,7 +22,7 @@ const FormatArrMapHas = (tree) => {
 }
 
 /**
- * @param {*} time  时间戳
+ * @param {*} time  时间戳 10位 * 1000
  * 
  * @param {*} Y  年
  * @param {*} m  月

@@ -24,7 +24,7 @@ export const constantRouterMaps = [
     component: getComponentMMin('login', 'index'),
     meta: { title: '登录_后台管理平台' }
   },
-];
+]
 
 
 /**
@@ -49,7 +49,7 @@ export const subMenuRouters: any = [
   },
   { path: '/404', name: '404', component: () => import('@/views/404.vue'), meta: { title: '404' } },
   { path: '*', redirect: '/404' },
-];
+]
 
 /**
  *  需要比对 -本地路由比对后台路由2
@@ -82,8 +82,8 @@ export const dynamicRouter: any = [
   },
   {
     path: '/system/user',
-    name: 'systemUser',
-    component: getComponentMMin('System', 'administrators'),
+    name: 'administratorList',
+    component: getComponentMMin('System', 'administratorList'),
     meta: { title: '管理员列表', permission: [] }
   },
   {
@@ -98,4 +98,4 @@ export const dynamicRouter: any = [
     component: getComponentMMin('Informations', 'bannerList'),
     meta: { title: '轮播图列表', permission: [] }
   },
-];
+]

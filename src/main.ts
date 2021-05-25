@@ -2,12 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import i18n from './locale'
+import i18n from './langs'
 import filters from './filters'
 
 import Viewer from 'v-viewer'
 import VueWechatTitle from 'vue-wechat-title'           // 动态修改
-import myECharts from "./components/Echarts/echarts"    // 挂载图表
+import myECharts from "./components/Echarts/common"    // 挂载图表
 import './common/permission'                           // 全局按钮权限
 
 // import 'babel-polyfill'           // 用于实现浏览器不支持原生功能的代码
