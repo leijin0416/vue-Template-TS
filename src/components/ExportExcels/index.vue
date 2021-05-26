@@ -47,24 +47,25 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch, Prop } from 'vue-property-decorator';
-import { sessionData } from '@/filters/storage';
-import { AdminSystemStore } from '@/store/private/AdminIstrators';
 import { UserStore } from '@/store/private/user';
+import { sessionData } from '@/filters/storage';
 
 type IndexData = {
   page: number;
   pageSize: number
 };
+
 @Component({
   components: {},
 })
 export default class UserList extends Vue {
-  // @Prop({ default: [] }) excelsTableData: Array<object> = [];     // 表格数据
+
   @Prop({ default: [] }) excelsTableHeader: Array<object> = [];   // 表格头
   @Prop({ default: [] }) excelsFilterVal: Array<object> = [];     // 表格参数
-  @Prop({ default: '' }) excelsName: string = '';
+  @Prop({ default: '' }) excelsName: string = '';                 // 表格名称
+  // @Prop({ default: [] }) excelsTableData: Array<object> = [];     // 表格数据
 
-  private excelsTableData: Array<object> = [];
+  private excelsTableData: Array<object> = [];  // 表格数据
   // 分页器
   private formData: IndexData = {
     page: 1,
@@ -79,7 +80,7 @@ export default class UserList extends Vue {
     return UserStore.getExportExcelsList
   };
 
-  // 监听数据列表
+  // 监听表格数据
   @Watch('getExportExcelsList', { deep: true })
   userPageChange(newValue) {
     if(newValue.length > 0) {
@@ -124,7 +125,9 @@ export default class UserList extends Vue {
     return jsonData.map(v => filterVal.map(j => v[j]));
   }
 
-  // 拿到数据导出
+  /** 拿到数据导出
+   *  https://juejin.cn/post/6966495816429076516  https://juejin.cn/post/6966062224892756005
+   */
   private onExportExcel() {
     let _that = this;
     let text1 = window['vm'].$t('Hlin.导出成功');
@@ -155,7 +158,7 @@ export default class UserList extends Vue {
         }
       });
       
-      export_json_to_excel(tableHeader, tableData, name);
+      export_json_to_excel(tableHeader, tableData, name);  // 生成
     })
   }
 }

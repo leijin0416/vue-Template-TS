@@ -2,15 +2,16 @@ import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-dec
 import store from '../index'
 import {  webGetAdminUserNoticeList, webGetAdminUserBannerList } from "@/api/index"
 
-//暴露接口
-export interface IterInformationListState {
-  informationNoticeList: any;
-  informationBannerList: any;
-}
+// 暴露接口
 export interface ResponseData {
-  code: number;
+  code?: number;
   data?: any;
-  message: string;
+  message?: string;
+}
+
+export interface IterInformationListState {
+  informationNoticeList: ResponseData;
+  informationBannerList: ResponseData;
 }
 
 function returnSelf<T extends ResponseData>(sth: T): T {
@@ -27,8 +28,8 @@ export default class InformationList extends VuexModule implements IterInformati
   /** 断言类型（ts的另外一种断言是as 关键字）
    *  强制类型转换, 尖括号内是泛型(参数类型化),在文中是"断言类型"，<类型>值
    */
-  informationNoticeList = <ResponseData>({});
-  informationBannerList = <ResponseData>({});
+  public informationNoticeList: ResponseData = {};
+  public informationBannerList: ResponseData = {};
 
   // 使用get修饰，代替了以前的getters
   get getInformationNoticeList() {
