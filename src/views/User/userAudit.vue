@@ -305,11 +305,13 @@ export default class userCarry extends Vue {
   }
 
   // 重置
-  private resetForm(formName) {
+  private resetForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.resetFields();
   }
+
+  // 搜索
   private resetSearchForm(formName:string) {
     const _that = this;
     Object.keys(_that.param).forEach(key => {

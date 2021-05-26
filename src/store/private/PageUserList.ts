@@ -7,15 +7,22 @@ export interface IterUserListState {
   userPageRowInfo: any;
   userPageAuditList: any;
 }
+export interface ResponseData {
+  code: number;
+  data?: any;
+  message: string;
+}
+
 @Module({
   name: "userList",
   dynamic: true,
   store
 })
 export default class UserList extends VuexModule implements IterUserListState {
-  userPageList = <any>{};
+
   userPageRowInfo = <any>{};
-  userPageAuditList = <any>{};
+  userPageList = <ResponseData>{};
+  userPageAuditList = <ResponseData>{};
 
   get getUserPageList() {
     return this.userPageList
@@ -28,7 +35,7 @@ export default class UserList extends VuexModule implements IterUserListState {
   }
   
   @Action
-  public async storeActionPageUserList(item: object) {  // 用户注册列表
+  public async storeActionPageUserList(item: object) {     // 用户注册列表
     let res: any = await webGetAdminPageUserList(item)
     if (res.data.code === 200) {
       let data = res.data
@@ -39,9 +46,10 @@ export default class UserList extends VuexModule implements IterUserListState {
     // commit('SET_MutationPageUserList', data)
   }
   @Action
-  public async storeActionPageUserRowInfo(item: object) {  // 用户注册表格 -详情
+  public async storeActionPageUserRowInfo(item: object) {    // 用户注册列表 -详情
     this.SET_MutationPageUserRowInfo(item)
   }
+
   @Action
   public async storeActionPageUserAuditList(item: object) {  // 用户审核列表
     let res: any = await webGetAdminPageUserAuditList(item)
@@ -55,7 +63,7 @@ export default class UserList extends VuexModule implements IterUserListState {
   
 
   @Mutation
-  private SET_MutationPageUserList(item: object) {
+  private SET_MutationPageUserList(item: ResponseData) {
     this.userPageList = item;
     // sessionData('set', 'HasSessionToken', item);
   }
@@ -63,8 +71,9 @@ export default class UserList extends VuexModule implements IterUserListState {
   private SET_MutationPageUserRowInfo(item: object) {
     this.userPageRowInfo = item;
   }
+  
   @Mutation
-  private SET_MutationPageUserAuditList(item: object) {
+  private SET_MutationPageUserAuditList(item: ResponseData) {
     this.userPageAuditList = item;
   }
 

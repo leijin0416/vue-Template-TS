@@ -1,6 +1,12 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators'
 import store from '../index'
-import { webGetAdminPageList, webGetAdminMenuTreeList, webGetAdminMenuRightList, webGetAdminMenuRoleList, webGetAdminPageSysJournalList, } from "@/api/index"
+import { 
+  webGetAdminPageList, 
+  webGetAdminMenuTreeList, 
+  webGetAdminMenuRightList, 
+  webGetAdminMenuRoleList, 
+  webGetAdminPageSysJournalList, 
+} from "@/api/index"
 
 //暴露接口
 export interface IterAdminSystemListState {

@@ -655,20 +655,21 @@ export default class userList extends Vue {
   }
 
   // 重置
-  private resetForm(formName) {
+  private resetForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName];
     ref.resetFields();
   }
-  private resetSearchForm(formName) {
+  private resetSearchForm(formName: string) {
     Object.keys(this.param).forEach(key => {
       if(key == 'userName' || key == 'invitationUserName' || key == 'status' || key == 'active') this.param[key] = '';
     });
     UserListStore.storeActionPageUserList(this.param);
     // console.log(this.param);
   }
+  
   // 搜索
-  private submitSearchForm(formName) {
+  private submitSearchForm(formName: string) {
     let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.validate((valid) => {
       if (valid) {

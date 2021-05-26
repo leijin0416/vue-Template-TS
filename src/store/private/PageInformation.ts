@@ -4,13 +4,17 @@ import {  webGetAdminUserNoticeList, webGetAdminUserBannerList } from "@/api/ind
 
 //暴露接口
 export interface IterInformationListState {
-  informationNoticeList: object;
-  informationBannerList: object;
+  informationNoticeList: any;
+  informationBannerList: any;
 }
 export interface ResponseData {
   code: number;
   data?: any;
   message: string;
+}
+
+function returnSelf<T extends ResponseData>(sth: T): T {
+  return sth
 }
 
 //这里配置仓库的一些基础配置
@@ -20,9 +24,11 @@ export interface ResponseData {
   store
 })
 export default class InformationList extends VuexModule implements IterInformationListState {
-  // 这里是仓库所具有的一些属性,尖括号内是泛型(参数类型化),在文中是"断言类型"，<类型>值
-  informationNoticeList = <any>{};
-  informationBannerList = <any>{};
+  /** 断言类型（ts的另外一种断言是as 关键字）
+   *  强制类型转换, 尖括号内是泛型(参数类型化),在文中是"断言类型"，<类型>值
+   */
+  informationNoticeList = <ResponseData>({});
+  informationBannerList = <ResponseData>({});
 
   // 使用get修饰，代替了以前的getters
   get getInformationNoticeList() {

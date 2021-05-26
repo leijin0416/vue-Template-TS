@@ -1,6 +1,13 @@
+/** 
+ *  定义规则,统一以 小(大)驼峰 且 webGetAdmin 开头
+ *  接口信息定义: 以当前接口请求头作为别名,并将相关接口放置在该文件下
+ *  @date 1949-10-01
+ */
 import service from '@/common/httpService';
 
 
+// 登录
+export const webGetAdminUserLogin = params => service.post('/api/ping-admin/login', params);
 // 获取公钥
 export const webGetAdminRSAAuthKey = params => service.post('/api/ping-open/getAuthKey', params);
 // 发送通知
@@ -14,8 +21,6 @@ export const webGetAdminRegisterAdd = params => service.post('/api/ping-admin/ad
 export const webGetAdminPageList = params => service.post('/api/ping-admin/admin/pageList', params);
 // 更改管理员账号状态
 export const webGetAdminPageDisable = params => service.post('/api/ping-admin/admin/disable', params);
-// 系统日志列表
-export const webGetAdminPageSysJournalList = params => service.post('/api/ping-sys-log/pageSysLogList', params);
 
 // 添加路由
 export const webGetAdminMenuAdd = params => service.post('/api/ping-auth-menu/addAuthMenu', params);
@@ -37,8 +42,6 @@ export const webGetAdminRoleDelte = params => service.post('/api/ping-auth-menu/
 // 角色列表
 export const webGetAdminMenuRoleList = params => service.post('/api/ping-auth-menu/findAuthRoleList', params);
 
-// 登录
-export const webGetAdminUserLogin = params => service.post('/api/ping-admin/login', params);
 // 首页用户统计
 export const webGetAdminUserMemberStatistics = params => service.post('/api/ping-admin/homeMemberStatistics', params);
 // 首页用户注册统计
@@ -65,6 +68,9 @@ export const webGetAdminPageUserRemainingAccount = params => service.post('/api/
 // 用户购买任务
 export const webGetAdminPageUserInvestmentTaskBuy = params => service.post('/api/ping-admin/userInvestmentTask', params);
 
+
+// 系统日志列表
+export const webGetAdminPageSysJournalList = params => service.post('/api/ping-sys-log/pageSysLogList', params);
 
 // 用户审核列表
 export const webGetAdminPageUserAuditList = params => service.post('/api/ping-kyc/pageKycList', params);

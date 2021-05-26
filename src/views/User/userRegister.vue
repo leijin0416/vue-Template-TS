@@ -236,12 +236,12 @@ export default class userRegister extends Vue {
   mounted() {};
 
   // 重置
-  private resetForm(formName) {
+  private resetForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName];
     ref.resetFields();
   }
-  private clearValidateForm(formName) {
+  private clearValidateForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName];
     ref.clearValidate();

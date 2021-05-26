@@ -67,10 +67,10 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { AdminSystemStore } from '@/store/private/AdminIstrators';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
-import { webGetAdminRoleAdd, webGetAdminPageDisable, webGetAdminRoleUpdate, webGetAdminRoleDelte } from '@/api/index';
+import { AdminSystemStore } from '@/store/private/AdminIstrators';
+import { webGetAdminRoleAdd, webGetAdminRoleUpdate, webGetAdminRoleDelte } from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
 import ElTree from "@/components/ElTree/index.vue";
@@ -180,7 +180,7 @@ export default class administrators extends Vue {
   mounted () {};
 
   // 重置
-  private resetForm(formName) {
+  private resetForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.resetFields();

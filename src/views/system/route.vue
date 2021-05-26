@@ -83,9 +83,9 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { AdminSystemStore } from '@/store/private/AdminIstrators';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
+import { AdminSystemStore } from '@/store/private/AdminIstrators';
 import { webGetAdminMenuAdd, webGetAdminMenuUpdate, webGetAdminMenuDelte } from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
@@ -119,8 +119,8 @@ export default class routes extends Vue {
     menuId: ''
   };
   private totalCount: number = 1;  // 表格总数
-  private tableData: object = [];  // 表格数据
-  private tableColumnData: object = [
+  private tableData: Array<object> = [];  // 表格数据
+  private tableColumnData: Array<object> = [
     {
       type: 'selection',
     },
@@ -229,11 +229,13 @@ export default class routes extends Vue {
   mounted () {};
 
   // 重置
-  private resetForm(formName) {
+  private resetForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.resetFields();
   }
+
+  // 搜索
   private resetSearchForm(formName:string) {
     const _that = this;
     Object.keys(_that.param).forEach(key => {

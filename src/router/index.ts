@@ -1,17 +1,17 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import NProgress from 'nprogress';
-import { constantRouterMaps } from './routerMaps';
-import { sessionData } from '@/filters/storage';
+import Vue from 'vue'
+import Router from 'vue-router'
+import NProgress from 'nprogress'
+import { constantRouterMaps } from './routerMaps'
+import { sessionData } from '@/filters/storage'
 
-import 'nprogress/nprogress.css';
+import 'nprogress/nprogress.css'
 
-Vue.use(Router);
+Vue.use(Router)
 
 const createRouter = () => new Router({
   routes: constantRouterMaps,
   mode: 'history',  // hash  history
-});
+})
 
 const router: any = createRouter();
 
@@ -26,7 +26,9 @@ const LOGIN_PAGE_NAME = 'Login';
 
 // 跳转之前
 router.beforeEach((to: any, from, next) => {
-  document.title = to.meta.title;    // 改变每次页面的标题
+  // 改变每次页面的标题
+  // document.title = to.meta.title;
+  
   const token = sessionData('get', 'HasSessionToken', '');
   // console.log(`${to}__${from}__${token}`);
   
@@ -42,12 +44,12 @@ router.beforeEach((to: any, from, next) => {
       });
     }
   }
-});
+})
 
 
 // 跳转之后
 router.afterEach(to => {
   NProgress.done();
-});
+})
 
-export default router;
+export default router
