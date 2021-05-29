@@ -7,8 +7,9 @@
         status-icon 
         :rules="rules"
         ref="ruleForm"
-        label-width="80px"
+        label-width="90px"
         label-position="left"
+        :hide-required-asterisk="true"
         class="demo-ruleForm">
         <el-form-item :label="$t('Hlin.用户名')" prop="userName">
           <el-input v-model="ruleForm.userName" />
