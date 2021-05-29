@@ -7,7 +7,7 @@
         status-icon 
         :rules="rules"
         ref="ruleForm"
-        label-width="90px"
+        label-width="80px"
         label-position="left"
         :hide-required-asterisk="true"
         class="demo-ruleForm">
