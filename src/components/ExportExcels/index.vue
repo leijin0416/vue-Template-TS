@@ -60,9 +60,9 @@ type IndexData = {
 })
 export default class UserList extends Vue {
 
-  @Prop({ default: [] }) excelsTableHeader: Array<object> = [];   // 表格头
-  @Prop({ default: [] }) excelsFilterVal: Array<object> = [];     // 表格参数
-  @Prop({ default: '' }) excelsName: string = '';                 // 表格名称
+  @Prop({ default: [] }) excelsTableHeader: Array<object> = [];      // 表格头
+  @Prop({ default: [] }) excelsFilterVal: Array<object> = [];        // 表格参数
+  @Prop({ default: '' }) excelsName: string = '';                    // 表格名称
   // @Prop({ default: [] }) excelsTableData: Array<object> = [];     // 表格数据
 
   private excelsTableData: Array<object> = [];  // 表格数据
@@ -117,16 +117,20 @@ export default class UserList extends Vue {
       }
     });
   }
+  // 传递请求参数
   private onDialogFormClick() {
     this.$emit('getExportExcelInput', this.formData.page, this.formData.pageSize);
   }
 
+  // 利用表格参数拿到对应数据
   private formatJson(filterVal, jsonData) {
     return jsonData.map(v => filterVal.map(j => v[j]));
   }
 
   /** 拿到数据导出
-   *  https://juejin.cn/post/6966495816429076516  https://juejin.cn/post/6966062224892756005
+   *  @param export_json_to_excel()  方法
+   *  https://juejin.cn/post/6966495816429076516  
+   *  https://juejin.cn/post/6966062224892756005
    */
   private onExportExcel() {
     let _that = this;
@@ -142,6 +146,8 @@ export default class UserList extends Vue {
       let filterVal = _that.excelsFilterVal;
       let list = _that.excelsTableData;
       let tableData = _that.formatJson(filterVal, list);
+      // console.log(list);
+      // console.log(tableData);
 
       let text = window['vm'].$t('Hlin.文件导出');
       let name = text + _that.excelsName;

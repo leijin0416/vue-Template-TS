@@ -162,7 +162,7 @@ export default class administrators extends Vue {
   };
   private optionsRoleIdData: object = [];  // 角色列表
 
-  private excelsTableHeader: object = [ window['vm'].$t('Aelt.管理员ID'), window['vm'].$t('Aelt.管理员用户名'), ];  // 表格头
+  private excelsTableHeader: object = [ 'Aelt.管理员ID', 'Aelt.管理员用户名', ];  // 表格头
   private excelsFilterVal: object = [ 'adminId', 'userName', ];   // 表格参数
   private excelsName: string = window['vm'].$t('Aelt.管理员列表');        // 表格名
 

@@ -19,7 +19,7 @@ switch (process.env.NODE_ENV) {
  *  超时重新请求配置 146
  */
 const axiosConfig: AxiosRequestConfig = {
-  baseURL: baseUrl,
+  baseURL: "http://23.111.163.146:10086",
   timeout: 5000,
   withCredentials: true,
 };
