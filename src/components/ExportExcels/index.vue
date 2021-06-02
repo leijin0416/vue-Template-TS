@@ -52,13 +52,13 @@ import { sessionData } from '@/filters/storage';
 
 type IndexData = {
   page: number;
-  pageSize: number
+  pageSize: number;
 };
 
 @Component({
   components: {},
 })
-export default class UserList extends Vue {
+export default class ExportExcels extends Vue {
 
   @Prop({ default: [] }) excelsTableHeader: Array<object> = [];      // 表格头
   @Prop({ default: [] }) excelsFilterVal: Array<object> = [];        // 表格参数
@@ -122,15 +122,18 @@ export default class UserList extends Vue {
     this.$emit('getExportExcelInput', this.formData.page, this.formData.pageSize);
   }
 
-  // 利用表格参数拿到对应数据
+  /** 利用表格参数拿到对应数据
+   *  @param filterVal  -表格参数
+   *  @param jsonData   -后台数据
+   */
   private formatJson(filterVal, jsonData) {
     return jsonData.map(v => filterVal.map(j => v[j]));
   }
 
-  /** 拿到数据导出
-   *  @param export_json_to_excel()  方法
+  /** 拿到数据进行导出
    *  https://juejin.cn/post/6966495816429076516  
    *  https://juejin.cn/post/6966062224892756005
+   *  @param export_json_to_excel   生成方法
    */
   private onExportExcel() {
     let _that = this;
