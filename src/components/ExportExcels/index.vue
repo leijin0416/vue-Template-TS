@@ -117,7 +117,8 @@ export default class ExportExcels extends Vue {
       }
     });
   }
-  // 传递请求参数
+
+  // 传递请求参数给父级
   private onDialogFormClick() {
     this.$emit('getExportExcelInput', this.formData.page, this.formData.pageSize);
   }
