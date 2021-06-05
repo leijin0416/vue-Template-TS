@@ -5,7 +5,7 @@
       <el-col :span="24">
         <div class="v-button-box">
           <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="v-btn" @click="onAddsClick">{{ $t('Sats.添加管理员账号') }}</el-button>
-          <el-button size="small" icon="el-icon-download" class="v-btn" @click="onExportClick">{{ $t('Sats.导出Excel') }}</el-button>
+          <el-button size="small" icon="el-icon-download" class="v-btn" @click="onExportClick">{{ $t('Hlin.导出Excel') }}</el-button>
           <el-button type="info" size="small" icon="el-icon-refresh" class="v-btn" @click="onRefreshClick" circle />
         </div>
         <ElTable :tableData="tableData"
@@ -162,9 +162,9 @@ export default class administrators extends Vue {
   };
   private optionsRoleIdData: object = [];  // 角色列表
 
-  private excelsTableHeader: object = [ 'Aelt.管理员ID', 'Aelt.管理员用户名', ];  // 表格头
-  private excelsFilterVal: object = [ 'adminId', 'userName', ];   // 表格参数
-  private excelsName: string = window['vm'].$t('Aelt.管理员列表');        // 表格名
+  private excelsTableHeader: Array<string> = [ 'Aelt.管理员ID', 'Aelt.管理员用户名', ];  // 表格头
+  private excelsFilterVal: Array<string> = [ 'adminId', 'userName', ];   // 表格参数
+  private excelsName: string = '管理员列表';        // 表格名
 
   private rules = {
     userName: [
@@ -218,7 +218,7 @@ export default class administrators extends Vue {
     let list = newValue.data.list;
     if(list.length > 0) {
       list.forEach( el => {
-        el.formatTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS",el.createTime)
+        el.formatTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime)
       });
     }
     this.tableData = list;
@@ -234,11 +234,6 @@ export default class administrators extends Vue {
 
   // 生命周期
   mounted () {};
-
-  // 导出
-  private onExportClick() {
-    UserStore.storeExportExcelsMap([{ids: 0}])
-  }
 
   // 重置
   private resetForm(formName: string) {
@@ -262,6 +257,11 @@ export default class administrators extends Vue {
   // 刷新
   private onRefreshClick() {
     AdminSystemStore.storeActionAdminPageList(this.param);
+  }
+
+  // 导出
+  private onExportClick() {
+    UserStore.storeExportExcelsMap([{ids: 0}])
   }
 
   // 导出
