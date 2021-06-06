@@ -60,20 +60,19 @@ type IndexData = {
 })
 export default class ExportExcels extends Vue {
 
-  @Prop({ default: [] }) excelsTableHeader: Array<object> = [];      // 表格头
-  @Prop({ default: [] }) excelsFilterVal: Array<object> = [];        // 表格参数
+  @Prop({ default: [] }) excelsTableHeader: Array<string> = [];      // 表格头
+  @Prop({ default: [] }) excelsFilterVal: Array<string> = [];        // 表格参数
   @Prop({ default: '' }) excelsName: string = '';                    // 表格名称
   // @Prop({ default: [] }) excelsTableData: Array<object> = [];     // 表格数据
 
   private excelsTableData: Array<object> = [];  // 表格数据
-  // 分页器
-  private formData: IndexData = {
+  private formData: IndexData = { // 分页器
     page: 1,
     pageSize: 12
   };
   private loadingType: boolean = false;
-  private dialogFormVisible: boolean = false;
-  private dialogFormType: boolean = true;
+  private dialogFormVisible: boolean = false;  // 弹窗
+  private dialogFormType: boolean = true;      // 类型
 
   // 获取数据
   get getExportExcelsList() {
@@ -83,6 +82,7 @@ export default class ExportExcels extends Vue {
   // 监听表格数据
   @Watch('getExportExcelsList', { deep: true })
   userPageChange(newValue) {
+    // console.log(newValue)
     if(newValue.length > 0) {
       if(newValue[0].ids === 0) {
         this.dialogFormVisible = true;
@@ -90,20 +90,22 @@ export default class ExportExcels extends Vue {
 
       } else {  // 有数据
         this.dialogFormVisible = true;
-        this.excelsTableData = newValue;
         this.dialogFormType = false;
+        this.excelsTableData = newValue;
       }
-    }
-    // console.log(newValue)
+    } else console.log('数据为空');
   };
 
   // 生命周期
   mounted () {};
 
+  /**
+   *  关闭弹窗
+   */
   private onDialogClose() {
-    this.excelsTableData = [];
     this.dialogFormType = true;
-    UserStore.storeExportExcelsMap([])
+    this.excelsTableData = [];
+    UserStore.storeExportExcelsMap([]);
   }
 
   private submitForm(formName) {
@@ -118,7 +120,9 @@ export default class ExportExcels extends Vue {
     });
   }
 
-  // 传递请求参数给父级
+  /**
+   *  向父级传递请求参数，分页
+   */
   private onDialogFormClick() {
     this.$emit('getExportExcelInput', this.formData.page, this.formData.pageSize);
   }
@@ -140,8 +144,8 @@ export default class ExportExcels extends Vue {
     let _that = this;
     let text1 = window['vm'].$t('Hlin.导出成功');
     let text2 = window['vm'].$t('Hlin.当前选择的数据已成功导出');
-
     _that.loadingType = true;
+
     if (_that.excelsTableData == []) return;
     require.ensure([], () => {
       let { export_json_to_excel } = require("@/utils/excel/Export2Excel.js");
