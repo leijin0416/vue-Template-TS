@@ -1,9 +1,11 @@
 /**
- *  @parentId     -父ID
- *  @router       -路由
- *  @icon         -图标
- *  @sort         -排序
- *  @title /titleEn    -标题中英
+ *  @description:   本地路由配置
+ *  @param parentId     -父ID
+ *  @param router       -路由
+ *  @param icon         -图标
+ *  @param sort         -排序
+ *  @param title /titleEn    -标题中英
+ * 
  */
 const childrenRouterMap = [
   {

@@ -10,10 +10,10 @@ const getComponentMMin = (name: any, component: any) => {
 
 
 /**
- * meta 可配置参数
+ * @description:   meta 可配置参数
  * @param displayNavBar 是否需要底部导航
- * @param keepAlive 是否缓存页面
- * @param title 页面标题
+ * @param keepAlive     是否缓存页面
+ * @param title         页面标题
  *
  * to.meta.index || from.meta.index || this.$router.isBack
  */
@@ -28,7 +28,9 @@ export const constantRouterMaps = [
 
 
 /**
- *  需要添加 -动态挂载路由1
+ *  @description:  需要添加 -动态挂载路由1
+ *  @param component    -权限模板
+ * 
  *  -navRouters
  */
 export const subMenuRouters: any = [
@@ -52,7 +54,9 @@ export const subMenuRouters: any = [
 ]
 
 /**
- *  需要比对 -本地路由比对后台路由2
+ *  @description:  需要比对 -本地路由比对后台路由2
+ *  @param permission    -权限按钮
+ * 
  *  -dynamicRouter
  */
 export const dynamicRouter: any = [
