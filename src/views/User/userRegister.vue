@@ -218,7 +218,7 @@ export default class userRegister extends Vue {
         this.ruleForm[key] = '';
       })
       // 异步更新
-      this.$nextTick(()=>{
+      this.$nextTick( ()=> {
         this.clearValidateForm('ruleForm');
       })
 
@@ -250,10 +250,12 @@ export default class userRegister extends Vue {
   // 注册
   private submitForm(formName) {
     let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
+    this.loadingType = true;
     ref.validate((valid) => {
       if (valid) {
         this.submitFormClick();
       } else {
+        this.loadingType = false;
         console.log('error submit!!');
         return false;
       }
@@ -262,22 +264,15 @@ export default class userRegister extends Vue {
 
   // 注册提交
   private async submitFormClick() {
-    let params = this.ruleForm;
-    let id = this.getUserRowInfoType;   // 1注册/0修改类型
-    let pages = {
-      page: 1,
-      pageSize: 12,
-      userName: '',
-      invitationUserName: ''
-    };
-    this.loadingType = true;
+    const params = this.ruleForm;
+    const id = this.getUserRowInfoType;   // 1注册 / 0修改类型
     // console.log(params);
     if (id === 1) {
       const text1 = window['vm'].$t('Ureg.注册成功');
-      let res = await webGetAdminPageUserRegister(params)
+      const res = await webGetAdminPageUserRegister(params)
       MessageTips(res, true, true, text1, item => {
-        this.getUserRowInfoType = 1;
         this.loadingType = false;
+        this.getUserRowInfoType = 1;
         Object.keys(this.ruleForm).forEach( key => this.ruleForm[key] = '' );
         this.$nextTick(()=>{
           this.clearValidateForm('ruleForm');
@@ -285,21 +280,20 @@ export default class userRegister extends Vue {
 
         this.$emit('getUserRegisterFormClick', 1);
 
-      }, errors => {
+      }, err => {
         this.loadingType = false;
       });
 
     } else {
       const text1 = window['vm'].$t('Ureg.修改成功');
-      let res = await webGetAdminPageUserUpdateUser(params)
-      // console.log(res);
+      const res = await webGetAdminPageUserUpdateUser(params)
       MessageTips(res, true, true, text1, item => {
-        this.getUserRowInfoType = 0;
         this.loadingType = false;
+        this.getUserRowInfoType = 0;
 
         this.$emit('getUserRegisterFormClick', 0);
 
-      }, errors => {
+      }, err => {
         this.loadingType = false;
       });
     }
