@@ -207,14 +207,15 @@ export default class administrators extends Vue {
   // 监听数据列表
   @Watch('getAdminSystemMenuRoleList', { deep: true })
   getMenuRoleList(newValue) {
+    // console.log(newValue)
     let list = newValue.data.list;
     if(list.length > 0) {
       this.optionsRoleIdData = list;
     }
-    // console.log(newValue)
   };
   @Watch('getAdminSystemPageList', { deep: true })
   userPageChange(newValue) {
+    // console.log(newValue)
     let list = newValue.data.list;
     if(list.length > 0) {
       list.forEach( el => {
@@ -223,7 +224,6 @@ export default class administrators extends Vue {
     }
     this.tableData = list;
     this.totalCount = newValue.data.total;
-    // console.log(newValue)
   };
 
   // 生命周期
@@ -259,12 +259,19 @@ export default class administrators extends Vue {
     AdminSystemStore.storeActionAdminPageList(this.param);
   }
 
-  // 导出
+  /**
+   * @description:  弹窗导出
+   */
   private onExportClick() {
     UserStore.storeExportExcelsMap([{ids: 0}])
   }
 
-  // 导出
+  /**
+   * @description:  导出
+   * @param {string} page      页码
+   * @param {string} pageSize  条数
+   * @return {*}
+   */
   private async getExportExcelInput(page, pageSize) {
     let res = await webGetAdminPageList({
       'page': page,
