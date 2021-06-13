@@ -13,6 +13,7 @@
               ref="ruleForm"
               label-width="140px"
               class="demo-ruleForm"
+              :hide-required-asterisk="true"
               :rules="rules"
               :model="formData">
               <el-form-item :label="$t('Hlin.起始页')" prop="page" >
@@ -33,7 +34,7 @@
         </el-row>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')" v-if="dialogFormType">{{ $t('Hlin.确定') }}</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType" v-if="dialogFormType">{{ $t('Hlin.确定') }}</el-button>
         <el-button type="primary" 
           @click="onExportExcel"  
           icon="el-icon-download"
@@ -74,6 +75,11 @@ export default class ExportExcels extends Vue {
   private dialogFormVisible: boolean = false;  // 弹窗
   private dialogFormType: boolean = true;      // 类型
 
+  private rules = {
+    page: [ { required: true, message: 'err', trigger: 'blur' }],
+    pageSize: [ { required: true, message: 'err', trigger: 'blur' } ],
+  };
+
   // 获取数据
   get getExportExcelsList() {
     return UserStore.getExportExcelsList
@@ -89,6 +95,7 @@ export default class ExportExcels extends Vue {
         this.dialogFormType = true;
 
       } else {  // 有数据
+        this.loadingType = false;
         this.dialogFormVisible = true;
         this.dialogFormType = false;
         this.excelsTableData = newValue;
@@ -99,29 +106,44 @@ export default class ExportExcels extends Vue {
   // 生命周期
   mounted () {};
 
+  // 重置
+  resetForm(formName) {
+    const _that = this;
+    const ref: any = _that.$refs[formName];
+    ref.resetFields();
+  }
+
   /**
    *  关闭弹窗
    */
   private onDialogClose() {
-    this.dialogFormType = true;
     this.excelsTableData = [];
+    this.dialogFormType = true;
+    this.loadingType = false;
+    this.formData.page = 1;
+    this.formData.pageSize = 12;
     UserStore.storeExportExcelsMap([]);
   }
 
+  /**
+   *  提交
+   */
   private submitForm(formName) {
     let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
+    this.loadingType = true;
     ref.validate((valid) => {
       if (valid) {
         this.onDialogFormClick();
       } else {
         console.log('error submit!!');
+        this.loadingType = false;
         return false;
       }
     });
   }
 
   /**
-   *  向父级传递请求参数，分页
+   *  向父级传递请求参数，传递分页
    */
   private onDialogFormClick() {
     this.$emit('getExportExcelInput', this.formData.page, this.formData.pageSize);
@@ -171,7 +193,7 @@ export default class ExportExcels extends Vue {
           _that.loadingType = false;
         }
       });
-      
+
       export_json_to_excel(tableHeader, tableData, name);  // 生成
     })
   }

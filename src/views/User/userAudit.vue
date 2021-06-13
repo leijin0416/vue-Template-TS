@@ -36,7 +36,7 @@
           @handleCurrentChange="handleCurrentChange">
           <el-table-column slot="operateStatus" :label="$t('审核状态')" align='center' width="150">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 1">{{$t('审核状态')}}</el-tag>
+              <el-tag v-if="scope.row.status === 1">{{$t('审核成功')}}</el-tag>
               <el-tag type="info" v-else-if="scope.row.status === 0">{{$t('待审核')}}</el-tag>
               <el-tag type="danger" v-else>{{$t('审核拒绝')}}</el-tag>
             </template>
