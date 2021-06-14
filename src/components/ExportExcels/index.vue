@@ -114,7 +114,7 @@ export default class ExportExcels extends Vue {
   }
 
   /**
-   *  关闭弹窗
+   *  关闭弹窗 -重置
    */
   private onDialogClose() {
     this.excelsTableData = [];
@@ -142,7 +142,7 @@ export default class ExportExcels extends Vue {
     });
   }
 
-  /**
+  /** 第一层弹窗
    *  向父级传递请求参数，传递分页
    */
   private onDialogFormClick() {
@@ -157,9 +157,8 @@ export default class ExportExcels extends Vue {
     return jsonData.map(v => filterVal.map(j => v[j]));
   }
 
-  /** 拿到数据进行导出
-   *  https://juejin.cn/post/6966495816429076516  
-   *  https://juejin.cn/post/6966062224892756005
+  /** 第二层弹窗 -拿到数据进行导出
+   *  https://juejin.cn/post/6966495816429076516  |  https://juejin.cn/post/6966062224892756005
    *  @param export_json_to_excel   生成方法
    */
   private onExportExcel() {

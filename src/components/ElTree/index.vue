@@ -88,7 +88,7 @@ export default class tree extends Vue {
 
   // 监听数据列表
   @Watch('getAdminSystemMenuTreeList', { immediate: true, deep: true })  // 树状图数据
-  getMenuTreeList(newValue: any) {
+  getMenuTreeList(newValue) {
     let list = newValue.data;
     if(newValue.data) {
       if(list.length > 0) this.childrenRouterData[0].children = list;
@@ -97,11 +97,11 @@ export default class tree extends Vue {
     //console.log(newValue)
   };
   @Watch('getAdminRoleChildrenMenuId', { immediate: true, deep: true })  // 默认勾选
-  getRoleChildrenMenuId(newValue: any) {
+  getRoleChildrenMenuId(newValue) {
     if(newValue) {
       let tree: any = this.$refs.tree;
       if(newValue.length > 0) {
-        let list = newValue.map(Number);
+        let list = newValue.map(Number);   // 删除0最高父级
         list.forEach((item, i) => {
           if (item == 0) {
             list.splice(i, 1); // 从下标 i 开始, 删除 1 个元素
@@ -120,14 +120,12 @@ export default class tree extends Vue {
   // 生命周期
   mounted () {}
 
-  /** 按钮 -树状图勾选事件
-   *  节点被点勾选的回调
-   * 
-   *  @data 属性的数组中该节点所对应的对象
+  /** 
+   * @description: 按钮 -树状图勾选事件 节点被点勾选的回调
+   * @param {*} data  属性的数组中该节点所对应的对象
    */
   @Emit('handleNodeCheck')
   private handleNodeCheck(data, node) {
-    
     let tree: any = this.$refs.tree;
     let arrayCheckedKeys: any = tree.getCheckedKeys();  // 当前选中的子
     let arrayData: any = tree.getCheckedKeys().concat(tree.getHalfCheckedKeys());  // 当前选中的父+子
@@ -144,10 +142,11 @@ export default class tree extends Vue {
     }
   }
 
-  /** 按钮 -树状图点击事件
-   *  节点被点击时的回调
-   * 
-   *  @data 属性的数组中该节点所对应的对象
+  /**
+   * @description:    按钮 -树状图点击事件 ,节点被点击时的回调
+   * @param {*} data  属性的数组中该节点所对应的对象
+   * @param {*} node
+   * @return {*}
    */
   private handleNodeClick(data, node) {
     console.log(data);
@@ -164,6 +163,7 @@ export default class tree extends Vue {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .custom-tree-node {
   position: relative;
