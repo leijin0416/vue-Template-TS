@@ -41,6 +41,7 @@ import { sessionData } from '@/filters/storage';
 import { childrenRouterMap } from '@/mock/childrenRouter';
 
 type IndexData = {
+  menuId: string | number;
   children: string;
   label: string
 };
@@ -53,8 +54,16 @@ export default class tree extends Vue {
    *  @treeType 1要 0不要
    */
   @Prop({ default: 0 }) treeType!: number;
-  private accordion: boolean = this.treeType === 0 ? true : false;
+  private accordion: boolean = this.treeType === 0 ? true : false;   // 是否每次只打开一个同级树节点展开
 
+  /** tree 动态插入
+   *  https://sg.jianshu.io/p/4b5cfaedc2b7
+   */
+  private defaultProps: IndexData = {
+    menuId: 'menuId',
+    children: 'children',
+    label: 'title'
+  };
   private childrenRouterData = [
     {
       depth: 1,
@@ -65,10 +74,6 @@ export default class tree extends Vue {
       icon: "el-icon-monitor"
     }
   ];
-  private defaultProps: IndexData = {
-    children: 'children',
-    label: 'title'
-  };
 
   private defaultCheckedKeys: Array<number> = [];    // 默认勾选的节点的 key 的数组 [0]
   private defaultExpandedKeys: Array<number> = [0];  // 默认展开的节点的 key 的数组

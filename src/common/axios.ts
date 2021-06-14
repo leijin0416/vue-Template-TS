@@ -1,6 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { Message } from 'element-ui';
 import { sessionData } from '@/filters/storage';
+
 import CryptoJS from './cryptoJS';  // 加密
 import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 
@@ -10,16 +11,16 @@ switch (process.env.NODE_ENV) {
     baseUrl = "http://192.168.1.xxxx:10086"
     break
   case "production":
-    baseUrl = "http://23.111.163.xxxx:10086"
+    baseUrl = "http://185.251.248.xxx:10086"
     break
 }
 /**
  *  const VUE_APP_URL = process.env.VUE_APP_URL;
  *  axiosConfig.headers.AuthType = 'WEB';
- *  超时重新请求配置 146
+ *  超时重新请求配置 230
  */
 const axiosConfig: AxiosRequestConfig = {
-  baseURL: baseUrl,
+  baseURL: "http://185.251.248.230:10086",
   timeout: 5000,
   withCredentials: true,
 };
@@ -36,11 +37,9 @@ const service = axios.create(axiosConfig);
       data: CryptoJS.ECBEncrypt(JSON.stringify(config.data))  // 文本数据交换格式
     }
  */
-service.interceptors.request.use(
-  config => {
+service.interceptors.request.use( config => {
     const token = sessionData('get', 'HasSessionToken', '');
-    // tslint:disable-next-line:no-unused-expression
-    token && (config.headers.Authorization = token);  // token
+    token && (config.headers.Authorization = token);       // token
     config.headers.AuthType = 'WEB';
     config.headers['content-Type'] = "application/json;charset=utf-8";
     config.headers['Accept-Language'] = sessionStorage.getItem('accessLocaleI18n') || 'zh-CN';
@@ -50,10 +49,9 @@ service.interceptors.request.use(
 
     return config;
 
-  },
-  (err) => {
-      return Promise.reject(err);
-  },
+  }, (err) => {
+    return Promise.reject(err);
+  }
 );
 
 /**
@@ -63,12 +61,9 @@ service.interceptors.request.use(
  * 
  *  response.data = getRealJsonData(CryptoJS.ECBDecrypt(response.data.data));
  */
-service.interceptors.response.use(
-  response => {
+service.interceptors.response.use( response => {
     // if(response.data !== null) response.data = CryptoJS.RSADecrypt(response.data);
     // console.log(CryptoJS.RSADecrypt(response.data));
-    // console.log(sessionData('get', 'HasSessionLocale', ''));
-    
     
     if (response.data.code === 401120) {
       sessionData('clean', 'HasSessionToken', '');
@@ -85,15 +80,11 @@ service.interceptors.response.use(
           window.location.reload();
         }
       })
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 3000);
     }
 
     return response;
 
-  },
-  (error) => {
+  }, (error) => {
     if (error && error.response) {
       const RESPONSE_CODE = {
         400: '请求参数错误',
@@ -111,11 +102,13 @@ service.interceptors.response.use(
         message: error.message,
         type: 'error',
         showClose: true,
-        onClose: () => {}
+        onClose: () => {
+          console.log(error);
+        }
       });
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 export default service;
