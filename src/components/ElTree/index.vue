@@ -49,7 +49,7 @@ type IndexData = {
 @Component({
   components: {},
 })
-export default class tree extends Vue {
+export default class TreeList extends Vue {
   /** three -新增状态
    *  @treeType 1要 0不要
    */
