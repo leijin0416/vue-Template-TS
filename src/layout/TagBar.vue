@@ -43,11 +43,12 @@ type IndexData = {
   names: string;
   messages: number;
 };
+
 // 挂载组件
 @Component({
   components: {}
 })
-export default class TagBar extends Vue {
+export default class vTagBar extends Vue {
   private tagsList: any = [];
   private tagsId: any = '';
   private activeLocale: string = 'zh-CN';
@@ -68,7 +69,7 @@ export default class TagBar extends Vue {
       _that.tagsId = newVal;
       _that.setTags(_that.$route);
     }
-    console.log(`【监听】TAG数组路由Index：${newVal}`);
+    console.log(`【watch】TAG标签index：${newVal}`);
   }
 
   created() {
@@ -193,8 +194,7 @@ export default class TagBar extends Vue {
       });
       
     } else {
-      // 权限递归
-      TreeForeach(JSON.parse(sessionRouterMap), tree => {
+      TreeForeach(JSON.parse(sessionRouterMap), tree => {  // 权限递归
         // data.push(tree);
         if (tree.index === tagsId) {
           data.push({

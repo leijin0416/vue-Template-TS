@@ -55,26 +55,17 @@ type IndexData = {
   names: string;
   messages: number;
 };
+
 // 挂载组件
 @Component({
   components: {}
 })
-export default class NavBar extends Vue {
+export default class vNavBar extends Vue {
   private items: object = [
     {
       icon: 'el-icon-lx-home',
       index: '/user/info',
       title: '系统首页'
-    },
-    {
-      icon: 'el-icon-lx-cascades',
-      index: '/user/property',
-      title: '基础表格'
-    },
-    {
-      icon: 'el-icon-lx-copy',
-      index: 'tabs',
-      title: 'tab选项卡'
     },
     {
       icon: 'el-icon-lx-calendar',
@@ -105,51 +96,12 @@ export default class NavBar extends Vue {
         }
       ]
     },
-    {
-      icon: 'el-icon-lx-emoji',
-      index: 'icon.less',
-      title: '自定义图标'
-    },
-    {
-      icon: 'el-icon-lx-favor',
-      index: 'charts',
-      title: 'schart图表'
-    },
-    {
-      icon: 'el-icon-rank',
-      index: '6',
-      title: '拖拽组件',
-      children: [
-        {
-          index: 'drag',
-          title: '拖拽列表',
-        },
-        {
-          index: 'dialog',
-          title: '拖拽弹框',
-        }
-      ]
-    },
-    {
-      icon: 'el-icon-lx-warn',
-      index: '7',
-      title: '错误处理',
-      children: [
-        {
-          index: 'permission',
-          title: '权限测试'
-        },
-        {
-          index: '404',
-          title: '404页面'
-        }
-      ]
-    }
   ];
   private navMenuData: any = [];
   private collapse: boolean = false;
-  private activeIndex: string = '';
-  private activeLocale: string = '';
+  private activeLocale: string = '';  // 当前语言
+  private activeIndex: string = '';   // 当前激活
+  private defaultOpeneds: any = [];   // 当前打开
 
   // computed -计算 get 用法
   get onRoutes(): any {
@@ -167,26 +119,24 @@ export default class NavBar extends Vue {
     const _that = this;
     if (newVal === '') _that.activeIndex = '';
     else _that.activeIndex = newVal;
-    console.log(`【监听】NavsLeft 路由index：${newVal}`);
+    console.log(`【watch】左侧导航路由index：${newVal}`);
   }
 
   created() {
     const _that = this;
-    const sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
-    // 获取并循环 左侧路由数组
-    const routerData: any = sessionData('get', 'HasSessionRouterMap', '');
+    let getLocaleI18n = sessionStorage.getItem('accessLocaleI18n');
+    if(getLocaleI18n !== null) this.activeLocale = getLocaleI18n;
+
+    const sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');  // 左侧导航路由数组index
+    const routerData: any = sessionData('get', 'HasSessionRouterMap', '');       // 循环左侧导航路由数组
     const navbarData: any = JSON.parse(routerData);
     // console.log(navbarData);
-    let getLocaleI18n = sessionStorage.getItem('accessLocaleI18n');
-    if(getLocaleI18n !== null) {
-      this.activeLocale = getLocaleI18n;
-    }
     
-    if (sessionRouterId != null) _that.activeIndex = sessionRouterId;
+    if (sessionRouterId != null) this.activeIndex = sessionRouterId;
     if (navbarData) {
       navbarData.forEach( el => {
         let data = el.children;
-        el.index = el.menuId;       // 父标识
+        el.index = el.menuId.toString();       // 父标识
         if (data.length > 0) {
           data.forEach( (cd, j) => {
             let size = Number(j) + 1;
@@ -195,8 +145,7 @@ export default class NavBar extends Vue {
           });
         }
       });
-      // console.log(navbarData);
-      _that.navMenuData = navbarData;
+      this.navMenuData = navbarData;
       UserStore.storeActionMenuMap(navbarData);   // 缓存菜单
     };
     

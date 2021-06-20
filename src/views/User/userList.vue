@@ -123,23 +123,9 @@
           <div class="weui-flex-bd">{{drawerRowData.userCode}}</div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">{{ $t('Ult.推荐码') }}</div>
-          <div class="weui-flex-bd">
-            <span v-if="drawerRowData.invitationUserCode === '-1'">{{$t('Ult.暂无')}}</span>
-            <span v-else>{{drawerRowData.invitationUserCode}}</span>
-          </div>
-        </div>
-        <div class="weui-flex">
           <div class="weui-flex-hd">{{ $t('Ult.推荐人') }}</div>
           <div class="weui-flex-bd">
             <span>{{drawerRowData.invitationUserName}}</span>
-          </div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">{{ $t('Ult.已购合约名称') }}</div>
-          <div class="weui-flex-bd">
-            <span v-if="!drawerRowData.contractName">{{$t('Ult.暂无')}}</span>
-            <span v-else>{{drawerRowData.contractName}}</span>
           </div>
         </div>
         <div class="weui-flex">
@@ -156,27 +142,6 @@
           </div>
         </div>
         <div class="weui-flex">
-          <div class="weui-flex-hd">{{ $t('Ult.账号激活') }}</div>
-          <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.active === 1">{{ $t('Ult.已激活') }}</el-tag>
-            <el-tag type="danger" v-else>{{ $t('Ult.未激活') }}</el-tag>
-          </div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">{{ $t('Ult.是否为子账户') }}</div>
-          <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.sonAccount === 1">{{ $t('Ult.是') }}</el-tag>
-            <el-tag type="danger" v-else>{{ $t('Ult.否') }}</el-tag>
-          </div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">{{ $t('Ult.通知类型') }}</div>
-          <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.isOpenNotice === 1">{{ $t('Ult.开启') }}</el-tag>
-            <el-tag type="danger" v-else>{{ $t('Ult.禁止') }}</el-tag>
-          </div>
-        </div>
-        <div class="weui-flex">
           <div class="weui-flex-hd">{{ $t('Ult.实名认证') }}</div>
           <div class="weui-flex-bd">
             <el-tag v-if="drawerRowData.kycStatus === 1">{{ $t('Ult.认证通过') }}</el-tag>
@@ -185,13 +150,6 @@
             <el-tag type="info" v-else>{{ $t('Ult.未认证') }}</el-tag>
           </div>
         </div>
-        <!-- <div class="weui-flex">
-          <div class="weui-flex-hd">注册方式</div>
-          <div class="weui-flex-bd">
-            <el-tag v-if="drawerRowData.registerType === 1">公众注册</el-tag>
-            <el-tag v-else>个人注册</el-tag>
-          </div>
-        </div> -->
         <div class="weui-flex">
           <div class="weui-flex-hd">{{ $t('Ult.证件类型') }}</div>
           <div class="weui-flex-bd" v-if="drawerRowData.identityCardType != 0">
@@ -209,18 +167,6 @@
             <span v-if="drawerRowData.identityCard === '-1'">{{$t('Ult.暂无')}}</span>
             <span v-else>{{drawerRowData.identityCard}}</span>
           </div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">{{ $t('Ult.用户邮箱') }}</div>
-          <div class="weui-flex-bd">{{drawerRowData.email}}</div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">{{ $t('Ult.用户电话') }}</div>
-          <div class="weui-flex-bd">{{drawerRowData.phone}}</div>
-        </div>
-        <div class="weui-flex">
-          <div class="weui-flex-hd">{{ $t('Ult.用户生日') }}</div>
-          <div class="weui-flex-bd">{{drawerRowData.birthdayTime}}</div>
         </div>
         <div class="weui-flex">
           <div class="weui-flex-hd">{{ $t('Ult.创建时间') }}</div>
@@ -344,6 +290,7 @@
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { sessionData } from '@/filters/storage';
 import { MessageTips } from '@/filters/MessageTips';
 import { IndexUserListData } from '@/types/views/index.interface';
 import { UserListStore } from '@/store/private/PageUserList';
@@ -355,7 +302,6 @@ import {
   webGetAdminPageUserInvestmentTaskBuy,
   webGetAdminSendNotice
 } from "@/api/index";
-import { sessionData } from '@/filters/storage';
 
 import ElTable from "@/components/ElTable/index.vue";
 import UserRegister from "./userRegister.vue";
@@ -460,13 +406,7 @@ export default class userList extends Vue {
 
   private userOpenTaskData: any = [];
   private userTaskAmount: number | string = '0';  // 可投数量
-  private formUserOpenTask: {
-    // 装饰器名称
-    userId: string;
-    taskCycle: string;
-    investmentAmount: number | string;
-    amount: number | string;
-  } = {
+  private formUserOpenTask: any = {
     userId: "",
     taskCycle: "",
     investmentAmount: "",

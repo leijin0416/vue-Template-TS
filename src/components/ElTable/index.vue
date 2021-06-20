@@ -52,7 +52,7 @@ import { sessionData } from '@/filters/storage';
 @Component({
   components: {},
 })
-export default class ElTable extends Vue {
+export default class vElTable extends Vue {
   private pageSize: number = 12;
 
   @Prop({ default: [] }) tableData!: Array<object>;         // 表格数据

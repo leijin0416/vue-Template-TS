@@ -40,15 +40,15 @@
 import md5 from 'js-md5';
 import scrollReveal from 'scrollreveal';
 import { Component, Vue, Watch, Provide } from 'vue-property-decorator';
-import { dynamicRouter, subMenuRouters } from '@/router/routerMaps';
 import router, { resetRouter } from '@/router/index';
-import { UserStore } from '@/store/private/user';
-import { MessageTips } from '@/filters/MessageTips';
 import { regBlank } from '@/filters/splitRegex';
+import { MessageTips } from '@/filters/MessageTips';
+import { UserStore } from '@/store/private/user';
 import { TreeForeach, scrollRevealEffect } from '@/filters/common';
-
-import { childrenRouterMap } from '@/mock/childrenRouter';
 import { webGetAdminUserLogin, webGetAdminUserFindRoleById } from "@/api/index";
+
+import { dynamicRouter, subMenuRouters } from '@/router/routerMaps';
+import { childrenRouterMap } from '@/mock/childrenRouter';
 
 type IndexData = {
   userName: string;
@@ -58,19 +58,17 @@ type IndexData = {
 @Component({
   components: {},
 })
-export default class login extends Vue {
+export default class Login extends Vue {
   // 动画
   private scrollReveal = scrollReveal();
-  // 定义input
   private ruleForm: IndexData = {
     userName: '',
     pass: ''
   };
-  
   private radioLocale: string = 'zh-CN';
   private loadingType: boolean = false;
-  // 请求环境 本地/线上
-  private LocalStatus: boolean = true;
+  private isLocalStatus: boolean = true; // 请求环境 本地/线上
+
   /**
    * 表单验证
    */
@@ -158,9 +156,11 @@ export default class login extends Vue {
     ref.resetFields();
   }
 
-  /** 
-   *  登录校验
-   *  @validate   报错找不到类型
+  /**
+   * @description:   按钮-登录校验
+   * @param {*} formName   标识
+   * @param {*} validate   报错找不到类型
+   * @return {*}
    */
   submitForm(formName: string) {
     const _that = this;
@@ -179,67 +179,74 @@ export default class login extends Vue {
     });
   }
 
-  /** 
-   *  按钮登录
-   *  @storeActionUserName   缓存用户名
-   *  @storeActionToken      缓存用户Token
-   *  @resetRouter           重置路由
+  /**
+   * @description:  按钮-登录
+   * @param {*} storeActionUserName   缓存用户名
+   * @param {*} storeActionToken      缓存用户Token
+   * @param {*} resetRouter           API-重置路由
+   * @return {*}
    */
   async submitFormClick() {
     let { userName, pass } = this.ruleForm;
     let md5s = md5(pass).toUpperCase();
-    let subMenuUser = await webGetAdminUserLogin({
+    let res = await webGetAdminUserLogin({
       'userName': userName,
       'password': pass,
     });
-    let type = MessageTips(subMenuUser, false, true, '', null, item => {
+    let type = MessageTips(res, false, true, '', null, err => {
       this.loadingType = false;
     });
-    // console.log(subMenuUser);
+    // console.log(res);
     if (type) {
-      const roleId = subMenuUser.data.data.userId;
-      // this.loadingType = false;
-      UserStore.storeActionUserName(subMenuUser.data.data.userName);
-      UserStore.storeActionToken(subMenuUser.data.data.token);  // 用户Token
+      const roleId = res.data.data.userId;
+      UserStore.storeActionUserName(res.data.data.userName);
+      UserStore.storeActionToken(res.data.data.token);  // 用户Token
+
       // 调用resetRouter方法，把原来的路由替换  【位置关系】
       resetRouter();
-      this.submitFormRoleId(roleId);
+      this.submitRouterRoleId(roleId);
     }
   }
 
-  /** 
-   *  拿用户ID -> 查询权限表
-   *  @storeActionRouterMap   缓存后台路由数组
-   *  @addRoutes              动态挂载路由
-   *  @TreeForeach            递归遍历
+  /**
+   * @description:  拿用户ID -> 查询权限表
+   * @param {*} storeActionRouterMap  缓存后台路由数组
+   * @param {*} subMenuRouters        本地挂载路由(最上层)
+   * @param {*} dynamicRouter         本地路由
+   * @param {*} TreeForeach    递归遍历，对比路由
+   * @param {*} addRoutes      API-动态挂载路由
+   * @return {*}
    */
-  async submitFormRoleId(roleId: number) {
+  async submitRouterRoleId(roleId: number) {
     let routersMapList = subMenuRouters;  // 本地挂载路由
-    if (this.LocalStatus) {
+    if (this.isLocalStatus) {
       // 后台路由
-      let subMenu = await webGetAdminUserFindRoleById({
+      let routerMenu = await webGetAdminUserFindRoleById({
         'adminId': roleId,
       });
-      // console.log(subMenu);
+      // console.log(routerMenu);
       const text = window['vm'].$t('Hlin.登录成功');
-      MessageTips(subMenu, true, true, text, item => {
+      MessageTips(routerMenu, true, true, text, item => {
+        let treeData = item.data.data;
         let dynamicMapList = dynamicRouter;  // 本地路由
-        let treesData = item.data.data;
         
-        TreeForeach(treesData, tree => { // 权限递归
+        TreeForeach(treeData, tree => {  // 权限递归
           dynamicMapList.forEach( el => {
-            if(tree.router == el.path) {
+            if(tree.router == el.path) {  // 比对
               routersMapList[0].children.push(el);
             }
             
           });
         });
 
-        UserStore.storeActionRouterMap(treesData);
+        UserStore.storeActionRouterMap(treeData);
         router.addRoutes(routersMapList);
         this.$router.push({path: '/'});
         this.loadingType = false;
-      }, null);
+
+      }, err => {
+        console.log(err);
+      });
 
     } else {
       // 本地路由
@@ -248,7 +255,7 @@ export default class login extends Vue {
       MessageTips(data, true, true, text, item => {
         let dynamicMapList = dynamicRouter;
         
-        TreeForeach(childrenRouterMap, tree => {  // 权限递归
+        TreeForeach(childrenRouterMap, tree => {
           dynamicMapList.forEach( el => {
             if(tree.router === el.path) {
               // console.log(el);
@@ -256,12 +263,16 @@ export default class login extends Vue {
             }
           });
         });
+        this.loadingType = false;
 
         UserStore.storeActionRouterMap(childrenRouterMap);
         router.addRoutes(routersMapList);
+
         this.$router.push({path: '/'});
-        this.loadingType = false;
-      }, null);
+
+      }, err => {
+        console.log(err);
+      });
     }
   }
 }
