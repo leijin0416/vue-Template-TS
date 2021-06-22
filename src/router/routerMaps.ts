@@ -1,11 +1,15 @@
 import Layout from '@/layout/Init.vue'
 
-/** 
- *  动态路由加载 
- *  const getComponentMMin = (name: any, component: any) => () => import(`@/views/${name}/${component}.vue`);
+/**
+ * @description: 动态路由加载
+ * @param {string} name  文件夹名
+ * @param {string} content  文件名
+ * @return {*}  const getComponentMMin = (name: any, component: any) => () => import(`@/views/${name}/${component}.vue`);
+ * 
+ * require()  -ts引入
  */
-const getComponentMMin = (name: any, component: any) => {
-  return (resolve: any) => require([`@/views/${name}/${component}.vue`], resolve)
+const getComponentMMin = (name: string, content: string) => {
+  return (resolve: any) => require([`@/views/${name}/${content}.vue`], resolve)
 }
 
 
@@ -14,6 +18,7 @@ const getComponentMMin = (name: any, component: any) => {
  * @param displayNavBar 是否需要底部导航
  * @param keepAlive     是否缓存页面
  * @param title         页面标题
+ * @return {*}
  *
  * to.meta.index || from.meta.index || this.$router.isBack
  */
@@ -29,7 +34,8 @@ export const constantRouterMaps = [
 
 /**
  *  @description:  需要添加 -动态挂载路由1
- *  @param component    -权限模板
+ *  @param component    -权限模板，集合
+ *  @return {*}
  * 
  *  -navRouters
  */
@@ -56,10 +62,11 @@ export const subMenuRouters: any = [
 /**
  *  @description:  需要比对 -本地路由比对后台路由2
  *  @param permission    -权限按钮
+ *  @return {*}
  * 
  *  -dynamicRouter
  */
-export const dynamicRouter: any = [
+export const dynamicRouter = [
   {
     path: '/user/list',
     name: 'userList',
