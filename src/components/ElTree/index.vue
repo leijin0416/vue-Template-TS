@@ -54,6 +54,7 @@ export default class vTreeList extends Vue {
    *  @treeType 1要 0不要
    */
   @Prop({ default: 0 }) treeType!: number;
+  
   private accordion: boolean = this.treeType === 0 ? true : false;   // 是否每次只打开一个同级树节点展开
 
   /** tree 动态插入
