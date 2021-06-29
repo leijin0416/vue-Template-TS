@@ -1,13 +1,17 @@
 /**
- * 格式化小数位
- * {{ 3.1111 | formatFloat }} -用法
- * @param val 传入的值
- * @param pos 保留的小数位
+ * @description: 格式化小数位 {{ 3.1452 | formatFloat }}
+ * @param val    传入的值
+ * @param pos    保留的小数位
+ * @param isNaN  检查是否是非数字值
+ * @param Math   检查是否是整数
  */
-const formatFloat = (val: any, pos = 2) => {
+const formatFloat = (val: any, pos: number = 2) => {
   let f = parseFloat(val);
   if (isNaN(f)) {
     return false
+  }
+  if (Math.floor(Number(val)) === Number(val)) {
+    return val
   }
   f = Math.round(val * Math.pow(10, pos)) / Math.pow(10, pos); // pow 幂
   let s = f.toString();
@@ -26,7 +30,7 @@ const formatFloat = (val: any, pos = 2) => {
  * 手机号格式化
  * @param String phone | 180****9230
  */
-const formatPhone = (phone: any) => {
+const formatPhone = (phone: string | number) => {
   phone = phone.toString();
   return phone.substr(0, 3) + '****' + phone.substr(7, 11)
 }
@@ -46,7 +50,6 @@ const formatBank = (val: any) => {
  * @param val 数字  1,279,878,236 | (123456789).toLocaleString('en-US')
  */
 const toThousands = (val: any) => {
-  // tslint:disable-next-line:one-variable-per-declaration
   let num = (val || 0).toString(),
     result = '';
   while (num.length > 3) {
