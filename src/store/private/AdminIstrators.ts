@@ -72,10 +72,8 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     if (res.data.code === 200) {
       let data = res.data
       this.SET_MutationAdminMenuTreeList(data)
-      // console.log(res);
       
     } else console.log(res);
-    // commit('SET_MutationAdminPageList', data)
   }
   @Action
   public async storeActionAdminMenuRightList(item: object) {  // 路由列表
@@ -83,10 +81,8 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     if (res.data.code === 200) {
       let data = res.data
       this.SET_MutationAdminMenuRightList(data)
-      // console.log(res);
       
     } else console.log(res);
-    // commit('SET_MutationAdminPageList', data)
   }
   @Action
   public async webGetAdminMenuRoleList(item: object) {  // 角色列表
@@ -94,15 +90,12 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     if (res.data.code === 200) {
       let data = res.data
       this.SET_MutationAdminMenuRoleList(data)
-      // console.log(res);
       
     } else console.log(res);
-    // commit('SET_MutationAdminPageList', data)
   }
   @Action
   public async webGetAdminRoleChildrenMenuId(item: object) {  // 角色列表-勾选子路由ID
     this.SET_MutationAdminRoleChildrenMenuId(item)
-    // commit('SET_MutationAdminPageList', data)
   }
 
   @Mutation
@@ -113,22 +106,18 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
   @Mutation
   private SET_MutationAdminMenuTreeList(item: any) {
     this.adminMenuTreeList = item;
-    // sessionData('set', 'HasSessionToken', item);
   }
   @Mutation
   private SET_MutationAdminMenuRightList(item: any) {
     this.adminMenuRightList = item;
-    // sessionData('set', 'HasSessionToken', item);
   }
   @Mutation
   private SET_MutationAdminMenuRoleList(item: any) {
     this.adminMenuRoleList = item;
-    // sessionData('set', 'HasSessionToken', item);
   }
   @Mutation
   private SET_MutationAdminRoleChildrenMenuId(item: any) {
     this.adminRoleChildrenMenuId = item;
-    // sessionData('set', 'HasSessionToken', item);
   }
   
 }

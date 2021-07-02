@@ -50,6 +50,9 @@ const formatBank = (val: any) => {
  * @param val 数字  1,279,878,236 | (123456789).toLocaleString('en-US')
  */
 const toThousands = (val: any) => {
+  if (Math.floor(Number(val)) === Number(val)) {
+    return val
+  }
   let num = (val || 0).toString(),
     result = '';
   while (num.length > 3) {
