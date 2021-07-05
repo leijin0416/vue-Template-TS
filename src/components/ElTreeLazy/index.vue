@@ -97,14 +97,10 @@ export default class userGrade extends Vue {
 
   // 获取数据
   get getUserSponsorTreeList() {
-    if(UserListStore.getUserSponsorTreeList.code === 200) {
-      return UserListStore.getUserSponsorTreeList
-    }
+    return
   };
   get getUserSponsorIdsTreeList() {
-    if(UserListStore.getUserSponsorIdsTreeList.code === 200) {
-      return UserListStore.getUserSponsorIdsTreeList
-    }
+    return
   };
 
   // 监听数据列表
@@ -187,14 +183,20 @@ export default class userGrade extends Vue {
       tree: 2,
       sponsorId: userIdsMap.toString()
     }
-    UserListStore.storeActionUserSponsorTreeList(params)   // 第二次查
+    // UserListStore.storeActionUserSponsorTreeList(params)   // 第一次查
+
     setTimeout(() => {
       let res = this.treeChildrenData;
       resolve(res);
     }, 1000);
   }
   
-  // 树组件动态加载子树数据事件
+  /**
+   * @description:  树组件动态加载子树数据事件
+   * @param {*} node
+   * @param {*} resolve
+   * @return {*}
+   */
   private loadNode(node, resolve) {
     // console.log(node);
     // console.log(resolve);
@@ -218,7 +220,8 @@ export default class userGrade extends Vue {
         tree: 2,
         sponsorId: node.data.userId
       }
-      UserListStore.storeActionUserSponsorTreeList(params)   // 第二次查
+      // UserListStore.storeActionUserSponsorTreeList(params)   // 第二次查
+
       setTimeout(() => {
         let res = this.treeChildrenData;
         resolve(res);
