@@ -21,14 +21,20 @@ export function resetRouter() {
   router.matcher = newRouter.matcher;
 }
 
-// 登陆页面路由 name
+/**
+ * @description: [白名单] 路由中的 name 属性
+ * @return {*} 
+ */
 const LOGIN_PAGE_NAME = 'Login';
 
-// 跳转之前
-router.beforeEach((to: any, from, next) => {
-  // 改变每次页面的标题
-  // document.title = to.meta.title;
-  
+/**
+ * @description:  跳转之前
+ * @param {any} to    即将要进入的目标 路由对象 （name，params，meta等属性）
+ * @param {any} from  当前导航正要离开的路由对象
+ * @param {*} next
+ * @return {*} document.title = to.meta.title;   -改变每次页面的标题
+ */
+router.beforeEach((to: any, from: any, next) => {
   const token = sessionData('get', 'HasSessionToken', '');
   // console.log(`${to}__${from}__${token}`);
   
