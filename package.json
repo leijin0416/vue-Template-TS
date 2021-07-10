@@ -14,6 +14,7 @@
 	"dependencies": {
 		"axios": "^0.18.0",
 		"babel-polyfill": "^6.26.0",
+		"clipboard": "^2.0.8",
 		"crypto-js": "^3.1.9-1",
 		"echarts": "^5.0.0",
 		"element-ui": "^2.15.0",
@@ -21,6 +22,7 @@
 		"js-md5": "^0.7.3",
 		"jsencrypt": "^3.1.0",
 		"nprogress": "^0.2.0",
+		"qrcodejs2": "^0.0.2",
 		"scrollreveal": "^4.0.9",
 		"v-viewer": "^1.5.0",
 		"vue": "^2.6.9",
