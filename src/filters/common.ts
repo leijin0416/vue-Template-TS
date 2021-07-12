@@ -135,6 +135,15 @@ const RemoveHtmlTag = (str) => {
   return str
 }
 
+/**
+ * @description:   去除HTML 前后空格 https://www.cnblogs.com/zhangnan35/p/8635059.html
+ * @param {string} str  数值
+ * @return {*}
+ */
+const RemoveHtmlTrim = (str) => {
+  return str.replace(/(^\s*)|(\s*$)/g, "")
+}
+
 
 /**
  * @description: 小数点 数值精度计算   RoundDecimaleeNum(3.1415926, 1)
@@ -153,5 +162,6 @@ export {
   FormatCurrentTime,
   RoundDecimaleeNum, 
   RemoveHtmlTag, 
+  RemoveHtmlTrim, 
   deepCloneData
 }
