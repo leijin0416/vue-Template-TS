@@ -123,19 +123,35 @@ const deepCloneData = (target: any) => {
 }
 
 /**
- * 暴露函数  去除HTML tag
+ * @description:   去除HTML tag
+ * @param {string} str  数值
+ * @return {*}
  */
-export function removeHTMLTag(str: any) {
-  str = str.replace(/<\/?[^>]*>/g, ''); //去除HTML tag
-  str = str.replace(/\s+/g, ''); //去除多余空行
-  str = str.replace(/&nbsp;/ig, ''); //去掉&nbsp;
+const RemoveHtmlTag = (str) => {
+  str = str.replace(/<\/?[^>]*>/g, ''); // 去除HTML tag
+  str = str.replace(/\s+/g, '');        // 去除多余空行
+  str = str.replace(/&nbsp;/ig, '');    // 去掉&nbsp;
 
   return str
+}
+
+
+/**
+ * @description: 小数点 数值精度计算   RoundDecimaleeNum(3.1415926, 1)
+ * @param {number} num       数值
+ * @param {number} decimal   精度
+ * @return {*}
+ */
+const RoundDecimaleeNum = (num, decimal) => {
+  let map = Math.round(num * 10 ** decimal) / 10 ** decimal;
+  return map
 }
 
 export { 
   TreeForeach, 
   FormatArrMapHas, 
-  FormatCurrentTime, 
-  deepCloneData 
+  FormatCurrentTime,
+  RoundDecimaleeNum, 
+  RemoveHtmlTag, 
+  deepCloneData
 }
