@@ -156,6 +156,17 @@ const RoundDecimaleeNum = (num, decimal) => {
   return map
 }
 
+const formatData = (num) => {
+  num = num + '';
+  if (!num.includes('.')) {
+    num += '.'
+  }
+  return num.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
+    return $1 + ',';
+  }).replace(/\.$/, '');
+}
+
+
 export { 
   TreeForeach, 
   FormatArrMapHas, 
