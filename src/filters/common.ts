@@ -156,14 +156,19 @@ const RoundDecimaleeNum = (num, decimal) => {
   return map
 }
 
+/**
+ * @description: 数字千位符格式化，保留小数位  http://openexchangerates.github.io/accounting.js/
+ * @param {number || string} num       数值
+ * @return {*} 解析 https://www.cnblogs.com/vinfy2018/p/8469883.html
+ */
 const formatData = (num) => {
   num = num + '';
   if (!num.includes('.')) {
     num += '.'
   }
   return num.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
-    return $1 + ',';
-  }).replace(/\.$/, '');
+    return $1 + ',';      // 只将整数部分进行分割
+  }).replace(/\.$/, '');  // 再将小数部分合并进来
 }
 
 
