@@ -123,7 +123,7 @@ const deepCloneData = (target: any) => {
 }
 
 /**
- * @description:   去除HTML tag
+ * @description: 去除HTML tag
  * @param {string} str  数值
  * @return {*}
  */
@@ -136,7 +136,7 @@ const RemoveHtmlTag = (str) => {
 }
 
 /**
- * @description:   去除HTML 前后空格 https://www.cnblogs.com/zhangnan35/p/8635059.html
+ * @description: 去除HTML 前后空格 https://www.cnblogs.com/zhangnan35/p/8635059.html
  * @param {string} str  数值
  * @return {*}
  */
@@ -161,7 +161,7 @@ const RoundDecimaleeNum = (num, decimal) => {
  * @param {number || string} num       数值
  * @return {*} 解析 https://www.cnblogs.com/vinfy2018/p/8469883.html
  */
-const formatData = (num) => {
+const FormatKilobitData = (num) => {
   num = num + '';
   if (!num.includes('.')) {
     num += '.'
@@ -179,5 +179,6 @@ export {
   RoundDecimaleeNum, 
   RemoveHtmlTag, 
   RemoveHtmlTrim, 
+  FormatKilobitData,
   deepCloneData
 }
