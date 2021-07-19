@@ -41,7 +41,7 @@ import md5 from 'js-md5';
 import scrollReveal from 'scrollreveal';
 import { Component, Vue, Watch, Provide } from 'vue-property-decorator';
 import router, { resetRouter } from '@/router/index';
-import { regBlank } from '@/filters/splitRegex';
+import { regBlank } from '@/filters/RegexSplit';
 import { MessageTips } from '@/filters/MessageTips';
 import { UserStore } from '@/store/private/user';
 import { TreeForeach, scrollRevealEffect } from '@/filters/common';
