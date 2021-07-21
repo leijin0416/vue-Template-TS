@@ -21,7 +21,7 @@ switch (process.env.NODE_ENV) {
  */
 const axiosConfig: AxiosRequestConfig = {
   baseURL: baseUrl,
-  timeout: 5000,
+  timeout: 30 * 1000,
   withCredentials: true,
 };
 

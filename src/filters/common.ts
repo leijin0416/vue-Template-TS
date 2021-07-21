@@ -181,7 +181,7 @@ const RoundDecimaleeNum = (num, decimal) => {
  * @param {number || string} num       数值
  * @return {*} 解析 https://www.cnblogs.com/vinfy2018/p/8469883.html
  */
-const FormatKilobitData = (num) => {
+const FormatThousands = (num) => {
   num = num + '';
   if (!num.includes('.')) {
     num += '.'
@@ -199,6 +199,6 @@ export {
   RoundDecimaleeNum, 
   RemoveHtmlTag, 
   RemoveHtmlTrim, 
-  FormatKilobitData,
+  FormatThousands,
   deepCloneData
 }

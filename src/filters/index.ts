@@ -49,7 +49,7 @@ const formatBank = (val: any) => {
  * 千分位格式化
  * @param val 数字  1,279,878,236 | (123456789).toLocaleString('en-US')
  */
-const toThousands = (val: any) => {
+const inFormatIntegerThousands = (val: any) => {
   if (Math.floor(Number(val)) === Number(val)) {
     return val
   }
@@ -63,6 +63,21 @@ const toThousands = (val: any) => {
     result = num + result;
   }
   return result
+}
+
+/**
+ * @description: 数字千位符格式化，保留小数位
+ * @param {number || string} num 
+ * @return {*}
+ */
+const inFormatThousands = (num) => {
+  num = num + '';
+  if (!num.includes('.')) {
+    num += '.'
+  }
+  return num.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
+    return $1 + ',';      // 只将整数部分进行分割
+  }).replace(/\.$/, '');  // 再将小数部分合并进来
 }
 
 /**
@@ -157,7 +172,8 @@ export default {
   formatFloat,
   formatPhone,
   formatBank,
-  toThousands,
+  inFormatIntegerThousands,
+  inFormatThousands,
   realFormatSecond,
   getImageUrlBase,
   saveImageFile,
