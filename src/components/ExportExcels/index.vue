@@ -60,7 +60,6 @@ type IndexData = {
   components: {},
 })
 export default class ExportExcels extends Vue {
-
   @Prop({ default: [] }) excelsTableHeader: Array<string> = [];      // 表格头
   @Prop({ default: [] }) excelsFilterVal: Array<string> = [];        // 表格参数
   @Prop({ default: '' }) excelsName: string = '';                    // 表格名称
