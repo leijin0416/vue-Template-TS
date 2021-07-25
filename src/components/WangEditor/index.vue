@@ -39,7 +39,7 @@ export default class WangEditors extends Vue {
 
   // 监听数据列表
   @Watch('isClear', { deep: true })
-  isClearChange(newValue) {
+  isClearTextChange(newValue) {
     if (newValue) {    // 触发清除文本域内容
       this.editor.txt.clear()
       this.info_ = null
@@ -47,7 +47,7 @@ export default class WangEditors extends Vue {
     // console.log(newValue)
   };
   @Watch('value', { deep: true })
-  valueChange(newValue) {  // value为编辑框输入的内容
+  valueTextChange(newValue) {  // value为编辑框输入的内容
     if (newValue !== this.editor.txt.html()) {
       this.editor.txt.html(this.value)
     }

@@ -293,7 +293,12 @@ export default class administrators extends Vue {
     this.drawerFormUpdateType = true;
   }
 
-  // 内容
+  /**
+   * @description: 获取编辑器内容
+   * @param {*} val 内容
+   * @return {*}
+   * data.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' ');  -将获取的Html转成纯文本
+   */
   private onEmitEditorChange(val) {
     // console.log(val);
     if(val !== '') this.formData.content = val;
