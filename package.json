@@ -36,6 +36,7 @@
 		"vuex": "^3.2.0",
 		"vuex-class": "^0.3.2",
 		"vuex-module-decorators": "^0.10.1",
+		"wangeditor": "^4.7.5",
 		"xlsx": "^0.16.9"
 	},
 	"devDependencies": {

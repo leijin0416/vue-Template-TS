@@ -1,7 +1,50 @@
 <template>
   <!-- 公告列表 -->
   <div class="container">
-    <el-row>
+    <div class="v-editor-main" v-show="drawerFormUpdateType">
+      <div class="v-text-header">
+        <i class="el-icon-warning" style="color: #f56c6c"></i>  {{$t('Iblt.注意')}}
+      </div>
+      <div class="v-form-box">
+        <el-row>
+          <el-col :span="12">
+            <el-form
+              ref="ruleForm"
+              label-width="auto"
+              class="demo-ruleForm"
+              :rules="rules"
+              :model="formData">
+              <el-form-item :label="$t('Iblt.标题')" prop="noticeTitle" >
+                <el-input type="text" v-model="formData.noticeTitle" size="medium"></el-input>
+              </el-form-item>
+              <el-form-item :label="$t('Iblt.类型')" prop="noticeType">
+                <el-radio-group v-model="formData.noticeType">
+                  <el-radio label="1">{{ $t('Iblt.会员') }}</el-radio>
+                  <el-radio label="2">{{ $t('Iblt.商户') }}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item :label="$t('Iblt.状态')" prop="status" v-if="!dialogFormType">
+                <el-radio-group v-model="formData.status">
+                  <el-radio :label="1">{{ $t('Iblt.正常') }}</el-radio>
+                  <el-radio :label="0">{{ $t('Iblt.禁用') }}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
+      </div>
+      <WangEditor 
+        v-model="detailValue" 
+        :isClear="isClear" 
+        @emitEditorChange="onEmitEditorChange"
+      />
+      <div class="v-btn-box">
+        <el-button type="primary" icon="el-icon-check" @click="submitForm('ruleForm')" :loading="loadingType" size="medium" class="v-btn" v-if="dialogFormType">{{ $t('Iblt.确定') }}</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="submitForm('ruleForm')" :loading="loadingType" size="medium" class="v-btn" v-else>{{ $t('Iblt.修改1') }}</el-button>
+        <el-button icon="el-icon-back" @click="goBackClick" size="medium" >{{ $t('Iblt.返回') }}</el-button>
+      </div>
+    </div>
+    <el-row v-show="!drawerFormUpdateType">
       <el-col :span="24">
         <div class="v-header-search">
           <el-form
@@ -11,6 +54,9 @@
             :inline="true"
             :rules="rules"
             :model="param">
+            <el-form-item :label="$t('Iblt.标题')" >
+              <el-input type="text" v-model="param.noticeTitle" size="small" clearable></el-input>
+            </el-form-item>
             <el-form-item :label="$t('Iblt.类型')" >
               <el-select v-model="param.noticeType" :placeholder="$t('Iblt.请选择')" size="small">
                 <el-option
@@ -31,9 +77,6 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('Iblt.标题')" >
-              <el-input type="text" v-model="param.noticeTitle" size="small" clearable></el-input>
-            </el-form-item>
             <el-button type="primary" @click="submitSearchForm('ruleSearchForm')" size="small" icon="el-icon-search" class="v-btn" >{{ $t('Iblt.搜索') }}</el-button>
             <el-button @click="resetSearchForm('ruleSearchForm')" size="small" icon="el-icon-refresh-left" class="v-btn">{{ $t('Iblt.重置') }}</el-button>
           </el-form>
@@ -47,13 +90,13 @@
           :totalCount="totalCount"
           @handleSelectionChange="handleSelectionChange"
           @handleCurrentChange="handleCurrentChange">
-          <el-table-column slot="operateTagNoticeType" :label="$t('Iblt.类型')" align="center" width="150">
+          <el-table-column slot="operateTagNoticeType" :label="$t('Iblt.类型')" align="center" width="180">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.noticeType === '1'">{{ $t('Iblt.会员APP') }}</el-tag>
-              <el-tag type="warning" v-else>{{ $t('Iblt.商户APP') }}</el-tag>
+              <el-tag v-if="scope.row.noticeType === '1'">{{ $t('Iblt.会员') }}</el-tag>
+              <el-tag type="warning" v-else>{{ $t('Iblt.商户') }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column slot="operateTagStatus" :label="$t('Iblt.状态')" align="center" width="170">
+          <el-table-column slot="operateTagStatus" :label="$t('Iblt.状态')" align="center" width="180">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status === 1 ? true : false"
@@ -63,7 +106,7 @@
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column slot="operateButton" :label="$t('Iblt.操作')" align='center' width="140">
+          <el-table-column slot="operateButton" :label="$t('Iblt.操作')" align='center' width="180">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleRowModifyClick(scope.row)" icon="el-icon-edit-outline">{{ $t('Iblt.修改') }}</el-button>
               <!-- <el-button type="text" size="small" @click="handleOpenClick(scope.row)" class="v-btn-red">删除</el-button> -->
@@ -78,44 +121,9 @@
       <div slot="title" class="el-dialog__title" v-if="dialogFormType">{{ $t('Iblt.添加公告') }}</div>
       <div slot="title" class="el-dialog__title" v-else>{{ $t('Iblt.修改公告') }}</div>
       <div class="v-form-box">
-        <el-row>
-          <el-col :span="15">
-            <el-form
-              ref="ruleForm"
-              label-width="140px"
-              class="demo-ruleForm"
-              :rules="rules"
-              :model="formData">
-              <el-form-item :label="$t('Iblt.公告ID')" v-if="!dialogFormType">
-                <el-input type="text" v-model="formData.noticeId" size="medium" :readonly="true"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('Iblt.标题')" prop="noticeTitle" >
-                <el-input type="text" v-model="formData.noticeTitle" size="medium"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('Iblt.内容')" prop="content" >
-                <el-input 
-                  type="textarea" 
-                  v-model="formData.content"
-                  :autosize="{ minRows: 2, maxRows: 4}"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('Iblt.类型')" prop="noticeType">
-                <el-radio-group v-model="formData.noticeType">
-                  <el-radio label="1">{{ $t('Iblt.会员APP') }}</el-radio>
-                  <el-radio label="2">{{ $t('Iblt.商户APP') }}</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item :label="$t('Iblt.状态')" prop="status" v-if="!dialogFormType">
-                <el-radio-group v-model="formData.status">
-                  <el-radio :label="1">{{ $t('Iblt.正常') }}</el-radio>
-                  <el-radio :label="0">{{ $t('Iblt.禁用') }}</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-form>
-          </el-col>
-        </el-row>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('ruleForm')" v-if="dialogFormType"{{ $t('Iblt.重置') }}</el-button>
+        <el-button @click="resetForm('ruleForm')" v-if="dialogFormType">{{ $t('Iblt.重置') }}</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')" :loading="loadingType">{{ $t('Iblt.确定') }}</el-button>
       </div>
     </el-dialog>
@@ -123,16 +131,19 @@
 </template>
 
 <script lang="ts">
-import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { InformationStore } from '@/store/private/PageInformation';
-import { UserStore } from '@/store/private/user';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
-import { webGetAdminUserNoticeAdd, webGetAdminUserNoticeUpdateStatus, webGetAdminUserNoticeUpdate, webGetAdminPageList } from '@/api/index';
+import { InformationStore } from '@/store/private/PageInformation';
+import { UserStore } from '@/store/private/user';
+import { 
+  webGetAdminUserNoticeAdd, 
+  webGetAdminUserNoticeUpdateStatus, 
+  webGetAdminUserNoticeUpdate, 
+} from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
-import ExportExcels from "@/components/ExportExcels/index.vue";
+import WangEditor from "@/components/WangEditor/index.vue";
 
 type IndexData = {
   page: number;
@@ -145,6 +156,7 @@ type IndexData = {
 @Component({
   components: {
     ElTable,
+    WangEditor,
   },
 })
 export default class administrators extends Vue {
@@ -158,11 +170,11 @@ export default class administrators extends Vue {
   };
   private formOptionNoticeType: object = [
     {
-      label: window['vm'].$t('Iblt.会员APP'),
+      label: window['vm'].$t('Iblt.会员'),
       value: '1'
     },
     {
-      label: window['vm'].$t('Iblt.商户APP'),
+      label: window['vm'].$t('Iblt.商户'),
       value: '2'
     },
   ];
@@ -189,11 +201,6 @@ export default class administrators extends Vue {
       label: window['vm'].$t('Iblt.标题'),
       width: 'auto',
     },
-    {
-      prop: 'content',
-      label: window['vm'].$t('Iblt.内容'),
-      width: 'auto',
-    },
     {slot: 'operateTagStatus'},
     {
       prop: 'createId',
@@ -210,9 +217,14 @@ export default class administrators extends Vue {
     },
   ]; // 表格行头
 
-  private loadingType:boolean = false;
-  private dialogFormType:boolean = true;
-  private dialogFormVisible:boolean = false;
+  // 添加
+  private drawerFormUpdateType: boolean = false;
+  private isClear: boolean = false;
+  private detailValue: string = "";
+
+  private loadingType: boolean = false;
+  private dialogFormType: boolean = true;
+  private dialogFormVisible: boolean = false;
   private formData = {
     noticeTitle: '',
     content: '',
@@ -224,21 +236,9 @@ export default class administrators extends Vue {
   private rules = {
     content: [
       { required: true, message: window['vm'].$t('Iblt.请输入公告内容'), trigger: 'blur' },
-      {
-        required: true,
-        pattern: /^\S*$/,
-        message:  window['vm'].$t('Iblt.请勿输入空字符'),
-        trigger: 'blur'
-      },
     ],
     noticeTitle: [
       { required: true, message: window['vm'].$t('Iblt.请输入公告标题'), trigger: 'blur' },
-      {
-        required: true,
-        pattern: /^\S*$/,
-        message:  window['vm'].$t('Iblt.请勿输入空字符'),
-        trigger: 'blur'
-      },
     ],
     status: [
       { required: true, message: window['vm'].$t('Iblt.请选择状态'), trigger: 'change' },
@@ -258,8 +258,8 @@ export default class administrators extends Vue {
   // 监听数据列表
   @Watch('getInformationNoticeList', { deep: true })
   userPageChange(newValue) {
+    // console.log(newValue)
     let list = newValue.data.list;
-    
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
@@ -268,7 +268,6 @@ export default class administrators extends Vue {
       this.tableData = obj;
     } else {this.tableData = list;}
     this.totalCount = newValue.data.total;
-    // console.log(newValue)
   };
 
   // 生命周期
@@ -278,6 +277,27 @@ export default class administrators extends Vue {
 
   // 生命周期
   mounted () {};
+
+  // 返回
+  goBackClick() {
+    this.$nextTick(function () {
+      this.resetForm('ruleForm');
+      this.detailValue = '';
+      this.dialogFormType = true;
+      this.drawerFormUpdateType = false;
+    });
+  }
+
+  // 添加弹窗
+  private onAddsClick() {
+    this.drawerFormUpdateType = true;
+  }
+
+  // 内容
+  private onEmitEditorChange(val) {
+    // console.log(val);
+    if(val !== '') this.formData.content = val;
+  }
 
   // 复选框
   private handleSelectionChange(val) {
@@ -297,17 +317,16 @@ export default class administrators extends Vue {
   }
 
   // 重置
-  private resetForm(formName: string) {
+  private resetForm(formName) {
     const _that = this;
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.resetFields();
   }
-
-  // 搜索
   private resetSearchForm(formName:string) {
     const _that = this;
     Object.keys(_that.param).forEach(key => {
-      if(key === 'status' || key === 'noticeType' || key === 'noticeTitle') _that.param[key] = '';
+      if(key === 'page' || key === 'pageSize') return
+      else _that.param[key] = ''
     });
     InformationStore.storeActionInformationNoticeList(this.param);
     // console.log(this.param);
@@ -324,13 +343,6 @@ export default class administrators extends Vue {
         return false;
       }
     });
-  }
-
-  // 添加弹窗
-  private onAddsClick() {
-    Object.keys(this.formData).forEach(key => this.formData[key] = '');
-    this.dialogFormVisible = true;
-    this.dialogFormType = true;
   }
 
   // 删除
@@ -395,9 +407,10 @@ export default class administrators extends Vue {
   private handleRowModifyClick(row) {
     const _that = this;
     const obj = deepCloneData(row);
-    _that.dialogFormVisible = true;
+    _that.drawerFormUpdateType = true;
     _that.dialogFormType = false;
     _that.formData = obj;
+    _that.detailValue = obj.content;
     // console.log(obj)
   }
 
@@ -432,9 +445,7 @@ export default class administrators extends Vue {
       MessageTips(res, true, true, text, item => {
         this.loadingType = false;
         this.onRefreshClick();
-        this.$nextTick(() => {
-          this.resetForm('ruleForm');
-        })
+
       }, null);
 
     } else {
@@ -449,6 +460,7 @@ export default class administrators extends Vue {
       MessageTips(res, true, true, text, item => {
         this.loadingType = false;
         this.onRefreshClick();
+        
       }, null);
     }
   }
@@ -462,6 +474,21 @@ export default class administrators extends Vue {
 /deep/.el-tag {
   min-width: 80px;
   text-align: center;
+}
+.v-editor-main {
+  padding: 30px 15px;
+  .v-text-header {
+    padding: 0 0 30px 0;
+    color: #f56c6c;
+  }
+  .v-btn-box {
+    margin-top: 30px;
+    .v-btn {
+      min-width: 120px;
+      margin-right: 5px;
+      text-align: center;
+    }
+  }
 }
 .container {
   min-height: 800px;
