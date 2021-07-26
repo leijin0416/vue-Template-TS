@@ -30,7 +30,10 @@ export default class WangEditors extends Vue {
   @Prop({ default: '' }) value: String;
   
   private editor: any = null;
-  private info_: any = null
+  private infoContent: any = null
+
+  private uploadImgServer: string = 'http://185.251.248.xxxx:10086/api/ping-shop-web/app/uploadFile';
+  
 
   // 获取数据
   get getUserLevelList() {
@@ -39,17 +42,17 @@ export default class WangEditors extends Vue {
 
   // 监听数据列表
   @Watch('isClear', { deep: true })
-  isClearTextChange(newValue) {
-    if (newValue) {    // 触发清除文本域内容
-      this.editor.txt.clear()
-      this.info_ = null
+  watchIsClearTextChange(newValue) {  // 监听 触发清除文本域内容
+    if (newValue) {
+      this.editor.txt.clear();
+      this.infoContent = null;
     }
     // console.log(newValue)
   };
   @Watch('value', { deep: true })
-  valueTextChange(newValue) {  // value为编辑框输入的内容
+  watchValueTextChange(newValue) {  // 监听 value为编辑框输入的内容
     if (newValue !== this.editor.txt.html()) {
-      this.editor.txt.html(this.value)
+      this.editor.txt.html(this.value);
     }
   };
 
@@ -65,8 +68,9 @@ export default class WangEditors extends Vue {
 
   /**
    * @description: 富文本编辑器  https://www.wangeditor.com/
-   * @param {*}
-   * @return {*}
+   * @param {*} editor
+   * @param {*} infoContent
+   * @return {*} 
    */
   private seteditor() {
     const refToolbar: any = this.$refs.toolbar;
@@ -74,7 +78,7 @@ export default class WangEditors extends Vue {
 
     this.editor = new E(refToolbar, refEditor);
     this.editor.config.uploadImgShowBase64 = false; // base 64 存储图片
-    this.editor.config.uploadImgServer = 'http://185.251.248.xxxx:10086/api/ping-shop-web/app/uploadFile';  // 配置服务器端地址
+    this.editor.config.uploadImgServer = 'http://otp.cdinfotech.top/file/upload_images';  // 配置服务器端地址
     this.editor.config.uploadImgHeaders = {  // 自定义 header
       AuthType: "WEB",
     };
@@ -123,17 +127,16 @@ export default class WangEditors extends Vue {
       error: (xhr, editor) => {   // 图片上传错误的回调
       },
       customInsert: (insertImg, result, editor) => {
+        // console.log(result)
         // 图片上传成功，插入图片的回调
-        //result为上传图片成功的时候返回的数据，这里我打印了一下发现后台返回的是data：[{url:"路径的形式"},...]
-        // console.log(result.data[0].url)
-        //insertImg()为插入图片的函数
-        let url = result.data.filePath
-        insertImg(url)
+        // insertImg()为插入图片的函数
+        let url = result.data.filePath;  // let url = "http://otp.cdinfotech.top" + result.url
+        insertImg(url);
       }
     }
     this.editor.config.onchange = (html) => {
-      this.info_ = html // 绑定当前逐渐地值
-      this.$emit('emitEditorChange', this.info_) // 将内容同步到父组件中
+      this.infoContent = html;   // "绑定" 当前逐渐地值
+      this.$emit('emitEditorChange', this.infoContent); // 将 "绑定" 内容同步到父组件中
     }
     // 创建富文本编辑器
     this.editor.create();
