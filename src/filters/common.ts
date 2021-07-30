@@ -16,6 +16,7 @@ const TreeForeach =  (tree, func) => {
 }
 
 /** https://juejin.cn/post/6983904373508145189
+ * 
  * @description: 扁平数据结构转Tree
  * @param pid 0
  * @param arr [{id: 1, pid: 0},{id: 2, pid: 0},{id: 3, pid: 1},{id: 4, pid: 2}]
@@ -40,10 +41,10 @@ const FormatArrMapHas = (tree) => {
 }
 
 /** https://juejin.cn/post/6986452564778680350
+ * 
  * @description: 深拷贝函数  接收目标target参数
  * @param target 
  * @returns 
- * 
  */
  const deepCloneData = (target: any) => {
   // 定义一个变量
@@ -78,9 +79,9 @@ const FormatArrMapHas = (tree) => {
   return result
 }
 
-/**
- * @param {*} time  时间戳 10位 * 1000
- * 
+/** 
+ * @description 时间戳转日期
+ * @param {Number} time  时间戳   10位 * 1000
  * @param {*} Y  年
  * @param {*} m  月
  * @param {*} d  日
@@ -111,8 +112,7 @@ const FormatCurrentTime = (fmt, time) => {
 }
 
 /**
- * scrollReveal 动画
- * 
+ * @description scrollReveal 动画
  * @param {*} duration  动画的时长
  * @param {*} origin    动画开始的位置，'bottom', 'left', 'top', 'right'
  * @param {*} reset     回滚的时候是否再次触发动画
@@ -147,7 +147,7 @@ const FormatCurrentTime = (fmt, time) => {
  * @param {string} str  数值
  * @return {*}
  */
-const RemoveHtmlTag = (str) => {
+const RemoveHtmlFormTag = (str) => {
   str = str.replace(/<\/?[^>]*>/g, ''); // 去除HTML tag
   str = str.replace(/\s+/g, '');        // 去除多余空行
   str = str.replace(/&nbsp;/ig, '');    // 去掉&nbsp;
@@ -155,23 +155,24 @@ const RemoveHtmlTag = (str) => {
   return str
 }
 
-/**
- * @description: 去除HTML 前后空格 https://www.cnblogs.com/zhangnan35/p/8635059.html
+/** https://www.cnblogs.com/zhangnan35/p/8635059.html
+ * 
+ * @description: 去除HTML 前后空格 
  * @param {string} str  数值
  * @return {*}
  */
-const RemoveHtmlTrim = (str) => {
+const RemoveHtmlFormTrim = (str) => {
   return str.replace(/(^\s*)|(\s*$)/g, "")
 }
 
 
 /**
- * @description: 小数点 数值精度计算   RoundDecimaleeNum(3.1415926, 1)
+ * @description: 小数点 数值精度计算   RoundDecimaleeFormNum(3.1415926, 1)
  * @param {number} num       数值
  * @param {number} decimal   精度
  * @return {*}
  */
-const RoundDecimaleeNum = (num, decimal) => {
+const RoundDecimaleeFormNum = (num, decimal) => {
   let map = Math.round(num * 10 ** decimal) / 10 ** decimal;
   return map
 }
@@ -196,9 +197,9 @@ export {
   TreeForeach, 
   FormatArrMapHas, 
   FormatCurrentTime,
-  RoundDecimaleeNum, 
-  RemoveHtmlTag, 
-  RemoveHtmlTrim, 
+  RoundDecimaleeFormNum, 
+  RemoveHtmlFormTag, 
+  RemoveHtmlFormTrim, 
   FormatThousands,
   deepCloneData
 }
