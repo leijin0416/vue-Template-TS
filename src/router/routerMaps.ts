@@ -100,13 +100,13 @@ export const dynamicRouter = [
   {
     path: '/information/notice',
     name: 'informationsNoticeList',
-    component: getComponentMMin('Informations', 'noticeList'),
+    component: getComponentMMin('NoticeRelease', 'noticeList'),
     meta: { title: '公告列表', permission: [] }
   },
   {
     path: '/information/banner',
     name: 'informationsBannerList',
-    component: getComponentMMin('Informations', 'bannerList'),
+    component: getComponentMMin('NoticeRelease', 'bannerList'),
     meta: { title: '轮播图列表', permission: [] }
   },
 ]
