@@ -12,8 +12,6 @@
 import E from 'wangeditor';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
-import { MessageTips } from '@/filters/MessageTips';
-import { UserListStore } from '@/store/private/PageUserList';
 
 
 type IndexData = {
@@ -29,8 +27,8 @@ export default class WangEditors extends Vue {
   @Prop({ default: false }) isClear!: Boolean;
   @Prop({ default: '' }) value: String;
   
-  private editor: any = null;
-  private infoContent: any = null
+  private editor: any = null;      // ID
+  private infoContent: any = null  // 内容值
 
   private uploadImgServer: string = 'http://185.251.248.xxxx:10086/api/ping-shop-web/app/uploadFile';
   
@@ -57,8 +55,7 @@ export default class WangEditors extends Vue {
   };
 
   // 生命周期
-  created() {
-  };
+  created() {};
 
   // 生命周期
   mounted () {
