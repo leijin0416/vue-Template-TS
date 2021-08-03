@@ -192,8 +192,14 @@ const FormatThousands = (num) => {
   }).replace(/\.$/, '');  // 再将小数部分合并进来
 }
 
+
+/**
+ * @description: 判断当前平台
+ * @param {boolean} num   布尔类型
+ * @return {*}
+ */
 const nUserAgentIphone = () => {
-  //location.reload();
+  // location.reload();
   const sUserAgent: any = navigator.userAgent.toLowerCase();
   const bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
   const bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
@@ -203,16 +209,16 @@ const nUserAgentIphone = () => {
   const bIsAndroid = sUserAgent.match(/android/i) == "android";
   const bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
   const bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
-  console.log("您的浏览设备为：");
+  console.log("[浏览设备为]：");
   
-  if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+  if (bIsIpad || bIsAndroid || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsCE || bIsWM) {
     console.log("phone");
+    
   } else {
     console.log("pc");
     
   }
 }
-
 
 export { 
   deepCloneData,
