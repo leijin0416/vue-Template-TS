@@ -198,9 +198,10 @@ const FormatThousands = (num) => {
  * @param {boolean} num   布尔类型
  * @return {*}
  */
-const nUserAgentIphone = () => {
+const UserAgentPcOrIphone = () => {
   // location.reload();
   const sUserAgent: any = navigator.userAgent.toLowerCase();
+  const bIsIOS = sUserAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/i) == "ios";  // ios终端
   const bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
   const bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
   const bIsMidp = sUserAgent.match(/midp/i) == "midp";
@@ -229,5 +230,5 @@ export {
   RemoveHtmlFormTag, 
   RemoveHtmlFormTrim, 
   FormatThousands,
-  nUserAgentIphone
+  UserAgentPcOrIphone
 }
