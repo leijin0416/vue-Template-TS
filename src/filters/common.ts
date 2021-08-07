@@ -198,7 +198,7 @@ const FormatThousands = (num) => {
  * @param {boolean} num   布尔类型
  * @return {*}
  */
-const UserAgentPcOrIphone = () => {
+const UserAgentWebOrIphone = () => {
   // location.reload();
   const sUserAgent: any = navigator.userAgent.toLowerCase();
   const bIsIOS = sUserAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/i) == "ios";  // ios终端
@@ -210,13 +210,14 @@ const UserAgentPcOrIphone = () => {
   const bIsAndroid = sUserAgent.match(/android/i) == "android";
   const bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
   const bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
-  console.log("[浏览设备为]：");
   
   if (bIsIpad || bIsAndroid || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsCE || bIsWM) {
-    console.log("phone");
+    console.log("[浏览设备为]：phone");
+    return true
     
   } else {
-    console.log("pc");
+    console.log("[浏览设备为]：web");
+    return false
     
   }
 }
@@ -230,5 +231,5 @@ export {
   RemoveHtmlFormTag, 
   RemoveHtmlFormTrim, 
   FormatThousands,
-  UserAgentPcOrIphone
+  UserAgentWebOrIphone
 }

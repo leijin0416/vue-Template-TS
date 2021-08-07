@@ -11,6 +11,9 @@
             :inline="true"
             :rules="rules"
             :model="param">
+            <el-form-item :label="$t('Iblt.标题')" >
+              <el-input type="text" v-model="param.bannerTitle" size="small" clearable></el-input>
+            </el-form-item>
             <el-form-item :label="$t('Iblt.类型')" >
               <el-select v-model="param.type" :placeholder="$t('Iblt.请选择')" size="small">
                 <el-option
@@ -31,9 +34,6 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('Iblt.标题')" >
-              <el-input type="text" v-model="param.bannerTitle" size="small" clearable></el-input>
-            </el-form-item>
             <el-button type="primary" @click="submitSearchForm('ruleSearchForm')" size="small" icon="el-icon-search" class="v-btn" >{{ $t('Iblt.搜索') }}</el-button>
             <el-button @click="resetSearchForm('ruleSearchForm')" size="small" icon="el-icon-refresh-left" class="v-btn">{{ $t('Iblt.重置') }}</el-button>
           </el-form>
@@ -49,8 +49,8 @@
           @handleCurrentChange="handleCurrentChange">
           <el-table-column slot="operateTagType" :label="$t('Iblt.类型')" align="center" width="200">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.type === '1'">{{ $t('Iblt.会员APP') }}</el-tag>
-              <el-tag type="warning" v-else>{{ $t('Iblt.商户APP') }}</el-tag>
+              <el-tag v-if="scope.row.type === '1'">{{ $t('Iblt.会员') }}</el-tag>
+              <el-tag type="warning" v-else>{{ $t('Iblt.商户') }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column slot="operateTagStatus" :label="$t('Iblt.状态')" align="center" width="200">
@@ -102,8 +102,8 @@
               </el-form-item>
               <el-form-item :label="$t('Iblt.类型')" prop="type" >
                 <el-radio-group v-model="formData.type">
-                  <el-radio label="1">{{ $t('Iblt.会员APP') }}</el-radio>
-                  <el-radio label="2">{{ $t('Iblt.商户APP') }}</el-radio>
+                  <el-radio label="1">{{ $t('Iblt.会员') }}</el-radio>
+                  <el-radio label="2">{{ $t('Iblt.商户') }}</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item :label="$t('Iblt.状态')" prop="status" v-if="!dialogFormType" >
@@ -175,11 +175,11 @@ export default class administrators extends Vue {
   };
   private formOptionNoticeType: object = [
     {
-      label: window['vm'].$t('Iblt.会员APP'),
+      label: window['vm'].$t('Iblt.会员'),
       value: '1'
     },
     {
-      label: window['vm'].$t('Iblt.商户APP'),
+      label: window['vm'].$t('Iblt.商户'),
       value: '2'
     },
   ];
