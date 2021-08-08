@@ -11,8 +11,7 @@
 <script lang="ts">
 import E from 'wangeditor';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
-
+import { deepCloneData } from '@/filters/common';
 
 type IndexData = {
   page: number;
@@ -30,7 +29,8 @@ export default class WangEditors extends Vue {
   private editor: any = null;      // ID
   private infoContent: any = null  // 内容值
 
-  private uploadImgServer: string = 'http://185.251.248.xxxx:10086/api/ping-shop-web/app/uploadFile';
+  private uploadImageServer: string = 'http://185.251.248.xxxx:10086/api/ping-shop-web/app/uploadFile';
+  private uploadImageDevs: string = 'http://otp.cdinfotech.top/file/upload_images';
   
 
   // 获取数据
@@ -60,7 +60,7 @@ export default class WangEditors extends Vue {
   // 生命周期
   mounted () {
     this.seteditor();
-    this.editor.txt.html(this.value);
+    if(this.value) this.editor.txt.html(this.value);
   };
 
   /**
@@ -75,7 +75,7 @@ export default class WangEditors extends Vue {
 
     this.editor = new E(refToolbar, refEditor);
     this.editor.config.uploadImgShowBase64 = false; // base 64 存储图片
-    this.editor.config.uploadImgServer = 'http://otp.cdinfotech.top/file/upload_images';  // 配置服务器端地址
+    this.editor.config.uploadImgServer = this.uploadImageDevs;  // 配置服务器端地址
     this.editor.config.uploadImgHeaders = {  // 自定义 header
       AuthType: "WEB",
     };

@@ -141,15 +141,17 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { InformationStore } from '@/store/private/PageInformation';
-import { UserStore } from '@/store/private/user';
 import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { InformationStore } from '@/store/private/PageInformation';
 import { MessageTips } from '@/filters/MessageTips';
-import { webGetAdminUserBannerAdd, webGetAdminUserBannerUpdateStatus, webGetAdminUserBannerUpdate, webGetAdminPageList } from '@/api/index';
+import { 
+  webGetAdminUserBannerAdd, 
+  webGetAdminUserBannerUpdateStatus, 
+  webGetAdminUserBannerUpdate,  
+} from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
 import ExportExcels from "@/components/ExportExcels/index.vue";
-import { log } from 'console';
 
 type IndexData = {
   page: number;
@@ -164,7 +166,7 @@ type IndexData = {
     ElTable,
   },
 })
-export default class administrators extends Vue {
+export default class BannerLists extends Vue {
   // 分页器
   private param: IndexData = {
     page: 1,

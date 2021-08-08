@@ -159,7 +159,7 @@ type IndexData = {
     WangEditor,
   },
 })
-export default class administrators extends Vue {
+export default class NoticeLists extends Vue {
   // 分页器
   private param: IndexData = {
     page: 1,
