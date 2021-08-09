@@ -2,6 +2,21 @@ import { Message } from 'element-ui';
 
 /**
  * Message 消息提示
+ */
+const MessageTextTips = (types: any, text: string) => {
+  Message({
+    customClass: 'v-zindex',
+    showClose: false,
+    message: text,
+    type: types,
+    onClose: () => {
+      return true
+    }
+  });
+};
+
+/**
+ * Message 消息提示
  * @res    数据
  * @success     true | false 是否需要
  * @error       true | false  是否需要
@@ -42,4 +57,5 @@ const MessageTips = (res: any, success: boolean, error: boolean, text: string, s
 
 export {
   MessageTips,
+  MessageTextTips,
 };
