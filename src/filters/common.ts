@@ -1,3 +1,34 @@
+/**
+ * @description scrollReveal 动画
+ * @param {*} duration  动画的时长
+ * @param {*} origin    动画开始的位置，'bottom', 'left', 'top', 'right'
+ * @param {*} reset     回滚的时候是否再次触发动画
+ * @param {*} mobile    在移动端是否使用动画
+ * @param {*} distance 
+ * @returns 
+ */
+ export function scrollRevealEffect(duration: number, origin: string, reset: boolean, mobile: boolean, distance: string) {
+  let item = {
+    // 动画的时长
+    duration: duration,
+    // 延迟时间
+    delay: 0,
+    // 动画开始的位置
+    origin: origin,
+    // 回滚的时候是否再次触发动画
+    reset: reset,
+    // 在移动端是否使用动画
+    mobile: mobile,
+    // 滚动的距离，单位可以用%，rem等
+    distance: distance,
+    // 其他可用的动画效果
+    opacity: 0.001,
+    easing: 'linear',
+    scale: 1,
+  };
+  return item
+}
+
 /** 
  * @description: 递归遍历
  * @param tree 
@@ -112,37 +143,6 @@ const FormatCurrentTime = (fmt, time) => {
 }
 
 /**
- * @description scrollReveal 动画
- * @param {*} duration  动画的时长
- * @param {*} origin    动画开始的位置，'bottom', 'left', 'top', 'right'
- * @param {*} reset     回滚的时候是否再次触发动画
- * @param {*} mobile    在移动端是否使用动画
- * @param {*} distance 
- * @returns 
- */
- export function scrollRevealEffect(duration: number, origin: string, reset: boolean, mobile: boolean, distance: string) {
-  let item = {
-    // 动画的时长
-    duration: duration,
-    // 延迟时间
-    delay: 0,
-    // 动画开始的位置
-    origin: origin,
-    // 回滚的时候是否再次触发动画
-    reset: reset,
-    // 在移动端是否使用动画
-    mobile: mobile,
-    // 滚动的距离，单位可以用%，rem等
-    distance: distance,
-    // 其他可用的动画效果
-    opacity: 0.001,
-    easing: 'linear',
-    scale: 1,
-  };
-  return item
-}
-
-/**
  * @description: 去除HTML tag
  * @param {string} str  数值
  * @return {*}
@@ -164,7 +164,6 @@ const RemoveHtmlFormTag = (str) => {
 const RemoveHtmlFormTrim = (str) => {
   return str.replace(/(^\s*)|(\s*$)/g, "")
 }
-
 
 /**
  * @description: 小数点 数值精度计算   RoundDecimaleeFormNum(3.1415926, 1)
