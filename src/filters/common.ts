@@ -36,12 +36,12 @@
  * @returns 
  */
 const TreeForeach =  (tree, func) => {
-  if (!tree || typeof tree !== 'object') return null;
+  if (!tree || typeof tree !== 'object') return null
   tree.forEach((data: { children: any }) => {
     if (typeof data.children === 'object' && data.children.length > 0) {
-      TreeForeach(data.children, func);   // 函数调用函数自身
+      TreeForeach(data.children, func)   // 函数调用函数自身
     } else {
-      func(data);                         // 递归出口
+      func(data)                         // 递归出口
     }
   })
 }
