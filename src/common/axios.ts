@@ -30,8 +30,8 @@ const service = axios.create(axiosConfig);
 
 /**
  *  2、再在 request 拦截器实现, 传给后台的
- *  Encrypt加密
- *  config.data.hash = md5((new Date()).valueOf() + config.data.func);
+ *     Encrypt加密
+ *     config.data.hash = md5((new Date()).valueOf() + config.data.func);
  * 
  *  config.data = {
       data: CryptoJS.ECBEncrypt(JSON.stringify(config.data))  // 文本数据交换格式
@@ -59,7 +59,7 @@ service.interceptors.request.use( config => {
  *     Decrypt解密
  *     getRealJsonData -去掉双引号，转化json格式
  * 
- *  response.data = getRealJsonData(CryptoJS.ECBDecrypt(response.data.data));
+ *     response.data = getRealJsonData(CryptoJS.ECBDecrypt(response.data.data));
  */
 service.interceptors.response.use( response => {
     // if(response.data !== null) response.data = CryptoJS.RSADecrypt(response.data);
