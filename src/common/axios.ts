@@ -8,7 +8,7 @@ import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 let baseUrl = '';
 switch (process.env.NODE_ENV) {
   case "development":
-    baseUrl = "http://192.168.1.xxxx:10086"
+    baseUrl = "http://192.168.1.xxx:10086"
     break
   case "production":
     baseUrl = "http://185.251.248.xxx:10086"
@@ -29,7 +29,7 @@ const axiosConfig: AxiosRequestConfig = {
 const service = axios.create(axiosConfig);
 
 /**
- *  2、再在 request 拦截器实现, 传给后台的
+ *  1、在 request 拦截器实现, 传给后台的
  *     Encrypt加密
  *     config.data.hash = md5((new Date()).valueOf() + config.data.func);
  * 
@@ -55,7 +55,7 @@ service.interceptors.request.use( config => {
 );
 
 /**
- *  1、先在 response 拦截器实现, 拿后台返回的
+ *  2、再在 response 拦截器实现, 拿后台返回的
  *     Decrypt解密
  *     getRealJsonData -去掉双引号，转化json格式
  * 
