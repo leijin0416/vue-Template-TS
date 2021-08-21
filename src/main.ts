@@ -8,7 +8,7 @@ import filters from './filters'
 import Viewer from 'v-viewer'
 import VueWechatTitle from 'vue-wechat-title'              // 动态修改
 import myECharts from "./components/Echarts/common"       // 挂载图表
-import './common/permissionBtn'                           // 全局按钮权限
+import './common/PermissionBtn'                           // 全局按钮权限
 
 // import 'babel-polyfill'           // 用于实现浏览器不支持原生功能的代码
 // import ElementUI from 'element-ui'

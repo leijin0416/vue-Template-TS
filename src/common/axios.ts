@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { Message } from 'element-ui';
 import { sessionData } from '@/filters/storage';
 
-import CryptoJS from './cryptoJS';  // 加密
+import { RSAEncryptKey } from './JSEncrypt';  // 加密
 import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
 
 let baseUrl = '';
@@ -30,21 +30,17 @@ const service = axios.create(axiosConfig);
 
 /**
  *  1、在 request 拦截器实现, 传给后台的
- *     Encrypt加密
- *     config.data.hash = md5((new Date()).valueOf() + config.data.func);
- * 
- *  config.data = {
-      data: CryptoJS.ECBEncrypt(JSON.stringify(config.data))  // 文本数据交换格式
-    }
  */
 service.interceptors.request.use( config => {
     const token = sessionData('get', 'HasSessionToken', '');
-    token && (config.headers.Authorization = token);       // token
+    const key = sessionData('get', 'HasSessionAuthKey', '');
+    const langs = sessionStorage.getItem('accessLocaleI18n');
+
+    token && (config.headers.Authorization = token)         // token
+    key && (config.headers['AuthKey'] = RSAEncryptKey(key)) // key
     config.headers.AuthType = 'WEB';
     config.headers['content-Type'] = "application/json;charset=utf-8";
-    config.headers['Accept-Language'] = sessionStorage.getItem('accessLocaleI18n') || 'zh-CN';
-
-    // config.data = CryptoJS.RSAEncrypt(JSON.stringify(config.data))  // 文本数据交换格式
+    config.headers['Accept-Language'] = langs || 'zh-CN';
     
 
     return config;
@@ -56,10 +52,6 @@ service.interceptors.request.use( config => {
 
 /**
  *  2、再在 response 拦截器实现, 拿后台返回的
- *     Decrypt解密
- *     getRealJsonData -去掉双引号，转化json格式
- * 
- *     response.data = getRealJsonData(CryptoJS.ECBDecrypt(response.data.data));
  */
 service.interceptors.response.use( response => {
     // if(response.data !== null) response.data = CryptoJS.RSADecrypt(response.data);
@@ -72,6 +64,7 @@ service.interceptors.response.use( response => {
       sessionData('clean', 'HasSessionMenuItemId', '');
       sessionData('clean', 'HasSessionMenuItem', '');
       sessionData('clean', 'HasSessionTagsMap', '');
+      sessionData('clean', 'HasSessionAuthKey', '');
 
       Message.error({
         message: window['vm'].$t('Hlin.您的登录信息已失效'),

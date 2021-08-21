@@ -3,7 +3,7 @@
  *  接口信息定义: 以当前接口请求头作为别名,并将相关接口放置在该文件下
  *  @date 1949-10-01
  */
-import service from '@/common/httpService';
+import service from '@/common/HttpService';
 
 
 // 登录
