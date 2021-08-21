@@ -23,7 +23,6 @@ const FTgetAgentWebOrIphone = () => {
   } else {
     console.log("[浏览设备为]：web");
     return false
-    
   }
 }
 
