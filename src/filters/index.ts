@@ -127,48 +127,6 @@ const FormatCurrentTime = (fmt, time) => {
 }
 
 /**
- * 上传图片，去除base64前缀
- * @return file
- */
-const getImageUrlBase = (file: any) => {
-  return new Promise(function (resolve, reject) {
-    let files = file;
-    let reader = new FileReader();
-    let imgResult;
-    
-    if (typeof files !== 'object') return;
-    reader.readAsDataURL(files);
-    reader.onload = function () {
-      imgResult = reader.result;
-    };
-    reader.onerror = function (error) {
-      reject(error);
-    };
-    reader.onloadend = function () {
-      resolve(imgResult);
-    };
-  })
-}
-
-/**
- * 保存图片
- * @param data url
- * @param filename 名称
- * https://www.jianshu.com/p/6620eac670da
- * https://blog.csdn.net/bamboozjy/article/details/81631487
- * https://www.cnblogs.com/FACESCORE/p/11804177.html
- */
-const saveImageFile = (data: any, fileName: any) => {
-  const save_link: any = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-    save_link.href = data;
-    save_link.download = fileName;
-
-  const event = document.createEvent('MouseEvents');
-    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-    save_link.dispatchEvent(event);
-}
-
-/**
  * 将科学计数法转换成小数  item.money | scientificToNumber
  * @param num 0E-10 数值类型
  */
@@ -199,7 +157,5 @@ export default {
   inFormatIntegerThousands,
   inFormatThousands,
   realFormatSecond,
-  getImageUrlBase,
-  saveImageFile,
   scientificToNumber
 }

@@ -1,8 +1,8 @@
-/* eslint-disable */
 require('script-loader!file-saver');
+require('./Blob.js');
+
 // require('script-loader!src/vendor/Blob');
 // require('script-loader!../../assets/js/Blob');
-require('./Blob.js');
 // require('script-loader!xlsx/dist/xlsx.core.min');
 
 function generateArray(table) {
@@ -116,6 +116,21 @@ function s2ab(s) {
   return buf;
 }
 
+/**
+ * @description: 下载  http://caibaojian.com/blob.html
+ * @param {*} fileName -文件名
+ * @param {*} blob  -文件
+ * @return {*}
+ */
+const download = (fileName, blob) => {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(link.href);
+}
+
 export function export_table_to_excel(id) {
   var theTable = document.getElementById(id);
   console.log('a')
@@ -146,24 +161,27 @@ export function export_table_to_excel(id) {
 
   saveAs(new Blob([s2ab(wbout)], {
     type: "application/octet-stream"
-  }), "test.xlsx")
+  }), "test.xlsx");
 }
 
-function formatJson(jsonData) {
-  console.log(jsonData)
-}
-
+/**
+ * @description: 导出文件
+ * @param {Array} th  -头部
+ * @param {Array} jsonData      -数据
+ * @param {String} defaultTitle  -文件名
+ * @return {*}
+ * 1）先获取需导出内容
+ * 2）使用Blob() 将内容编译一下
+ * 3）定义文件名
+ * 4）saveAs() 导出文件
+ */
 export function export_json_to_excel(th, jsonData, defaultTitle) {
-
-  /* original data */
-
   var data = jsonData;
   data.unshift(th);
   var ws_name = "SheetJS";
 
   var wb = new Workbook(),
     ws = sheet_from_array_of_arrays(data);
-
 
   /* add worksheet to workbook */
   wb.SheetNames.push(ws_name);
@@ -174,8 +192,15 @@ export function export_json_to_excel(th, jsonData, defaultTitle) {
     bookSST: false,
     type: 'binary'
   });
-  var title = defaultTitle || '列表'
-  saveAs(new Blob([s2ab(wbout)], {
+  var title = defaultTitle || '列表';
+  
+  // saveAs(new Blob([s2ab(wbout)], {
+  //   type: "application/octet-stream"
+  // }), title + ".xlsx");
+
+  var myBlob  = new Blob([s2ab(wbout)], {
     type: "application/octet-stream"
-  }), title + ".xlsx")
+  });
+  var fileName  = title + ".xlsx";
+  download(fileName, myBlob);
 }

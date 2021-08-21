@@ -191,36 +191,6 @@ const FormatThousands = (num) => {
   }).replace(/\.$/, '');  // 再将小数部分合并进来
 }
 
-
-/**
- * @description: 判断当前平台
- * @param {boolean} num   布尔类型
- * @return {*}
- */
-const UserAgentWebOrIphone = () => {
-  // location.reload();
-  const sUserAgent: any = navigator.userAgent.toLowerCase();
-  const bIsIOS = sUserAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/i) == "ios";  // ios终端
-  const bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
-  const bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
-  const bIsMidp = sUserAgent.match(/midp/i) == "midp";
-  const bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
-  const bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
-  const bIsAndroid = sUserAgent.match(/android/i) == "android";
-  const bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
-  const bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
-  
-  if (bIsIpad || bIsAndroid || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsCE || bIsWM) {
-    console.log("[浏览设备为]：phone");
-    return true
-    
-  } else {
-    console.log("[浏览设备为]：web");
-    return false
-    
-  }
-}
-
 export { 
   deepCloneData,
   TreeForeach, 
@@ -230,5 +200,4 @@ export {
   RemoveHtmlFormTag, 
   RemoveHtmlFormTrim, 
   FormatThousands,
-  UserAgentWebOrIphone
 }
