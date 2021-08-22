@@ -22,7 +22,6 @@ const ClipBoardCopyText = (id: string) => {
     // 释放内存  
     clipboard.destroy();
   });
-
 }
 
 /**
@@ -57,12 +56,10 @@ const SaveDownloadIamge = (selectorUrl, name) => {
 }
 
 /**
- * 
- * @description:   保存图片
+ * @description:   下载图片  https://www.jianshu.com/p/6620eac670da
  * @param {String} data     -url
  * @param {String} filename -名称
  * @return {*}
- * https://www.jianshu.com/p/6620eac670da
  * https://blog.csdn.net/bamboozjy/article/details/81631487
  * https://www.cnblogs.com/FACESCORE/p/11804177.html
  */
@@ -77,7 +74,6 @@ const SaveDownloadImageFile = (data: any, fileName: any) => {
 }
 
 /**
- * 
  * @description:  上传图片，去除base64前缀
  * @param {String} file 
  * @return {*}
@@ -104,7 +100,7 @@ const SaveImageUrlBase64 = (file: any) => {
 
 export { 
   ClipBoardCopyText,
+  SaveImageUrlBase64,
   SaveDownloadIamge,
   SaveDownloadImageFile,
-  SaveImageUrlBase64,
 }

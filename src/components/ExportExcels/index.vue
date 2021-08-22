@@ -1,5 +1,5 @@
 <template>
-  <!-- 导出excel -->
+  <!-- 导出 excel -->
   <div class="v-excel-main">
     <el-dialog
       @close="onDialogClose"
@@ -113,7 +113,8 @@ export default class ExportExcels extends Vue {
   }
 
   /**
-   *  关闭弹窗 -重置
+   * @description:  关闭弹窗 -重置
+   * @return {*}
    */
   private onDialogClose() {
     this.excelsTableData = [];
@@ -125,7 +126,8 @@ export default class ExportExcels extends Vue {
   }
 
   /**
-   *  提交
+   * @description:  提交
+   * @return {*}
    */
   private submitForm(formName) {
     let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
@@ -141,24 +143,29 @@ export default class ExportExcels extends Vue {
     });
   }
 
-  /** 第一层弹窗
-   *  向父级传递请求参数，传递分页
-   */
-  private onDialogFormClick() {
-    this.$emit('getExportExcelInput', this.formData.page, this.formData.pageSize);
-  }
-
-  /** 利用表格参数拿到对应数据
-   *  @param filterVal  -表格参数
-   *  @param jsonData   -后台数据
+  /** 
+   * @description: 利用表格参数拿到对应数据
+   * @param {*} filterVal  -表格参数
+   * @param {*} jsonData   -后台数据
+   * @return {*}
    */
   private formatJson(filterVal, jsonData) {
     return jsonData.map(v => filterVal.map(j => v[j]));
   }
 
-  /** 第二层弹窗 -拿到数据进行导出
+  /** 
+   * @description: 【1】第一层弹窗  -向父级传递请求参数，传递 “分页”
+   * @return {*}
+   */
+  private onDialogFormClick() {
+    this.$emit('getExportExcelInput', this.formData.page, this.formData.pageSize);
+  }
+
+  /** 
+   * @description: 【2】第二层弹窗 -拿到数据进行导出
+   * @param {*} export_json_to_excel   生成方法
+   * @return {*}
    *  https://juejin.cn/post/6966495816429076516  |  https://juejin.cn/post/6966062224892756005
-   *  @param export_json_to_excel   生成方法
    */
   private onExportExcel() {
     let _that = this;
@@ -179,6 +186,8 @@ export default class ExportExcels extends Vue {
 
       let text = window['vm'].$t('Hlin.文件导出');
       let name = text + _that.excelsName;
+
+      export_json_to_excel(tableHeader, tableData, name);  // 生成
       
       this.$notify({
         title: text1,
@@ -191,8 +200,6 @@ export default class ExportExcels extends Vue {
           _that.loadingType = false;
         }
       });
-
-      export_json_to_excel(tableHeader, tableData, name);  // 生成
     })
   }
 }
