@@ -1,6 +1,6 @@
 /**
  * @description: 判断当前平台
- * @param {boolean} num   布尔类型
+ * @param {Object} navigator  -提供执行环境相关信息
  * @return {*}
  */
 const FTgetAgentWebOrIphone = () => {
@@ -28,7 +28,7 @@ const FTgetAgentWebOrIphone = () => {
 
 /**
  * @description: 检测平台
- * @param {*}
+ * @param {Object} navigator  -提供执行环境相关信息
  * @return {*}
  */
 const FTgetWebBrowserTypeInfo = () => {
