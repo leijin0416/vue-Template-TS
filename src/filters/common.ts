@@ -46,9 +46,8 @@ const TreeForeach =  (tree, func) => {
   })
 }
 
-/** https://juejin.cn/post/6983904373508145189
- * 
- * @description: 扁平数据结构转Tree
+/** 
+ * @description: 扁平数据结构转Tree  https://juejin.cn/post/6983904373508145189
  * @param pid 0
  * @param arr [{id: 1, pid: 0},{id: 2, pid: 0},{id: 3, pid: 1},{id: 4, pid: 2}]
  * @returns 
@@ -71,9 +70,8 @@ const FormatArrMapHas = (tree) => {
   return [...map.values()]
 }
 
-/** https://juejin.cn/post/6986452564778680350
- * 
- * @description: 深拷贝函数  接收目标target参数
+/** 
+ * @description: 深拷贝函数  接收目标target参数  https://juejin.cn/post/6986452564778680350
  * @param target 
  * @returns 
  */
@@ -90,10 +88,10 @@ const FormatArrMapHas = (tree) => {
         result.push(deepCloneData(target[i]))
       }
       // 判断如果当前的值是null的话；直接赋值为null
-    } else if(target===null) {
+    } else if(target === null) {
       result = null;
       // 判断如果当前的值是一个RegExp对象的话，直接赋值    
-    } else if(target.constructor===RegExp){
+    } else if(target.constructor === RegExp){
       result = target;
     }else {
       // 否则是普通对象，直接for in循环，递归赋值对象的所有值
@@ -155,9 +153,8 @@ const RemoveHtmlFormTag = (str) => {
   return str
 }
 
-/** https://www.cnblogs.com/zhangnan35/p/8635059.html
- * 
- * @description: 去除HTML 前后空格 
+/** 
+ * @description: 去除HTML 前后空格  https://www.cnblogs.com/zhangnan35/p/8635059.html
  * @param {string} str  数值
  * @return {*}
  */

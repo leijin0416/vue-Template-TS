@@ -26,7 +26,8 @@ const cdn = {
     'element-ui': 'ELEMENT',
     'scrollReveal': 'ScrollReveal',
     'xlsx': 'xlsx',
-    'echarts': 'echarts'
+    'echarts': 'echarts',
+    'wangeditor': 'wangeditor'
   },
   css: [
 		'https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/theme-chalk/index.css',
@@ -43,7 +44,8 @@ const cdn = {
     "https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/locale/zh-CN.min.js",
     "https://cdn.bootcdn.net/ajax/libs/scrollReveal.js/4.0.9/scrollreveal.min.js",
     "https://cdn.bootcdn.net/ajax/libs/xlsx/0.16.9/xlsx.core.min.js",
-    "https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0/echarts.min.js"
+    "https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0/echarts.min.js",
+    "https://cdn.jsdelivr.net/npm/wangeditor@4/dist/wangEditor.min.js"
   ]
 }
 

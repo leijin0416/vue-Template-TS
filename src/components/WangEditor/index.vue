@@ -17,7 +17,6 @@ type IndexData = {
   page: number;
   pageSize: number
 };
-
 @Component({
   components: {
   },
@@ -64,9 +63,9 @@ export default class WangEditors extends Vue {
   };
 
   /**
-   * @description: 富文本编辑器  https://www.wangeditor.com/
-   * @param {*} editor
-   * @param {*} infoContent
+   * @description: 富文本编辑器  https://www.wangeditor.com
+   * @param {Object} editor      -创建
+   * @param {String} infoContent -当前值
    * @return {*} 
    */
   private seteditor() {
