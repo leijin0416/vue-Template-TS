@@ -4,6 +4,7 @@
  * @param pos    保留的小数位
  * @param isNaN  检查是否是非数字值
  * @param Math   检查是否是整数
+ * @return {*}
  */
 const formatFloat = (val: any, pos: number = 2) => {
   let f = parseFloat(val);
@@ -27,8 +28,9 @@ const formatFloat = (val: any, pos: number = 2) => {
 }
 
 /**
- * 手机号格式化
+ * @description: 手机号格式化
  * @param String phone | 180****9230
+ * @return {*}
  */
 const formatPhone = (phone: string | number) => {
   phone = phone.toString();
@@ -36,8 +38,9 @@ const formatPhone = (phone: string | number) => {
 }
 
 /**
- * 4位一空格（格式化银行卡）
- * @param String val
+ * @description: 4位一空格（格式化银行卡）
+ * @param {String} val
+ * @return {*}
  */
 const formatBank = (val: any) => {
   if (val) {
@@ -46,8 +49,9 @@ const formatBank = (val: any) => {
 }
 
 /**
- * 千分位格式化
- * @param val 数字  1,279,878,236 | (123456789).toLocaleString('en-US')
+ * @description: 千分位格式化
+ * @param {*} val  数字  1,279,878,236 | (123456789).toLocaleString('en-US')
+ * @return {*}
  */
 const inFormatIntegerThousands = (val: any) => {
   if (Math.floor(Number(val)) === Number(val)) {
@@ -67,7 +71,7 @@ const inFormatIntegerThousands = (val: any) => {
 
 /**
  * @description: 数字千位符格式化，保留小数位
- * @param {number || string} num 
+ * @param {Number || String} num 
  * @return {*}
  */
 const inFormatThousands = (num) => {
@@ -81,7 +85,10 @@ const inFormatThousands = (num) => {
 }
 
 /**
- * 格式化时长
+ * @description: 格式化时长
+ * @param {Number} second
+ * @return {*}
+ * 
  */
 const realFormatSecond = (second: any) => {
   let secondType = typeof second;
@@ -103,7 +110,10 @@ const realFormatSecond = (second: any) => {
 }
 
 /**
- * 时间戳转日期
+ * @description: 时间戳转日期
+ * @param {String} fmt
+ * @param {Number} time
+ * @return {*}
  */
 const FormatCurrentTime = (fmt, time) => {
   let date = new Date(time)
@@ -127,8 +137,9 @@ const FormatCurrentTime = (fmt, time) => {
 }
 
 /**
- * 将科学计数法转换成小数  item.money | scientificToNumber
- * @param num 0E-10 数值类型
+ * @description: 将科学计数法转换成小数  item.money | scientificToNumber
+ * @param {Number} num 0E-10 数值类型
+ * @return {*}
  */
 const scientificToNumber = (num: number) => {
 	let str = num.toString();
