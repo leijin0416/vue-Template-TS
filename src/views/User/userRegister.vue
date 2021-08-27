@@ -90,15 +90,15 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from "vue-property-decorator";
+import { sessionData } from "@/filters/storage";
+import { deepCloneData } from '@/filters/common';
 import { UserListStore } from '@/store/private/PageUserList';
 import { MessageTips } from '@/filters/MessageTips';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { webGetAdminPageUserRegister, webGetAdminPageUserUpdateUser } from "@/api/index";
-// import { error } from "node:console";
-// import { sessionData } from "@/filters/storage";
 
 @Component({
-  components: {},
+  components: {
+  },
 })
 export default class userRegister extends Vue {
   private ruleForm = {

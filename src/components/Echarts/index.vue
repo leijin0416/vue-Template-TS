@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch, Prop } from 'vue-property-decorator';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { deepCloneData } from '@/filters/common';
 import { UserStore } from '@/store/private/user';
 
 @Component({
