@@ -115,7 +115,7 @@ const realFormatSecond = (second: any) => {
  * @param {Number} time
  * @return {*}
  */
-const FormatCurrentTime = (fmt, time) => {
+const FTisFormatCurrentTime = (fmt, time) => {
   let date = new Date(time)
   let ret;
   let opt = {
@@ -168,5 +168,6 @@ export default {
   inFormatIntegerThousands,
   inFormatThousands,
   realFormatSecond,
-  scientificToNumber
+  scientificToNumber,
+  FTisFormatCurrentTime
 }

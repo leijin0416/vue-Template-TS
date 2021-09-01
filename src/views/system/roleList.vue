@@ -67,7 +67,7 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
 import { AdminSystemStore } from '@/store/private/AdminIstrators';
 import { webGetAdminRoleAdd, webGetAdminRoleUpdate, webGetAdminRoleDelte } from '@/api/index';
@@ -161,7 +161,7 @@ export default class administrators extends Vue {
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
-        el.createTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS",el.createTime)
+        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
       });
       this.tableData = obj;
     } else {this.tableData = list;}

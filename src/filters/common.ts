@@ -1,18 +1,19 @@
 /**
  * @description scrollReveal 动画
- * @param {*} duration  动画的时长
- * @param {*} origin    动画开始的位置，'bottom', 'left', 'top', 'right'
- * @param {*} reset     回滚的时候是否再次触发动画
- * @param {*} mobile    在移动端是否使用动画
- * @param {*} distance 
+ * @param {Number} duration   -动画的时长
+ * @param {String} origin     -动画开始的位置，'bottom', 'left', 'top', 'right'
+ * @param {Boolean} reset     -回滚的时候是否再次触发动画
+ * @param {Boolean} mobile    -在移动端是否使用动画
+ * @param {String} distance   -滚动的距离
+ * @param {Number} delays     -延迟时间
  * @returns 
  */
- export function scrollRevealEffect(duration: number, origin: string, reset: boolean, mobile: boolean, distance: string) {
+ export function scrollRevealEffect(duration: number, origin: string, reset: boolean, mobile: boolean, distance: string, delays: number) {
   let item = {
     // 动画的时长
     duration: duration,
     // 延迟时间
-    delay: 0,
+    delay: delays || 0,
     // 动画开始的位置
     origin: origin,
     // 回滚的时候是否再次触发动画
@@ -27,47 +28,6 @@
     scale: 1,
   };
   return item
-}
-
-/** 
- * @description: 递归遍历
- * @param tree 
- * @param func 
- * @returns 
- */
-const TreeForeach =  (tree, func) => {
-  if (!tree || typeof tree !== 'object') return null
-  tree.forEach((data: { children: any }) => {
-    if (typeof data.children === 'object' && data.children.length > 0) {
-      TreeForeach(data.children, func)   // 函数调用函数自身
-    } else {
-      func(data)                         // 递归出口
-    }
-  })
-}
-
-/** 
- * @description: 扁平数据结构转Tree  https://juejin.cn/post/6983904373508145189
- * @param pid 0
- * @param arr [{id: 1, pid: 0},{id: 2, pid: 0},{id: 3, pid: 1},{id: 4, pid: 2}]
- * @returns 
- */
-const nestArrToTree = (pid, arr) => {
-  return arr.filter(item => item.pid === pid).map( item => ({
-    ...item,
-    children: nestArrToTree(item.id, arr)  // 切换ID
-  }))
-}
-
-// 去重
-const FormatArrMapHas = (tree) => {
-  let map = new Map();
-  for (let item of tree) {
-    if (!map.has(item.title)) {
-      map.set(item.title, item);
-    }
-  }
-  return [...map.values()]
 }
 
 /** 
@@ -119,7 +79,7 @@ const FormatArrMapHas = (tree) => {
  * @param {*} S  秒
  * @returns 
  */
-const FormatCurrentTime = (fmt, time) => {
+const FTisFormatCurrentTime = (fmt, time) => {
   let date = new Date(time)
   let ret;
   let opt = {
@@ -138,6 +98,47 @@ const FormatCurrentTime = (fmt, time) => {
     };
   };
   return fmt
+}
+
+/** 
+ * @description: 递归遍历
+ * @param tree 
+ * @param func 
+ * @returns 
+ */
+const TreeForeach =  (tree, func) => {
+  if (!tree || typeof tree !== 'object') return null
+  tree.forEach((data: { children: any }) => {
+    if (typeof data.children === 'object' && data.children.length > 0) {
+      TreeForeach(data.children, func)   // 函数调用函数自身
+    } else {
+      func(data)                         // 递归出口
+    }
+  })
+}
+
+/** 
+ * @description: 扁平数据结构转Tree  https://juejin.cn/post/6983904373508145189
+ * @param pid 0
+ * @param arr [{id: 1, pid: 0},{id: 2, pid: 0},{id: 3, pid: 1},{id: 4, pid: 2}]
+ * @returns 
+ */
+const nestArrToTree = (pid, arr) => {
+  return arr.filter(item => item.pid === pid).map( item => ({
+    ...item,
+    children: nestArrToTree(item.id, arr)  // 切换ID
+  }))
+}
+
+// 去重
+const FormatArrMapHas = (tree) => {
+  let map = new Map();
+  for (let item of tree) {
+    if (!map.has(item.title)) {
+      map.set(item.title, item);
+    }
+  }
+  return [...map.values()]
 }
 
 /**
@@ -192,7 +193,7 @@ export {
   deepCloneData,
   TreeForeach, 
   FormatArrMapHas, 
-  FormatCurrentTime,
+  FTisFormatCurrentTime,
   RoundDecimaleeFormNum, 
   RemoveHtmlFormTag, 
   RemoveHtmlFormTrim, 

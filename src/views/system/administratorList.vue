@@ -87,7 +87,7 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
 import { UserStore } from '@/store/private/user';
 import { AdminSystemStore } from '@/store/private/AdminIstrators';
@@ -219,7 +219,7 @@ export default class administrators extends Vue {
     let list = newValue.data.list;
     if(list.length > 0) {
       list.forEach( el => {
-        el.formatTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime)
+        el.formatTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
       });
     }
     this.tableData = list;

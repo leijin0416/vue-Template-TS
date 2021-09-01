@@ -289,7 +289,7 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { sessionData } from '@/filters/storage';
 import { MessageTips } from '@/filters/MessageTips';
 import { IndexUserListData } from '@/types/views/index.interface';
@@ -478,8 +478,8 @@ export default class userList extends Vue {
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
-        el.birthdayTime = FormatCurrentTime("YYYY-mm-dd", el.birthday)
-        el.createTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime)
+        el.birthdayTime = FTisFormatCurrentTime("YYYY-mm-dd", el.birthday);
+        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
       });
       this.tableData = obj;
     } else {this.tableData = list;}

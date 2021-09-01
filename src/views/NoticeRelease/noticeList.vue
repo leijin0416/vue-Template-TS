@@ -33,6 +33,7 @@
           </el-col>
         </el-row>
       </div>
+      <!-- 富文本 -->
       <WangEditor 
         v-model="detailValue" 
         :isClear="isClear" 
@@ -132,7 +133,7 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
 import { InformationStore } from '@/store/private/PageInformation';
 import { UserStore } from '@/store/private/user';
@@ -263,7 +264,7 @@ export default class NoticeLists extends Vue {
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
-        el.createTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS",el.createTime)
+        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
       });
       this.tableData = obj;
     } else {this.tableData = list;}

@@ -83,7 +83,7 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { FormatCurrentTime, deepCloneData } from '@/filters/common';
+import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
 import { AdminSystemStore } from '@/store/private/AdminIstrators';
 import { webGetAdminMenuAdd, webGetAdminMenuUpdate, webGetAdminMenuDelte } from '@/api/index';
@@ -211,7 +211,7 @@ export default class routes extends Vue {
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
-        el.createTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS",el.createTime)
+        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
       });
       this.tableData = obj;
     } else {this.tableData = list;}
