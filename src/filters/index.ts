@@ -1,12 +1,33 @@
 /**
- * @description: 格式化小数位 {{ 3.1452 | formatFloat }}
+ * @description: 手机号格式化
+ * @param String phone | 180****9230
+ * @return {*}
+ */
+const FTisFormatPhone = (phone: string | number) => {
+  phone = phone.toString();
+  return phone.substr(0, 3) + '****' + phone.substr(7, 11)
+};
+
+/**
+ * @description: 4位一空格（格式化银行卡）
+ * @param {String} val
+ * @return {*}
+ */
+const FTisFormatBank = (val: any) => {
+  if (val) {
+    return val.toString().replace(/\s/g, '').replace(/(.{4})/g, '$1 ')
+  }
+};
+
+/**
+ * @description: 格式化小数位 {{ 3.1452 | FTisFormatFloatAmount }}
  * @param val    传入的值
  * @param pos    保留的小数位
  * @param isNaN  检查是否是非数字值
  * @param Math   检查是否是整数
  * @return {*}
  */
-const formatFloat = (val: any, pos: number = 2) => {
+const FTisFormatFloatAmount = (val: any, pos: number = 2) => {
   let f = parseFloat(val);
   if (isNaN(f)) {
     return false
@@ -25,35 +46,15 @@ const formatFloat = (val: any, pos: number = 2) => {
     s += '0';
   }
   return s
-}
-
-/**
- * @description: 手机号格式化
- * @param String phone | 180****9230
- * @return {*}
- */
-const formatPhone = (phone: string | number) => {
-  phone = phone.toString();
-  return phone.substr(0, 3) + '****' + phone.substr(7, 11)
-}
-
-/**
- * @description: 4位一空格（格式化银行卡）
- * @param {String} val
- * @return {*}
- */
-const formatBank = (val: any) => {
-  if (val) {
-    return val.toString().replace(/\s/g, '').replace(/(.{4})/g, '$1 ')
-  }
-}
+};
 
 /**
  * @description: 千分位格式化
- * @param {*} val  数字  1,279,878,236 | (123456789).toLocaleString('en-US')
+ * @param {Number} integer 整数
+ * @param {Number} val  数字  1,279,878,236 | (123456789).toLocaleString('en-US')
  * @return {*}
  */
-const inFormatIntegerThousands = (val: any) => {
+const FTisinFormatIntegerNum = (val: any) => {
   if (Math.floor(Number(val)) === Number(val)) {
     return val
   }
@@ -67,14 +68,14 @@ const inFormatIntegerThousands = (val: any) => {
     result = num + result;
   }
   return result
-}
+};
 
 /**
  * @description: 数字千位符格式化，保留小数位
  * @param {Number || String} num 
  * @return {*}
  */
-const inFormatThousands = (num) => {
+const FTisFormatThousandsNum = (num) => {
   num = num + '';
   if (!num.includes('.')) {
     num += '.'
@@ -82,7 +83,7 @@ const inFormatThousands = (num) => {
   return num.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
     return $1 + ',';      // 只将整数部分进行分割
   }).replace(/\.$/, '');  // 再将小数部分合并进来
-}
+};
 
 /**
  * @description: 格式化时长
@@ -90,7 +91,7 @@ const inFormatThousands = (num) => {
  * @return {*}
  * 
  */
-const realFormatSecond = (second: any) => {
+const FTisFormatSecondTime = (second) => {
   let secondType = typeof second;
 
   if (secondType === 'number' || secondType === 'string') {
@@ -107,12 +108,12 @@ const realFormatSecond = (second: any) => {
   } else {
     return '0:00:00'
   }
-}
+};
 
 /**
  * @description: 时间戳转日期
- * @param {String} fmt
- * @param {Number} time
+ * @param {String} fmt    日期格式
+ * @param {Number} time   时间戳
  * @return {*}
  */
 const FTisFormatCurrentTime = (fmt, time) => {
@@ -134,7 +135,7 @@ const FTisFormatCurrentTime = (fmt, time) => {
     };
   };
   return fmt
-}
+};
 
 /**
  * @description: 将科学计数法转换成小数  item.money | scientificToNumber
@@ -159,15 +160,15 @@ const scientificToNumber = (num: number) => {
 		}
 		return '0.' + zero + arr[1]
 	}
-}
+};
 
 export default {
-  formatFloat,
-  formatPhone,
-  formatBank,
-  inFormatIntegerThousands,
-  inFormatThousands,
-  realFormatSecond,
+  FTisFormatFloatAmount,
+  FTisFormatPhone,
+  FTisFormatBank,
+  FTisinFormatIntegerNum,
+  FTisFormatThousandsNum,
+  FTisFormatSecondTime,
   scientificToNumber,
   FTisFormatCurrentTime
 }

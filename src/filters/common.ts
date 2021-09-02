@@ -28,7 +28,7 @@
     scale: 1,
   };
   return item
-}
+};
 
 /** 
  * @description: 深拷贝函数  接收目标target参数  https://juejin.cn/post/6986452564778680350
@@ -66,11 +66,12 @@
   }
   // 返回最终结果
   return result
-}
+};
 
 /** 
  * @description 时间戳转日期
- * @param {Number} time  时间戳   10位 * 1000
+ * @param {String} fmt    日期格式
+ * @param {Number} time   时间戳   10位 * 1000
  * @param {*} Y  年
  * @param {*} m  月
  * @param {*} d  日
@@ -98,10 +99,10 @@ const FTisFormatCurrentTime = (fmt, time) => {
     };
   };
   return fmt
-}
+};
 
 /** 
- * @description: 递归遍历
+ * @description: 递归遍历  https://juejin.cn/post/7002108799439863821
  * @param tree 
  * @param func 
  * @returns 
@@ -115,20 +116,7 @@ const TreeForeach =  (tree, func) => {
       func(data)                         // 递归出口
     }
   })
-}
-
-/** 
- * @description: 扁平数据结构转Tree  https://juejin.cn/post/6983904373508145189
- * @param pid 0
- * @param arr [{id: 1, pid: 0},{id: 2, pid: 0},{id: 3, pid: 1},{id: 4, pid: 2}]
- * @returns 
- */
-const nestArrToTree = (pid, arr) => {
-  return arr.filter(item => item.pid === pid).map( item => ({
-    ...item,
-    children: nestArrToTree(item.id, arr)  // 切换ID
-  }))
-}
+};
 
 // 去重
 const FormatArrMapHas = (tree) => {
@@ -139,44 +127,44 @@ const FormatArrMapHas = (tree) => {
     }
   }
   return [...map.values()]
-}
+};
 
 /**
  * @description: 去除HTML tag
  * @param {string} str  数值
  * @return {*}
  */
-const RemoveHtmlFormTag = (str) => {
+const FTisRemoveFormInput = (str) => {
   str = str.replace(/<\/?[^>]*>/g, ''); // 去除HTML tag
   str = str.replace(/\s+/g, '');        // 去除多余空行
   str = str.replace(/&nbsp;/ig, '');    // 去掉&nbsp;
 
   return str
-}
+};
 
 /** 
  * @description: 去除HTML 前后空格  https://www.cnblogs.com/zhangnan35/p/8635059.html
- * @param {string} str  数值
+ * @param {String} str  数值
  * @return {*}
  */
-const RemoveHtmlFormTrim = (str) => {
+const FTisRemoveFormInputTrim = (str) => {
   return str.replace(/(^\s*)|(\s*$)/g, "")
-}
+};
 
 /**
- * @description: 小数点 数值精度计算   RoundDecimaleeFormNum(3.1415926, 1)
- * @param {number} num       数值
- * @param {number} decimal   精度
+ * @description: 小数点 数值精度计算   FTisRoundDecimaleeForm(3.1415926, 1)
+ * @param {Number} num       数值
+ * @param {Number} decimal   精度
  * @return {*}
  */
-const RoundDecimaleeFormNum = (num, decimal) => {
+const FTisRoundDecimaleeForm = (num, decimal) => {
   let map = Math.round(num * 10 ** decimal) / 10 ** decimal;
   return map
-}
+};
 
 /**
  * @description: 数字千位符格式化，保留小数位  http://openexchangerates.github.io/accounting.js/
- * @param {number || string} num       数值
+ * @param {Number || String} num       数值
  * @return {*} 解析 https://www.cnblogs.com/vinfy2018/p/8469883.html
  */
 const FormatThousands = (num) => {
@@ -187,15 +175,16 @@ const FormatThousands = (num) => {
   return num.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
     return $1 + ',';      // 只将整数部分进行分割
   }).replace(/\.$/, '');  // 再将小数部分合并进来
-}
+};
+
 
 export { 
   deepCloneData,
   TreeForeach, 
   FormatArrMapHas, 
   FTisFormatCurrentTime,
-  RoundDecimaleeFormNum, 
-  RemoveHtmlFormTag, 
-  RemoveHtmlFormTrim, 
+  FTisRoundDecimaleeForm, 
+  FTisRemoveFormInput, 
+  FTisRemoveFormInputTrim, 
   FormatThousands,
 }

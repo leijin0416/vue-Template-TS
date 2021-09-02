@@ -75,7 +75,7 @@ const SaveDownloadImageFile = (data: any, fileName: any) => {
 
 /**
  * @description:  上传图片，去除base64前缀
- * @param {String} file 
+ * @param {String} file 文件
  * @return {*}
  */
 const SaveImageUrlBase64 = (file: any) => {
