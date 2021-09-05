@@ -169,6 +169,6 @@ export default {
   FTisinFormatIntegerNum,
   FTisFormatThousandsNum,
   FTisFormatSecondTime,
+  FTisFormatCurrentTime,
   scientificToNumber,
-  FTisFormatCurrentTime
 }

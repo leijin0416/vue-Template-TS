@@ -46,7 +46,7 @@ const FTisES6CompareSort = (arr, order, type) => {
   }
   
   return arr
-}
+};
 
 export {
   FTisES6CompareSort
