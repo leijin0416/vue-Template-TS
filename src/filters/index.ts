@@ -1,6 +1,6 @@
 /**
  * @description: 手机号格式化
- * @param String phone | 180****9230
+ * @param {String} phone | 180****9230
  * @return {*}
  */
 const FTisFormatPhone = (phone: string | number) => {
@@ -10,7 +10,7 @@ const FTisFormatPhone = (phone: string | number) => {
 
 /**
  * @description: 4位一空格（格式化银行卡）
- * @param {String} val
+ * @param {String} val  -数据
  * @return {*}
  */
 const FTisFormatBank = (val: any) => {
@@ -21,10 +21,10 @@ const FTisFormatBank = (val: any) => {
 
 /**
  * @description: 格式化小数位 {{ 3.1452 | FTisFormatFloatAmount }}
- * @param val    传入的值
- * @param pos    保留的小数位
- * @param isNaN  检查是否是非数字值
- * @param Math   检查是否是整数
+ * @param {*} val    -传入的值
+ * @param {*} pos    -保留的小数位
+ * @param {*} isNaN  -检查是否是非数字值
+ * @param {*} Math   -检查是否是整数
  * @return {*}
  */
 const FTisFormatFloatAmount = (val: any, pos: number = 2) => {
@@ -49,9 +49,9 @@ const FTisFormatFloatAmount = (val: any, pos: number = 2) => {
 };
 
 /**
- * @description: 千分位格式化
- * @param {Number} integer 整数
- * @param {Number} val  数字  1,279,878,236 | (123456789).toLocaleString('en-US')
+ * @description: 数字千分位格式化，整数
+ * @param {Number} val    -数据  1,279,878,236 | FTisinFormatIntegerNum || (123456789).FTisinFormatIntegerNum()
+ * @param {*} Math.floor  -整数
  * @return {*}
  */
 const FTisinFormatIntegerNum = (val: any) => {
@@ -71,8 +71,10 @@ const FTisinFormatIntegerNum = (val: any) => {
 };
 
 /**
- * @description: 数字千位符格式化，保留小数位
- * @param {Number || String} num 
+ * @description: 数字千位符格式化，正则保留小数位
+ * @param {Number || String} num  -数据
+ * @param {*} includes
+ * @param {*} replace
  * @return {*}
  */
 const FTisFormatThousandsNum = (num) => {
@@ -87,7 +89,7 @@ const FTisFormatThousandsNum = (num) => {
 
 /**
  * @description: 格式化时长
- * @param {Number} second
+ * @param {Number} second  -数据
  * @return {*}
  * 
  */
@@ -112,8 +114,8 @@ const FTisFormatSecondTime = (second) => {
 
 /**
  * @description: 时间戳转日期
- * @param {String} fmt    日期格式
- * @param {Number} time   时间戳
+ * @param {String} fmt    -日期格式
+ * @param {Number} time   -时间戳
  * @return {*}
  */
 const FTisFormatCurrentTime = (fmt, time) => {
