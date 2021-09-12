@@ -92,15 +92,40 @@ const factsTree = (num) => {
  * @param {Object} init    -表示初始值;
  * @returns {*}  https://www.jianshu.com/p/e375ba1cfc47
  */
-const arrsReduce = (arr) => arr.reduce((prev, cur) => prev + cur);
-const arrResult = (arr) => arr.reduce((pre, cur) => { // 数组去重
-  if(!pre.includes(cur)){
-    pre.push(cur)
+const arrsReduce = (arr) => arr.reduce((prev, cur) => prev + cur);  // 求和
+/** 
+ * @description: reduce()方法  -数组去重，不断叠加数组中的每一项，并返回出来
+ * @param {Object} arr   -原数组
+ * @param {Object} []    -arr 的类型和初始值
+ * @param {*} includes   -检测数组 arr 是否包含 cur ，如果是返回 true，否则 false； =====>>>>>  对标 [indexOf()]，下标属性来查询，其不够语义化
+ * @param {*} concat     -用于连接 两个或多个 数组，返回副本
+ * @param {*} Map        -结构的 [has()] 方法，是用来查找键名的
+ * @returns {*}
+ */
+const FTisES6ReduceIncludes = (arr) => arr.reduce((pre, cur) => {
+  if(!pre.includes(cur)) {
+    pre.push(cur) // pre.concat(cur)
   }
-  return pre;
-},[])
+  return pre
+
+}, []);
+
+/** 
+ * @description: reduce()方法  -数组去重
+ * @param {Object} arr   -原数组
+ * @param {Object} []    -arr 的类型和初始值
+ * @param {Object} newobj     -缓存 arr对象数组 里的某一个属性
+ * @returns {*} https://blog.csdn.net/AS_TS/article/details/108060856
+ */
+const FTisES6ReduceObjectNum = (arr, newobj = {}) => arr.reduce((preVal, curVal) => {
+  newobj[curVal.id] ? '' : newobj[curVal.id] = true && preVal.push(curVal); 
+	return preVal
+  
+}, []);
 
 export {
   FTisES6CompareSort,
-  FTisES6PlaceCompareSort
+  FTisES6PlaceCompareSort,
+  FTisES6ReduceIncludes,
+  FTisES6ReduceObjectNum,
 }
