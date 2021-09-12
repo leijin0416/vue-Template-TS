@@ -85,11 +85,11 @@ const factsTree = (num) => {
 
 /** 
  * @description: reduce()方法  -是数组的归并方法，可同时将前面数组项遍历产生的结果与当前遍历项进行运算
- * @param {Object} arr  -原数组
- * @param {Object} prev   -表示上一次调用回调时的返回值，或者初始值 init; [常用]
- * @param {Object} cur   -表示当前正在处理的数组元素；                   [常用]
+ * @param {Object} arr     -原数组
+ * @param {Object} prev    -表示上一次调用回调时的返回值，或者初始值 init;  [常用]
+ * @param {Object} cur     -表示当前正在处理的数组元素；                   [常用]
  * @param {Object} index   -表示当前正在处理的数组元素的索引，若提供 init 值，则索引为0，否则索引为1；
- * @param {Object} init   -表示初始值;
+ * @param {Object} init    -表示初始值;
  * @returns {*}  https://www.jianshu.com/p/e375ba1cfc47
  */
 const arrsReduce = (arr) => arr.reduce((prev, cur) => prev + cur);
