@@ -25,10 +25,13 @@ const FTisDebounce = (fn, wait) => {
  */
 const FTisES6CompareSort = (arr, order, type) => {
   if(order === 'asc') {
-    arr.sort( (a, b) => a[type] - b[type] );
+    arr.sort( (a, b) => a[type] - b[type] )
 
   } else if(order === 'desc'){
-    arr.sort( (a, b) => b[type] - a[type] );
+    arr.sort( (a, b) => b[type] - a[type] )
+
+  } else{
+    arr.sort( (a, b) => b[0] - a[0] )  // 二维数组
   }
   
   return arr
@@ -54,7 +57,7 @@ const FTisES6PlaceCompareSort = (arr, type) => {
  * @description: 【1】扁平数据结构转Tree  https://juejin.cn/post/6983904373508145189
  * @param {*} pid - ID值0
  * @param {Object} arr -格式[{id: 1, pid: 0},{id: 2, pid: 0},{id: 3, pid: 1},{id: 4, pid: 2}]
- * @returns 
+ * @returns {*} https://blog.csdn.net/huangsting/article/details/110002682  -递归利用reduce处理tree树形  https://segmentfault.com/a/1190000023949947?utm_source=tag-newest
  */
 const arrNestToTree = (pid = 0, arr) => {
   return arr.filter(item => item.pid === pid).map( item => ({
@@ -115,7 +118,7 @@ const FTisES6ReduceIncludes = (arr) => arr.reduce((pre, cur) => {
  * @param {Object} arr   -原数组
  * @param {Object} []    -arr 的类型和初始值
  * @param {Object} newobj     -缓存 arr对象数组 里的某一个属性
- * @returns {*} https://blog.csdn.net/AS_TS/article/details/108060856
+ * @returns {*} https://blog.csdn.net/AS_TS/article/details/108060856  https://www.cnblogs.com/Peter2014/p/13187008.html -深度优先遍历和广度优先遍历
  */
 const FTisES6ReduceObjectNum = (arr, newobj = {}) => arr.reduce((preVal, curVal) => {
   newobj[curVal.id] ? '' : newobj[curVal.id] = true && preVal.push(curVal); 
