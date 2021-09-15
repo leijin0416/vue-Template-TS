@@ -17,7 +17,7 @@ const FTisDebounce = (fn, wait) => {
 };
 
 /** 
- * @description: 字符串分割成字符串数组
+ * @description: [split()] -将字符串分割成字符串数组
  * @param {Object} arr    -数组
  * @param {String} type   -名称 '_'
  * @returns {*} 
