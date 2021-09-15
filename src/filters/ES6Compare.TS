@@ -17,6 +17,17 @@ const FTisDebounce = (fn, wait) => {
 };
 
 /** 
+ * @description: 字符串分割成字符串数组
+ * @param {Object} arr    -数组
+ * @param {String} type   -名称 '_'
+ * @returns {*} 
+ */
+const FTisES6CompareSplit = (arr, type) => {
+  let str = arr.split(type);
+  return str
+};
+
+/** 
  * @description: 排序  https://www.cnblogs.com/taohuaya/p/10048496.html
  * @param {Object} arr    -数组
  * @param {String} order  -asc表示升序，desc为降序
@@ -83,13 +94,14 @@ const factsTree = (num) => {
   if (num === 1) {  // 1.避免无限循环
     return 1;
   }
+  
   return num * factsTree(num-1); // 2.递归条件，出栈和入栈
 }
 
 /** 
  * @description: reduce()方法  -是数组的归并方法，可同时将前面数组项遍历产生的结果与当前遍历项进行运算
  * @param {Object} arr     -原数组
- * @param {Object} prev    -表示上一次调用回调时的返回值，或者初始值 init;  [常用]
+ * @param {Object} prev    -表示上一次调用回调时的返回值，或者计算结束后的返回值;  [常用]
  * @param {Object} cur     -表示当前正在处理的数组元素；                   [常用]
  * @param {Object} index   -表示当前正在处理的数组元素的索引，若提供 init 值，则索引为0，否则索引为1；
  * @param {Object} init    -表示初始值;
@@ -114,13 +126,14 @@ const FTisES6ReduceIncludes = (arr) => arr.reduce((pre, cur) => {
 }, []);
 
 /** 
- * @description: reduce()方法  -数组去重
+ * @description: reduce()方法  -数组对象去重，不重复的值会打印 undefined
  * @param {Object} arr   -原数组
  * @param {Object} []    -arr 的类型和初始值
  * @param {Object} newobj     -缓存 arr对象数组 里的某一个属性
  * @returns {*} https://blog.csdn.net/AS_TS/article/details/108060856  https://www.cnblogs.com/Peter2014/p/13187008.html -深度优先遍历和广度优先遍历
  */
 const FTisES6ReduceObjectNum = (arr, newobj = {}) => arr.reduce((preVal, curVal) => {
+  // newobj[curVal.id] 查看是否有 id 属性值相同的一项，没有则将当前项 curVal 加入数组 preVal ，然后返回修改后数组，作为下一次的初始值进行遍历
   newobj[curVal.id] ? '' : newobj[curVal.id] = true && preVal.push(curVal); 
 	return preVal
   
