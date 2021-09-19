@@ -2,7 +2,7 @@
  * @description: 防抖   -到达规定的时间执行一次
  * @param {*} fn    函数
  * @param {*} wait  时间
- * @return {*}
+ * @return {*} https://juejin.cn/post/6844903669389885453  [0918]
  */
 const FTisDebounce = (fn, wait) => {
   let time: any = null;
@@ -85,17 +85,18 @@ const array2Tree = (array, id = 1) => {
 }
 
 /** 
- * @description: 【2】数组递归 -大白话就是 一个函数不断的调用自己。出栈和入栈
+ * @description: 【2】数组递归 -大白话就是 一个函数不断的调用自己。需要有结束递归的条件，否则就会变成死循  出栈和入栈
  * @param {Object} arr  -数组
  * @returns {*}  https://segmentfault.com/a/1190000015826387?utm_source=sf-similar-article
  * @returns {*}  https://segmentfault.com/a/1190000015813977?utm_source=tag-newest -获取节点的所有叶子节点个数
+ * @returns {*}  https://juejin.cn/post/6865234324275331086 深浅拷贝    [0918]
  */
 const factsTree = (num) => {
   if (num === 1) {  // 1.避免无限循环
     return 1;
   }
   
-  return num * factsTree(num-1); // 2.递归条件，出栈和入栈
+  return num * factsTree(num - 1); // 2.递归条件，出栈和入栈  -尾递归，在函数执行的最后一步返回一个一个函数调用
 }
 
 /** 
