@@ -1,19 +1,19 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import NProgress from 'nprogress'
-import { constantRouterMaps } from './routerMaps'
-import { sessionData } from '@/filters/storage'
+import Vue from 'vue';
+import Router from 'vue-router';
+import NProgress from 'nprogress';
+import { constantRouterMaps } from './routerMaps';
+import { sessionData } from '@/filters/storage';
 
-import 'nprogress/nprogress.css'
+import 'nprogress/nprogress.css';
 
 Vue.use(Router)
 
 const createRouter = () => new Router({
   routes: constantRouterMaps,
-  mode: 'history',  // hash  history
+  mode: 'hash',  // hash  history
 })
 
-const router: any = createRouter();
+const router: any = createRouter()
 
 // 清除路由
 export function resetRouter() {
@@ -21,33 +21,25 @@ export function resetRouter() {
   router.matcher = newRouter.matcher;
 }
 
-/**
- * @description: [白名单] 路由中的 name 属性
- * @return {*} 
- */
+// 登陆页面路由 name
 const LOGIN_PAGE_NAME = 'Login';
 
-/**
- * @description:  跳转之前
- * @param {any} to    即将要进入的目标 路由对象 （name，params，meta等属性）
- * @param {any} from  当前导航正要离开的路由对象
- * @param {*} next
- * @return {*} document.title = to.meta.title;   -改变每次页面的标题
- */
-router.beforeEach((to: any, from: any, next) => {
-  const token = sessionData('get', 'HasSessionToken', '');
-  // console.log(`${to}__${from}__${token}`);
+// 跳转之前
+router.beforeEach((to: any, from, next) => {
+  document.title = to.meta.title;    // 改变每次页面的标题
+  const token = sessionData('get', 'HasSessionToken', '')
+  // console.log(`${to}__${from}__${token}`)
   
-  if (to.path !== from.path) NProgress.start();  // 进度条
-  if (token !== null) next();
+  if (to.path !== from.path) NProgress.start()
+  if (token !== null) next()
   else {
     // 未登陆且要跳转的页面是登录页
-    if (to.name === LOGIN_PAGE_NAME) next();
+    if (to.name === LOGIN_PAGE_NAME) next()
     else {
       // 未登录且要跳转的页面不是登录页，则跳转到登录页
       next({
         name: LOGIN_PAGE_NAME
-      });
+      })
     }
   }
 })

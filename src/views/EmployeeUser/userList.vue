@@ -1,5 +1,5 @@
 <template>
-  <!-- 用户列表 -->
+  <!-- 员工列表 -->
   <div class="pages">
     <el-row>
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -11,45 +11,30 @@
             :inline="true"
             :rules="rules"
             :model="param">
-            <el-form-item :label="$t('User.会员编号')">
+            <el-form-item :label="$t('User.员工编号')">
               <el-input type="text" v-model="param.userName" size="small" clearable></el-input>
             </el-form-item>
             <el-form-item :label="$t('User.姓名')">
               <el-input type="text" v-model="param.userName" size="small" clearable></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('User.用户名')">
-              <el-input type="text" v-model="param.userName" size="small" clearable></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('User.会员类型')">
-              <el-select v-model="param.businessStatus" :placeholder="$t('User.请选择')" size="small">
-                <el-option
-                  v-for="item in formOptionsStatus"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
             </el-form-item>
             <el-button type="primary" @click="submitSearchForm('ruleSearchForm')" size="small" icon="el-icon-search" class="v-btn" >{{ $t('User.搜索') }}</el-button>
             <el-button @click="resetSearchForm('ruleSearchForm')" size="small" icon="el-icon-refresh-left" class="v-btn">{{ $t('User.重置') }}</el-button>
           </el-form>
         </div>
         <div class="v-refresh-box" style="min-height: 30px" >
-          <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="v-btn" @click="onAddUsersClick">{{ $t('User.注册新用户') }}</el-button>
+          <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="v-btn" @click="onAddUsersClick">{{ $t('User.注册新员工') }}</el-button>
           <el-button type="info" size="small" icon="el-icon-refresh" class="v-btn" @click="onRefreshClick" circle />
         </div>
         <ElTable 
-        :tableData="tableData"
+          :tableData="tableData"
           :tableColumnData="tableColumnData"
           :totalCount="totalCount"
           @handleSelectionChange="handleSelectionChange"
           @handleCurrentChange="handleCurrentChange">
-          <el-table-column slot="operateTagStatus" :label="$t('User.会员类型')" width="160" align='center'>
+          <el-table-column slot="operateTagStatus" :label="$t('User.工作岗位')" width="160" align='center'>
             <template slot-scope="scope">
-              <el-tag effect="light" type="warning" v-if="scope.row.businessStatus === 0">{{$t('User.普通会员')}}</el-tag>
-              <el-tag effect="light" type="warning" v-else-if="scope.row.businessStatus === 1">{{$t('User.白银会员')}}</el-tag>
-              <el-tag effect="light" type="warning" v-else-if="scope.row.businessStatus === 2">{{$t('User.黄金会员')}}</el-tag>
-              <el-tag effect="light" type="warning" v-else>{{ $t('User.白金会员') }}</el-tag>
+              <el-tag effect="light" type="info" v-if="scope.row.businessStatus === 0">{{$t('User.普通会员')}}</el-tag>
+              <el-tag effect="light" type="info" v-else>{{ $t('User.白金会员') }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column slot="operateTagBindStatus" :label="$t('User.证件类型')" width="160" align='center'>
@@ -76,9 +61,9 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { UserListStore } from '@/store/common/StorePageUsersList';
 import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
+import { UserListStore } from '@/store/common/StorePageUsersList';
 import { } from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
@@ -91,7 +76,7 @@ interface IndexData {
   bindStatus: string;
 };
 @Component({
-  name: "UserList",
+  name: "EmployeeUserList",
   components: {
     ElTable
   },
@@ -143,7 +128,7 @@ export default class extends Vue {
     },
     {
       prop: 'userId',
-      label: this.vm.$t('User.会员编号'),
+      label: this.vm.$t('User.员工编号'),
       width: '180',
     },
     {
@@ -179,7 +164,7 @@ export default class extends Vue {
     },
     {
       prop: 'createTime',
-      label: this.vm.$t('User.身高/体重'),
+      label: this.vm.$t('User.紧急联络电话'),
       width: '180',
     },
     {

@@ -1,6 +1,5 @@
 <template>
 	<div id="app">
-		<!-- v-wechat-title="$route.meta.title" -->
     <router-view v-wechat-title="$t('Hlin.'+ $route.meta.title)" />
 	</div>
 </template>

@@ -1,9 +1,9 @@
 <template>
   <!-- 用户角色列表 -->
-  <div class="container">
+  <div class="pages">
     <el-row>
       <el-col :span="24">
-        <div class="v-button-box">
+        <div class="v-refresh-box">
           <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="v-btn" @click="onAddsClick">{{ $t('Srls.添加用户角色') }}</el-button>
           <el-button type="info" size="small" icon="el-icon-refresh" class="v-btn" @click="onRefreshClick" circle />
         </div>
@@ -12,12 +12,12 @@
           :totalCount="totalCount"
           @handleSelectionChange="handleSelectionChange"
           @handleCurrentChange="handleCurrentChange">
-          <el-table-column slot="operateTagRoleName" :label="$t('Srls.角色名称')" width="200" align="center">
+          <el-table-column slot="operateTagRoleName" :label="$t('Srls.角色名称')" width="auto" align="center">
             <template slot-scope="scope">
               <el-tag>{{scope.row.name}}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column slot="operateButton" :label="$t('Srls.操作')" align='center' width="200">
+          <el-table-column slot="operateButton" :label="$t('Srls.操作')" align='center' width="220">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleRowModifyClick(scope.row)" icon="el-icon-edit-outline">{{ $t('Srls.修改') }}</el-button>
               <el-button type="text" size="small" @click="handleOpenClick(scope.row)" icon="el-icon-delete" class="v-btn-red">{{ $t('Srls.删除') }}</el-button>
@@ -67,10 +67,14 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
+import { AdminSystemStore } from '@/store/private/StoreAdminIstrators';
 import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
-import { AdminSystemStore } from '@/store/private/AdminIstrators';
-import { webGetAdminRoleAdd, webGetAdminRoleUpdate, webGetAdminRoleDelte } from '@/api/index';
+import { 
+  webGetAdminRoleAdd, 
+  webGetAdminRoleUpdate, 
+  webGetAdminRoleDelte 
+} from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
 import ElTree from "@/components/ElTree/index.vue";
@@ -87,12 +91,15 @@ type IndexDialogData = {
 };
 
 @Component({
+  name: "RoleList",
   components: {
     ElTree,
     ElTable
   },
 })
-export default class administrators extends Vue {
+export default class extends Vue {
+  private vm = window['vm'];
+
   // 分页器
   private param: IndexData = {
     page: 1,
@@ -106,21 +113,21 @@ export default class administrators extends Vue {
     },
     {
       prop: 'roleId',
-      label: window['vm'].$t('Srls.角色ID'),
-      width: 'auto',
+      label: this.vm.$t('Srls.角色ID'),
+      width: '220',
     },
     {
       slot: 'operateTagRoleName',
     },
     {
       prop: 'createId',
-      label: window['vm'].$t('Srls.创建人ID'),
-      width: 'auto',
+      label: this.vm.$t('Srls.创建人ID'),
+      width: '220',
     },
     {
       prop: 'createTime',
-      label: window['vm'].$t('Srls.创建时间'),
-      width: '200',
+      label: this.vm.$t('Srls.创建时间'),
+      width: '220',
     },
     {
       slot: 'operateButton', //内容slot
@@ -139,11 +146,11 @@ export default class administrators extends Vue {
 
   private rules = {
     name: [
-      { required: true, message: window['vm'].$t('Srls.请输入角色名称'), trigger: 'blur' },
+      { required: true, message: this.vm.$t('Srls.请输入角色名称'), trigger: 'blur' },
       {
         required: true,
         pattern: /^\S*$/,
-        message: window['vm'].$t('Srls.请勿输入空字符'),
+        message: this.vm.$t('Srls.请勿输入空字符'),
         trigger: 'blur'
       },
     ],
@@ -161,7 +168,7 @@ export default class administrators extends Vue {
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
-        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
+        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS",el.createTime)
       });
       this.tableData = obj;
     } else {this.tableData = list;}
@@ -239,11 +246,11 @@ export default class administrators extends Vue {
   // 删除
   private handleOpenClick(row) {
     const _that = this;
-    const text1 = window['vm'].$t('Srls.此操作将删除该条信息');
-    const text2 = window['vm'].$t('Srls.提示');
+    const text1 = this.vm.$t('Srls.此操作将删除该条信息');
+    const text2 = this.vm.$t('Srls.提示');
     _that.$confirm(text1, text2, {
-      confirmButtonText: window['vm'].$t('Srls.确定'),
-      cancelButtonText: window['vm'].$t('Srls.取消'),
+      confirmButtonText: this.vm.$t('Srls.确定'),
+      cancelButtonText: this.vm.$t('Srls.取消'),
       type: 'warning',
     }).then(() => {
       _that.handleRowDeleteClick(row)
@@ -256,13 +263,13 @@ export default class administrators extends Vue {
     })
     // console.log(res);
     
-    const text = window['vm'].$t('Srls.删除成功');
+    const text = this.vm.$t('Srls.删除成功');
     MessageTips(res, true, true, text, item => {
       this.onRefreshClick();
     }, null);
   }
 
-  private submitForm(formName) {
+  private submitForm(formName: string) {
     let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     this.loadingType = true;
     ref.validate((valid) => {
@@ -290,7 +297,7 @@ export default class administrators extends Vue {
       })
       // console.log(res);
       
-      const text = window['vm'].$t('Srls.添加成功');
+      const text = this.vm.$t('Srls.添加成功');
       MessageTips(res, true, true, text, item => {
         this.loadingType = false;
         this.resetForm('ruleForm');
@@ -307,7 +314,7 @@ export default class administrators extends Vue {
         'menuIds': menuIds,
         'childrenMenuId': childrenMenuId
       })
-      const text = window['vm'].$t('Srls.修改成功');
+      const text = this.vm.$t('Srls.修改成功');
       MessageTips(res, true, true, text, item => {
         this.loadingType = false;
         this.onRefreshClick();
@@ -332,7 +339,7 @@ export default class administrators extends Vue {
   min-width: 80px;
   text-align: center;
 }
-.container {
+.pages {
   min-height: 700px;
   /deep/.el-switch__label {color: #909399;}
   /deep/.el-switch__label.is-active {

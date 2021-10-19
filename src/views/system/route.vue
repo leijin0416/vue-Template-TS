@@ -1,6 +1,6 @@
 <template>
   <!-- 路由配置 -->
-  <div class="container">
+  <div class="pages">
     <div class="v-header-search">
       <el-form
         ref="ruleSearchForm"
@@ -9,8 +9,8 @@
         :inline="true" 
         :rules="rules"
         :model="param">
-        <el-form-item :label="$t('Srte.路由ID')" >
-          <el-input type="text" v-model="param.menuId" size="small" clearable></el-input>
+        <el-form-item :label="$t('Srte.路由名称')" >
+          <el-input type="text" v-model="param.title" size="small" clearable></el-input>
         </el-form-item>
         <el-button type="primary" @click="submitSearchForm('ruleSearchForm')" size="small" icon="el-icon-search" class="v-btn" >{{ $t('Srte.搜索') }}</el-button>
         <el-button @click="resetSearchForm('ruleSearchForm')" size="small" icon="el-icon-refresh-left" class="v-btn">{{ $t('Srte.重置') }}</el-button>
@@ -49,7 +49,7 @@
           <el-col :span="15">
             <el-form
               ref="ruleForm"
-              label-width="120px"
+              label-width="160px"
               class="demo-ruleForm"
               :rules="rules"
               :model="formRouteData"
@@ -69,6 +69,9 @@
               <el-form-item :label="$t('Srte.路由图标名称')" prop="icon">
                 <el-input type="text" v-model="formRouteData.icon" size="medium"></el-input>
               </el-form-item>
+              <el-form-item :label="$t('Srte.路由排序')" >
+                <el-input type="text" v-model="formRouteData.sort" size="medium"></el-input>
+              </el-form-item>
             </el-form>
           </el-col>
         </el-row>
@@ -83,10 +86,14 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
+import { AdminSystemStore } from '@/store/private/StoreAdminIstrators';
 import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
-import { AdminSystemStore } from '@/store/private/AdminIstrators';
-import { webGetAdminMenuAdd, webGetAdminMenuUpdate, webGetAdminMenuDelte } from '@/api/index';
+import { 
+  webGetAdminMenuAdd, 
+  webGetAdminMenuUpdate, 
+  webGetAdminMenuDelte 
+} from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
 import ElTree from "@/components/ElTree/index.vue";
@@ -94,7 +101,7 @@ import ElTree from "@/components/ElTree/index.vue";
 type IndexData = {
   page: number;
   pageSize: number;
-  menuId: string
+  title: string;
 };
 type FormData = {
   menuId: number | string;
@@ -102,51 +109,55 @@ type FormData = {
   title: string;
   router: string;
   titleEn: string;
-  type: string
+  type: string;
+  sort: string;
 };
 
 @Component({
+  name: "RouteList",
   components: {
     ElTree,
     ElTable
   },
 })
-export default class routes extends Vue {
+export default class RouteList extends Vue {
+  private vm = window['vm'];
+
   // 分页器
   private param: IndexData = {
     page: 1,
     pageSize: 12,
-    menuId: ''
+    title: ''
   };
   private totalCount: number = 1;  // 表格总数
-  private tableData: Array<object> = [];  // 表格数据
-  private tableColumnData: Array<object> = [
+  private tableData: object = [];  // 表格数据
+  private tableColumnData: object = [
     {
       type: 'selection',
     },
     {
       prop: 'menuId',
-      label: window['vm'].$t('Srte.路由ID'),
+      label: this.vm.$t('Srte.路由ID'),
       width: '100',
     },
     {
       prop: 'title',
-      label: window['vm'].$t('Srte.路由名称'),
+      label: this.vm.$t('Srte.路由名称'),
       width: 'auto',
     },
     {
       prop: 'router',
-      label: window['vm'].$t('Srte.路由地址'),
+      label: this.vm.$t('Srte.路由地址'),
       width: 'auto',
     },
     {
       prop: 'icon',
-      label: window['vm'].$t('Srte.路由图标名称'),
+      label: this.vm.$t('Srte.路由图标名称'),
       width: 'auto',
     },
     {
       prop: 'createTime',
-      label: window['vm'].$t('Srte.创建时间'),
+      label: this.vm.$t('Srte.创建时间'),
       width: '170',
     },
     {
@@ -163,37 +174,38 @@ export default class routes extends Vue {
     title: '',
     router: '',
     type: '1',
-    titleEn: ''
+    titleEn: '',
+    sort: ''
   };
 
   private rules = {
     icon: [
-      { required: true, message: window['vm'].$t('Srte.请输入路由图标名称'), trigger: 'blur' },
+      { required: true, message: this.vm.$t('Srte.请输入路由图标名称'), trigger: 'blur' },
       {
         required: true,
         pattern: /^\S*$/,
-        message: window['vm'].$t('Srte.请勿输入空字符'),
+        message: this.vm.$t('Srte.请勿输入空字符'),
         trigger: 'blur'
       },
     ],
     title: [
-      { required: true, message: window['vm'].$t('Srte.请输入路由名称'), trigger: 'blur' },
+      { required: true, message: this.vm.$t('Srte.请输入路由名称'), trigger: 'blur' },
       {
         required: true,
         pattern: /^\S*$/,
-        message: window['vm'].$t('Srte.请勿输入空字符'),
+        message: this.vm.$t('Srte.请勿输入空字符'),
         trigger: 'blur'
       },
     ],
     titleEn: [
-      { required: true, message: window['vm'].$t('Srte.请输入英文路由名称'), trigger: 'blur' },
+      { required: true, message: this.vm.$t('Srte.请输入英文路由名称'), trigger: 'blur' },
     ],
     router: [
-      { required: true, message: window['vm'].$t('Srte.请输入路由地址'), trigger: 'blur' },
+      { required: true, message: this.vm.$t('Srte.请输入路由地址'), trigger: 'blur' },
       {
         required: true,
         pattern: /^\S*$/,
-        message: window['vm'].$t('Srte.请勿输入空字符'),
+        message: this.vm.$t('Srte.请勿输入空字符'),
         trigger: 'blur'
       },
     ],
@@ -206,12 +218,12 @@ export default class routes extends Vue {
 
   // 监听数据列表
   @Watch('getAdminSystemMenuRightList', { deep: true })
-  userPageChange(newValue: any) {
+  userPageChange(newValue) {
     let list = newValue.data.list;
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
-        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
+        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime)
       });
       this.tableData = obj;
     } else {this.tableData = list;}
@@ -234,18 +246,16 @@ export default class routes extends Vue {
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.resetFields();
   }
-
-  // 搜索
   private resetSearchForm(formName:string) {
     const _that = this;
     Object.keys(_that.param).forEach(key => {
-      if(key == 'menuId') _that.param[key] = '';
+      if(key == 'title') _that.param[key] = '';
     });
     AdminSystemStore.storeActionAdminMenuRightList(this.param);
     // console.log(this.param);
   }
 
-  private submitSearchForm(formName) {
+  private submitSearchForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     ref.validate((valid) => {
@@ -298,11 +308,11 @@ export default class routes extends Vue {
   // 删除
   private handleOpenClick(row) {
     const _that = this;
-    const text1 = window['vm'].$t('Srte.此操作将删除该条信息');
-    const text2 = window['vm'].$t('Srte.提示');
+    const text1 = this.vm.$t('Srte.此操作将删除该条信息');
+    const text2 = this.vm.$t('Srte.提示');
     _that.$confirm(text1, text2, {
-      confirmButtonText: window['vm'].$t('Srte.确定'),
-      cancelButtonText: window['vm'].$t('Srte.取消'),
+      confirmButtonText: this.vm.$t('Srte.确定'),
+      cancelButtonText: this.vm.$t('Srte.取消'),
       type: 'warning',
     }).then(() => {
       _that.handleRowDeleteClick(row)
@@ -315,7 +325,7 @@ export default class routes extends Vue {
     })
     // console.log(res);
     
-    const text = window['vm'].$t('Srte.删除成功');
+    const text = this.vm.$t('Srte.删除成功');
     MessageTips(res, true, true, text, item => {
       this.onRefreshClick();
     }, null);
@@ -329,7 +339,7 @@ export default class routes extends Vue {
     // console.log(data);
   }
 
-  private submitForm(formName) {
+  private submitForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     this.loadingType = true;
@@ -347,7 +357,7 @@ export default class routes extends Vue {
   // 确认提交
   private async onDialogFormClick() {
     let dialogType = this.dialogFormType;
-    let { menuId, router, type, title, icon, titleEn } = this.formRouteData;
+    let { menuId, router, type, title, icon, titleEn, sort } = this.formRouteData;
     if(dialogType) {
       let res = await webGetAdminMenuAdd({
         'parentId': menuId,
@@ -355,10 +365,11 @@ export default class routes extends Vue {
         'type': type,
         'title': title,
         'icon': icon,
-        'titleEn': titleEn
+        'titleEn': titleEn,
+        'sort': sort
       });
       // console.log(res);
-      const text = window['vm'].$t('Srte.添加成功');
+      const text = this.vm.$t('Srte.添加成功');
       MessageTips(res, true, true, text, item => {
         this.dialogFormVisible = false;
         this.loadingType = false;
@@ -374,9 +385,10 @@ export default class routes extends Vue {
         'type': type,
         'title': title,
         'icon': icon,
-        'titleEn': titleEn
+        'titleEn': titleEn,
+        'sort': sort
       });
-      const text = window['vm'].$t('Srte.修改成功');
+      const text = this.vm.$t('Srte.修改成功');
       MessageTips(res, true, true, text, item => {
         this.dialogFormVisible = false;
         this.loadingType = false;
@@ -390,7 +402,7 @@ export default class routes extends Vue {
 </script>
 
 <style lang='scss' scoped>
-.container {
+.pages {
   padding: 15px;
   min-height: 700px;
 }

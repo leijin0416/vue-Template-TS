@@ -2,19 +2,19 @@
  * 
  *  用户列表模块
  */
-import zhUser from './User/userAudit.json';
-import userList from './User/userList.json';
-import userRegister from './User/userRegister.json';
+import userList from './User/index.json';
 
-
-// 全局模块 首页/登录
-import home from './Home/index.json';
-// 资讯模块 公告/轮播
-import noticeBannerList from './Notice/index.json';
 // 管理员模块
 import administrators from './System/administrators.json';
 import roleList from './System/roleList.json';
 import route from './System/route.json';
+
+// 全局模块 首页/登录
+import home from './Home/index.json';
+// 系统日志模块
+import editionList from './Setup/editionList.json';
+// 资讯模块 公告/轮播
+import bannerList from './NoticeBanner/bannerList.json';
 
 export default {
   m: {
@@ -23,9 +23,6 @@ export default {
   },
   Hlin: {
     ...home,
-  },
-  Iblt: {
-    ...noticeBannerList,
   },
   Sats: {
     ...administrators,
@@ -36,11 +33,13 @@ export default {
   Srte: {
     ...route,
   },
-  Ult: {
+  Aelt: {
+    ...editionList,
+  },
+  Iblt: {
+    ...bannerList,
+  },
+  User: {
     ...userList
   },
-  Ureg: {
-    ...userRegister
-  },
-  ...zhUser
 }

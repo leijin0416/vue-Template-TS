@@ -1,21 +1,19 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators'
 import store from '../index'
-import {  webGetAdminUserNoticeList, webGetAdminUserBannerList } from "@/api/index"
+import { 
+  webGetAdminUserNoticeList, 
+  webGetAdminUserBannerList 
+} from "@/api/index"
 
-// 暴露接口
-export interface ResponseData {
-  code?: number;
-  data?: any;
-  message?: string;
-}
-
+//暴露接口
 export interface IterInformationListState {
-  informationNoticeList: ResponseData;
-  informationBannerList: ResponseData;
+  informationNoticeList: object;
+  informationBannerList: object;
 }
-
-function returnSelf<T extends ResponseData>(sth: T): T {
-  return sth
+export interface ResponseData {
+  code: number;
+  data?: any;
+  message: string;
 }
 
 //这里配置仓库的一些基础配置
@@ -25,11 +23,9 @@ function returnSelf<T extends ResponseData>(sth: T): T {
   store
 })
 export default class InformationList extends VuexModule implements IterInformationListState {
-  /** 断言类型（ts的另外一种断言是as 关键字）
-   *  强制类型转换, 尖括号内是泛型(参数类型化),在文中是"断言类型"，<类型>值
-   */
-  public informationNoticeList: ResponseData = {};
-  public informationBannerList: ResponseData = {};
+  // <类型>值
+  informationNoticeList = <ResponseData>{};
+  informationBannerList = <ResponseData>{};
 
   // 使用get修饰，代替了以前的getters
   get getInformationNoticeList() {
@@ -57,7 +53,6 @@ export default class InformationList extends VuexModule implements IterInformati
     } else console.log(res);
     // commit('SET_MutationAdminPageList', data)
   }
-
   
   @Mutation
   private SET_MutationInformationNoticeList(item: ResponseData) {
@@ -68,6 +63,7 @@ export default class InformationList extends VuexModule implements IterInformati
     this.informationBannerList = item;
     // sessionData('set', 'HasSessionToken', item);
   }
+
   
 }
 //暴露仓库

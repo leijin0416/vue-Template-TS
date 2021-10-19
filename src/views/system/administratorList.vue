@@ -1,11 +1,11 @@
 <template>
   <!-- 管理员列表 -->
-  <div class="container">
+  <div class="pages">
     <el-row>
       <el-col :span="24">
-        <div class="v-button-box">
+        <div class="v-refresh-box">
           <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="v-btn" @click="onAddsClick">{{ $t('Sats.添加管理员账号') }}</el-button>
-          <el-button size="small" icon="el-icon-download" class="v-btn" @click="onExportClick">{{ $t('Hlin.导出Excel') }}</el-button>
+          <el-button size="small" icon="el-icon-download" class="v-btn" @click="onExportClick">{{ $t('Sats.导出Excel') }}</el-button>
           <el-button type="info" size="small" icon="el-icon-refresh" class="v-btn" @click="onRefreshClick" circle />
         </div>
         <ElTable :tableData="tableData"
@@ -13,7 +13,7 @@
           :totalCount="totalCount"
           @handleSelectionChange="handleSelectionChange"
           @handleCurrentChange="handleCurrentChange">
-          <el-table-column slot="operateTagAdminId" :label="$t('Sats.账号状态')" align="center" width="180">
+          <el-table-column slot="operateTagAdminId" :label="$t('Sats.账号状态')" align="center" width="auto">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status === 1 ? true : false"
@@ -23,7 +23,7 @@
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column slot="operateTagRoleName" :label="$t('Sats.管理员角色名称')" width="150" align="center">
+          <el-table-column slot="operateTagRoleName" :label="$t('Sats.管理员角色名称')" width="auto" align="center">
             <template slot-scope="scope">
               <el-tag>{{scope.row.roleName ? scope.row.roleName : $t('Sats.暂无') }}</el-tag>
             </template>
@@ -87,11 +87,15 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
+import { AdminSystemStore } from '@/store/private/StoreAdminIstrators';
+import { UserStore } from '@/store/private/user';
 import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
-import { UserStore } from '@/store/private/user';
-import { AdminSystemStore } from '@/store/private/AdminIstrators';
-import { webGetAdminRegisterAdd, webGetAdminPageDisable, webGetAdminPageList } from '@/api/index';
+import { 
+  webGetAdminRegisterAdd, 
+  webGetAdminPageDisable, 
+  webGetAdminPageList 
+} from '@/api/index';
 
 import ElTable from "@/components/ElTable/index.vue";
 import ExportExcels from "@/components/ExportExcels/index.vue";
@@ -102,12 +106,15 @@ type IndexData = {
 };
 
 @Component({
+  name: "Administrators",
   components: {
     ElTable,
     ExportExcels
   },
 })
-export default class administrators extends Vue {
+export default class extends Vue {
+  private vm = window['vm'];
+
   // 分页器
   private param: IndexData = {
     page: 1,
@@ -121,30 +128,20 @@ export default class administrators extends Vue {
     },
     {
       prop: 'adminId',
-      label: window['vm'].$t('Sats.管理员ID'),
-      width: 'auto',
+      label: this.vm.$t('Sats.管理员ID'),
+      width: '200',
     },
     {
       prop: 'userName',
-      label: window['vm'].$t('Sats.管理员用户名'),
+      label: this.vm.$t('Sats.管理员用户名'),
       width: 'auto',
-    },
-    {
-      prop: 'password',
-      label: window['vm'].$t('Sats.密码'),
-      width: '320',
     },
     {slot: 'operateTagRoleName'},
     {slot: 'operateTagAdminId'},
     {
-      prop: 'createId',
-      label: window['vm'].$t('Sats.创建人ID'),
-      width: 'auto',
-    },
-    {
       prop: 'formatTime',
-      label: window['vm'].$t('Sats.创建时间'),
-      width: '180',
+      label: this.vm.$t('Sats.创建时间'),
+      width: '200',
     },
     {
       slot: 'operateButton', //内容slot
@@ -160,34 +157,34 @@ export default class administrators extends Vue {
     contractId: '',
     roleId: ''
   };
-  private optionsRoleIdData: object = [];  // 角色列表
+  private optionsRoleIdData = [];  // 角色列表
 
-  private excelsTableHeader: Array<string> = [ 'Aelt.管理员ID', 'Aelt.管理员用户名', ];  // 表格头
-  private excelsFilterVal: Array<string> = [ 'adminId', 'userName', ];   // 表格参数
-  private excelsName: string = '管理员列表';        // 表格名
+  private excelsTableHeader = [ '管理员ID', '管理员用户名', '管理员角色名称' ];  // 表格头
+  private excelsFilterVal = [ 'adminId', 'userName', 'roleName' ];   // 表格参数
+  private excelsName: string = 'Aelt.管理员列表';        // 表格名
 
   private rules = {
     userName: [
-      { required: true, message: window['vm'].$t('Sats.请输入管理员用户名'), trigger: 'blur' },
+      { required: true, message: this.vm.$t('Sats.请输入管理员用户名'), trigger: 'blur' },
       {
         required: true,
         pattern: /^\S*$/,
-        message: window['vm'].$t('Sats.请勿输入空字符'),
+        message: this.vm.$t('Sats.请勿输入空字符'),
         trigger: 'blur'
       },
     ],
     password: [
-      { required: true, message: window['vm'].$t('Sats.请输入登录密码'), trigger: 'blur' },
-      { min: 6, max: 18, message: window['vm'].$t('Sats.密码长度'), trigger: 'blur' },
+      { required: true, message: this.vm.$t('Sats.请输入登录密码'), trigger: 'blur' },
+      { min: 6, max: 18, message: this.vm.$t('Sats.密码长度'), trigger: 'blur' },
       {
         required: true,
         pattern: /^\S*$/,
-        message: window['vm'].$t('Sats.请勿输入空字符'),
+        message: this.vm.$t('Sats.请勿输入空字符'),
         trigger: 'blur'
       },
     ],
     roleId: [
-      { required: true, message: window['vm'].$t('Sats.请选择管理员用户角色'), trigger: 'change' },
+      { required: true, message: this.vm.$t('Sats.请选择管理员用户角色'), trigger: 'change' },
     ],
   };
 
@@ -207,15 +204,14 @@ export default class administrators extends Vue {
   // 监听数据列表
   @Watch('getAdminSystemMenuRoleList', { deep: true })
   getMenuRoleList(newValue) {
-    // console.log(newValue)
     let list = newValue.data.list;
     if(list.length > 0) {
       this.optionsRoleIdData = list;
     }
+    // console.log(newValue)
   };
   @Watch('getAdminSystemPageList', { deep: true })
   userPageChange(newValue) {
-    // console.log(newValue)
     let list = newValue.data.list;
     if(list.length > 0) {
       list.forEach( el => {
@@ -224,6 +220,7 @@ export default class administrators extends Vue {
     }
     this.tableData = list;
     this.totalCount = newValue.data.total;
+    // console.log(newValue)
   };
 
   // 生命周期
@@ -234,6 +231,11 @@ export default class administrators extends Vue {
 
   // 生命周期
   mounted () {};
+
+  // 导出
+  private onExportClick() {
+    UserStore.storeExportExcelsMap([{ids: 0}])
+  }
 
   // 重置
   private resetForm(formName: string) {
@@ -259,19 +261,7 @@ export default class administrators extends Vue {
     AdminSystemStore.storeActionAdminPageList(this.param);
   }
 
-  /**
-   * @description:  弹窗导出
-   */
-  private onExportClick() {
-    UserStore.storeExportExcelsMap([{ids: 0}])
-  }
-
-  /**
-   * @description:  导出
-   * @param {string} page      页码
-   * @param {string} pageSize  条数
-   * @return {*}
-   */
+  // 导出
   private async getExportExcelInput(page, pageSize) {
     let res = await webGetAdminPageList({
       'page': page,
@@ -302,11 +292,11 @@ export default class administrators extends Vue {
   // 表格Switch操作 确认框
   private handleOpenClick(row, id) {
     const _that = this;
-    const text1 = window['vm'].$t('Sats.此操作将执行重要信息');
-    const text2 = window['vm'].$t('Sats.提示');
+    const text1 = this.vm.$t('Sats.此操作将执行重要信息');
+    const text2 = this.vm.$t('Sats.提示');
     _that.$confirm(text1, text2, {
-      confirmButtonText: window['vm'].$t('Sats.确定'),
-      cancelButtonText: window['vm'].$t('Sats.取消'),
+      confirmButtonText: this.vm.$t('Sats.确定'),
+      cancelButtonText: this.vm.$t('Sats.取消'),
       type: 'warning',
     }).then(() => {
       _that.onSwitchChange(row)  // 用户状态
@@ -323,7 +313,7 @@ export default class administrators extends Vue {
       // console.log(params);
       
       let res = await webGetAdminPageDisable(params)
-      const text = window['vm'].$t('Sats.激活成功');
+      const text = this.vm.$t('Sats.激活成功');
       MessageTips(res, true, true, text, item => {
         AdminSystemStore.storeActionAdminPageList(this.param);
       }, null);
@@ -335,7 +325,7 @@ export default class administrators extends Vue {
       // console.log(params);
       
       let res = await webGetAdminPageDisable(params)
-      const text = window['vm'].$t('Sats.禁用成功');
+      const text = this.vm.$t('Sats.禁用成功');
       MessageTips(res, true, true, text, item => {
         AdminSystemStore.storeActionAdminPageList(this.param);
       }, null);
@@ -343,7 +333,7 @@ export default class administrators extends Vue {
     }
   }
 
-  private submitForm(formName) {
+  private submitForm(formName: string) {
     let ref: any = this.$refs[formName]; // 类型断言的用，定义一个变量等价ref
     this.loadingType = true;
     ref.validate((valid) => {
@@ -370,7 +360,7 @@ export default class administrators extends Vue {
       })
       // console.log(res);
       
-      const text = window['vm'].$t('Sats.添加成功');
+      const text = this.vm.$t('Sats.添加成功');
       MessageTips(res, true, true, text, item => {
         this.loadingType = false;
         this.onRefreshClick();
@@ -392,7 +382,7 @@ export default class administrators extends Vue {
   min-width: 80px;
   text-align: center;
 }
-.container {
+.pages {
   min-height: 800px;
   /deep/.el-switch__label {color: #909399;}
   /deep/.el-switch__label.is-active {

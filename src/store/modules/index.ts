@@ -18,9 +18,7 @@ const getters: GetterTree<IndexState, any> = {
 };
 
 // 更新state
-const mutations: MutationTree<IndexState> = {
-  // 更新state都用该方法
-};
+const mutations: MutationTree<IndexState> = {};
 
 const actions: ActionTree<IndexState, any> = {};
 

@@ -2,26 +2,32 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { Message } from 'element-ui';
 import { sessionData } from '@/filters/storage';
 
-import { RSAEncryptKey } from './JSEncrypt';  // 加密
-import { getRealJsonData } from '@/assets/js/jsonData'; // 格式化返回数据
+import CryptoJS from './cryptoJS';                       // 加密
+import { getRealJsonData } from '@/assets/js/jsonData';  // 格式化返回数据
 
+/**
+ * @description: IP信息
+ * @param {*} "http://185.251.248.xxx"
+ * @return {*}
+ */
 let baseUrl = '';
 switch (process.env.NODE_ENV) {
   case "development":
-    baseUrl = "http://192.168.1.xxx:10086"
+    baseUrl = "http://185.251.248.xxx"
     break
   case "production":
-    baseUrl = "http://185.251.248.xxx:10086"
+    baseUrl = "https://xxxxxxx.com"
     break
 }
+
 /**
- *  const VUE_APP_URL = process.env.VUE_APP_URL;
- *  axiosConfig.headers.AuthType = 'WEB';
- *  超时重新请求配置 230
+ * @description: 请求配置
+ * @param {*} const VUE_APP_URL = process.env.VUE_APP_URL;
+ * @return {*}
  */
 const axiosConfig: AxiosRequestConfig = {
   baseURL: baseUrl,
-  timeout: 30 * 1000,
+  timeout: 30 * 1000, 
   withCredentials: true,
 };
 
@@ -29,33 +35,35 @@ const axiosConfig: AxiosRequestConfig = {
 const service = axios.create(axiosConfig);
 
 /**
- *  1、在 request 拦截器实现, 传给后台的
+ * @description: request 拦截器实现, 传给后台的
+ * config.data.hash = md5((new Date()).valueOf() + config.data.func);  // Encrypt加密  
+ * config.data = { data: CryptoJS.ECBEncrypt(JSON.stringify(config.data))  // 文本数据交换格式 }
  */
-service.interceptors.request.use( config => {
+service.interceptors.request.use(
+  config => {
     const token = sessionData('get', 'HasSessionToken', '');
-    const key = sessionData('get', 'HasSessionAuthKey', '');
-    const langs = sessionStorage.getItem('accessLocaleI18n');
-
-    token && (config.headers.Authorization = token)         // token
-    key && (config.headers['AuthKey'] = RSAEncryptKey(key)) // key
-    config.headers.AuthType = 'WEB';
+    // tslint:disable-next-line:no-unused-expression
+    token && (config.headers.Authorization = token);  // token
+    config.headers.AuthType = 'OPEN_ADMIN';
     config.headers['content-Type'] = "application/json;charset=utf-8";
-    config.headers['Accept-Language'] = langs || 'zh-CN';
-    
+    config.headers['Accept-Language'] = sessionStorage.getItem('accessLocaleI18n') || 'zh-CN';
 
-    return config;
+    // config.data = CryptoJS.RSAEncrypt(JSON.stringify(config.data))  // 文本数据交换格式
+    return config
 
   }, (err) => {
-    return Promise.reject(err);
+    return Promise.reject(err)
   }
-);
+)
 
 /**
- *  2、再在 response 拦截器实现, 拿后台返回的
+ * @description: response 拦截器实现, 拿后台返回的
+ * @param {*} getRealJsonData -去掉双引号，转化json格式
+ * @return {*}
  */
-service.interceptors.response.use( response => {
-    // if(response.data !== null) response.data = CryptoJS.RSADecrypt(response.data);
-    // console.log(CryptoJS.RSADecrypt(response.data));
+service.interceptors.response.use(
+  response => {
+    // if(response.data !== null) response.data = CryptoJS.RSADecrypt(response.data); // Decrypt解密
     
     if (response.data.code === 401120) {
       sessionData('clean', 'HasSessionToken', '');
@@ -64,7 +72,6 @@ service.interceptors.response.use( response => {
       sessionData('clean', 'HasSessionMenuItemId', '');
       sessionData('clean', 'HasSessionMenuItem', '');
       sessionData('clean', 'HasSessionTagsMap', '');
-      sessionData('clean', 'HasSessionAuthKey', '');
 
       Message.error({
         message: window['vm'].$t('Hlin.您的登录信息已失效'),
@@ -75,8 +82,8 @@ service.interceptors.response.use( response => {
       })
     }
 
-    return response;
-
+    return response
+    
   }, (error) => {
     if (error && error.response) {
       const RESPONSE_CODE = {
@@ -95,13 +102,11 @@ service.interceptors.response.use( response => {
         message: error.message,
         type: 'error',
         showClose: true,
-        onClose: () => {
-          console.log(error);
-        }
+        onClose: () => {}
       });
     }
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 
-export default service;
+export default service

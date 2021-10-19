@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch, Emit, Prop } from 'vue-property-decorator';
-import { AdminSystemStore } from '@/store/private/AdminIstrators';
+import { AdminSystemStore } from '@/store/private/StoreAdminIstrators';
 import { sessionData } from '@/filters/storage';
 
 import { childrenRouterMap } from '@/mock/childrenRouter';

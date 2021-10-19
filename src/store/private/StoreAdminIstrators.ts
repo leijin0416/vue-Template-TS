@@ -6,15 +6,18 @@ import {
   webGetAdminMenuRightList, 
   webGetAdminMenuRoleList, 
   webGetAdminPageSysJournalList, 
+  webGetAdminEditionList
 } from "@/api/index"
 
-//暴露接口
+// 暴露接口
 export interface IterAdminSystemListState {
   adminPageList: any;
   adminMenuTreeList: any;
   adminMenuRightList: any;
   adminMenuRoleList: any;
   adminRoleChildrenMenuId: any;
+  adminSysJournalList: object;
+  adminSysEditionList: object
 }
 
 export interface ResponseData {
@@ -23,21 +26,20 @@ export interface ResponseData {
   message: string;
 }
 
-//这里配置仓库的一些基础配置
 @Module({
   name: "adminSystemList",
   dynamic: true,
   store
 })
 export default class AdminSystemList extends VuexModule implements IterAdminSystemListState {
-  // 这里是仓库所具有的一些属性
   adminPageList = <any>{};
   adminMenuTreeList = <any>{};
   adminMenuRightList = <any>{};
   adminMenuRoleList = <any>{};
   adminRoleChildrenMenuId = <any>{};
+  adminSysJournalList = <ResponseData>{};
+  adminSysEditionList = <ResponseData>{};
 
-  // 使用get修饰，代替了以前的getters
   get getAdminSystemPageList() {
     return this.adminPageList
   }
@@ -54,6 +56,12 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     return this.adminRoleChildrenMenuId
   }
   
+  get getAdminSysJournalList() {
+    return this.adminSysJournalList
+  }
+  get getAdminSysEditionList() {
+    return this.adminSysEditionList
+  }
 
   @Action
   public async storeActionAdminPageList(item: object) {  // 管理员列表
@@ -72,6 +80,7 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     if (res.data.code === 200) {
       let data = res.data
       this.SET_MutationAdminMenuTreeList(data)
+      // console.log(res);
       
     } else console.log(res);
   }
@@ -81,6 +90,7 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     if (res.data.code === 200) {
       let data = res.data
       this.SET_MutationAdminMenuRightList(data)
+      // console.log(res);
       
     } else console.log(res);
   }
@@ -90,12 +100,36 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     if (res.data.code === 200) {
       let data = res.data
       this.SET_MutationAdminMenuRoleList(data)
+      // console.log(res);
       
     } else console.log(res);
+    // commit('SET_MutationAdminPageList', data)
   }
   @Action
   public async webGetAdminRoleChildrenMenuId(item: object) {  // 角色列表-勾选子路由ID
     this.SET_MutationAdminRoleChildrenMenuId(item)
+  }
+  
+  @Action
+  public async storeActionAdminSysJournalList(item: object) {  // 系统日志列表
+    let res = await webGetAdminPageSysJournalList(item)
+    if (res.data.code === 200) {
+      let data = res.data
+      this.SET_MutationAdminSysJournalList(data)
+      // console.log(res);
+      
+    } else console.log(res);
+    // commit('SET_MutationAdminPageList', data)
+  }
+  @Action
+  public async storeActionAdminSysEditionList(item: object) {  // 版本升级列表
+    let res = await webGetAdminEditionList(item)
+    if (res.data.code === 200) {
+      let data = res.data
+      this.SET_MutationAdminSysEditionList(data)
+      // console.log(res);
+      
+    } else console.log(res);
   }
 
   @Mutation
@@ -118,6 +152,16 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
   @Mutation
   private SET_MutationAdminRoleChildrenMenuId(item: any) {
     this.adminRoleChildrenMenuId = item;
+  }
+
+  @Mutation
+  private SET_MutationAdminSysJournalList(item: ResponseData) {
+    this.adminSysJournalList = item;
+  }
+  @Mutation
+  private SET_MutationAdminSysEditionList(item: ResponseData) {
+    this.adminSysEditionList = item;
+    // sessionData('set', 'HasSessionToken', item);
   }
   
 }

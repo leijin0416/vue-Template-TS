@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { UserListStore } from '@/store/private/PageUserList';
+import { UserListStore } from '@/store/common/StorePageUsersList';
 
 interface DefaultProps {
   children: any;

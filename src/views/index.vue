@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="v-header-main reveal-top">
+  <div class="pages">
+    <div class="v-header-main reveal-top" v-if="startType === 0">
       <el-row>
         <el-col :span="6">
           <div class="v-register-box">
@@ -93,7 +93,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="v-echarts-mian reveal-bottom">
+    <div class="v-echarts-mian reveal-bottom" v-if="startType === 0">
       <h2 class="v-h2"><i class="el-icon-data-line" style="color: #777"></i> {{ $t('Hlin.平台注册折线图') }}</h2>
       <div class="v-tab-box">
         <el-tabs v-model="activeTabsName" @tab-click="handleTabsClick">
@@ -109,35 +109,39 @@
         </el-tabs>
       </div>
     </div>
-    <!-- <div class="v-img-box">
+    <div class="v-img-box" v-else>
       <img src="@/assets/img/icon-welcome.jpg" alt="home.png" class="v-img reveal-top" >
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import scrollReveal from 'scrollreveal';
 import countTo from 'vue-count-to';
-
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { sessionData } from '@/filters/storage';
-import { TreeForeach, scrollRevealEffect } from '@/filters/common';
 import { UserStore } from '@/store/private/user';
-import { webGetAdminUserMemberStatistics, webGetAdminUserRegistrationsStatistics, webGetAdminUserRegistrationsStatisticsList } from "@/api/index";
-
+import { scrollRevealEffect } from '@/filters/common';
+import { sessionData } from '@/filters/storage';
+import { 
+  webGetAdminUserMemberStatistics,
+  webGetAdminUserRegistrationsStatistics,
+  webGetAdminUserRegistrationsStatisticsList,
+} from "@/api/index";
 
 import Echarts from "@/components/Echarts/index.vue";
-import { log } from 'console';
 
 @Component({
+  name: "AdminHome",
   components: {
     Echarts,
     countTo
   },
 })
-export default class UserList extends Vue {
+export default class extends Vue {
   // 动画
   private scrollReveal = scrollReveal();
+  private startType: number = 1;        // 0 表格数据  1 图片
+
   private userInfoStatistic: object = {
     sameDayRegistrationNums: 0,
     registerNums: 0,
@@ -152,15 +156,12 @@ export default class UserList extends Vue {
 
   // 生命周期
   created() {
-    this.initUserAssetsList();
-    this.initUserInfoStatistics();
-    this.initUserRegistrationStatistics();
   };
 
   // 生命周期
   mounted () {
-    let revealTop = scrollRevealEffect(400, 'top', false, false, '300px');
-    let revealBottom = scrollRevealEffect(400, 'bottom', false, false, '300px');
+    let revealTop = scrollRevealEffect(400, 'top', false, false, '300px', 0);
+    let revealBottom = scrollRevealEffect(400, 'bottom', false, false, '300px', 0);
     this.scrollReveal.reveal('.reveal-top', revealTop);
     this.scrollReveal.reveal('.reveal-bottom', revealBottom);
   };
@@ -207,11 +208,10 @@ export default class UserList extends Vue {
   private handleTabsClick() {}
 }
 </script>
-
 <style lang="scss" scoped>
-.container {
+.pages {
   position: relative;
-  min-height: 900px;
+  min-height: 800px;
   background-color: #fff;
   .v-header-main {
     box-sizing: border-box;
