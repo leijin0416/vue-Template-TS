@@ -106,7 +106,7 @@ type IndexData = {
 };
 
 @Component({
-  name: "Administrators",
+  name: "UserPowerList",
   components: {
     ElTable,
     ExportExcels

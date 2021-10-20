@@ -114,13 +114,13 @@ type FormData = {
 };
 
 @Component({
-  name: "RouteList",
+  name: "RouteAdd",
   components: {
     ElTree,
     ElTable
   },
 })
-export default class RouteList extends Vue {
+export default class extends Vue {
   private vm = window['vm'];
 
   // 分页器

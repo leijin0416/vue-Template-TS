@@ -91,7 +91,7 @@ type IndexDialogData = {
 };
 
 @Component({
-  name: "RoleList",
+  name: "UserRoleList",
   components: {
     ElTree,
     ElTable

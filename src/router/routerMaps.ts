@@ -28,7 +28,6 @@ export const constantRouterMaps = [
   },
 ]
 
-
 /**
  * @description: 动态挂载路由 1
  * @return {*}
@@ -60,20 +59,20 @@ export const subMenuRouters: any = [
 export const dynamicRouter: any = [
   {
     path: '/system/route',
-    name: 'systemRoute',
-    component: getComponentMMin('System', 'route'),
+    name: 'RouteAdd',
+    component: getComponentMMin('System', 'routeAdd'),
     meta: { title: '路由配置列表', permission: [] }
   },
   {
     path: '/system/role',
-    name: 'systemList',
-    component: getComponentMMin('System', 'roleList'),
+    name: 'UserRoleList',
+    component: getComponentMMin('System', 'userRoleList'),
     meta: { title: '用户角色列表', permission: [] }
   },
   {
     path: '/system/user',
-    name: 'administratorList',
-    component: getComponentMMin('System', 'administratorList'),
+    name: 'UserPowerList',
+    component: getComponentMMin('System', 'userPowerList'),
     meta: { title: '管理员列表', permission: [] }
   },
   {
