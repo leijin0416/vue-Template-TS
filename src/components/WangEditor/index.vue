@@ -28,7 +28,7 @@ export default class WangEditors extends Vue {
   private editor: any = null;      // ID
   private infoContent: any = null  // 内容值
 
-  private uploadImageServer: string = 'http://185.251.248.xxxx:10086/api/ping-shop-web/app/uploadFile';
+  private uploadImageServer: string = 'http://185.251.248.xxxx/api/ping-shop-web/app/uploadFile';  // :10086
   private uploadImageDevs: string = 'http://otp.cdinfotech.top/file/upload_images';
   
 
