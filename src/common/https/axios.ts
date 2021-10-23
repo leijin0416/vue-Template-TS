@@ -29,7 +29,7 @@ const axiosConfig: AxiosRequestConfig = {
   baseURL: baseUrl,
   timeout: 30 * 1000, 
   withCredentials: true,
-};
+}
 
 // 修改axios配置信息
 const service = axios.create(axiosConfig);
@@ -103,7 +103,7 @@ service.interceptors.response.use(
         type: 'error',
         showClose: true,
         onClose: () => {}
-      });
+      })
     }
     return Promise.reject(error)
   }

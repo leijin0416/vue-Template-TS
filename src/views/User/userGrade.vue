@@ -1,7 +1,7 @@
 <template>
   <div class="pages">
     <el-row>
-      <el-col :span="24">
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <ElTable :tableData="tableData"
           :tableColumnData="tableColumnData"
           :totalCount="totalCount"
@@ -31,7 +31,7 @@
 <script lang="ts">
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
 import { UserListStore } from '@/store/common/StorePageUsersList';
-import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
+import { FormatCurrentTime, deepCloneData } from '@/filters/common';
 import { MessageTips } from '@/filters/MessageTips';
 import { } from '@/api/index';
 
@@ -57,8 +57,8 @@ export default class extends Vue {
     pageSize: 12,
   };
   private totalCount: number = 1;  // 表格总数
-  private tableData: object = [];  // 表格数据
-  private tableColumnData: object = [
+  private tableData: any = [];  // 表格数据
+  private tableColumnData = [
     {
       type: 'selection',
     },
@@ -92,20 +92,19 @@ export default class extends Vue {
 
   // 获取数据
   get getUserPageList() {
-    if(UserListStore.getUserPageList.code === 200) {
-      return UserListStore.getUserPageList
-    }
+    const data = UserListStore.getUserPageList;
+    if(data.code === 200) return data
   };
 
   // 监听数据列表
   @Watch('getUserPageList', { deep: true })
-  userPageChange(newValue) {
+  getWatchUserPageList(newValue) {
     // console.log(newValue)
-    let list = newValue.data.list;
+    const list = newValue.data.list;
     if(list.length > 0) {
       let obj = deepCloneData(list);
       obj.forEach( el => {
-        el.createTime = FTisFormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
+        el.createTime = FormatCurrentTime("YYYY-mm-dd HH:MM:SS", el.createTime);
       });
       this.tableData = obj;
     } else {this.tableData = list;}
