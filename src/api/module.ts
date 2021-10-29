@@ -5,7 +5,7 @@
 import service from '@/common/https/httpService'
 
 // 登录
-export const webGetAdminUserLogin = params => service.post('/back/ping-admin/login', params);
+export const webGetAdminUserLogin = params => service.post('/whale-swim/api/auth-admin/login', params);
 // 获取公钥
 export const webGetAdminRSAAuthKey = params => service.post('/api/ping-open/getAuthKey', params);
 
@@ -17,55 +17,55 @@ export const webGetAdminUserRegistrationsStatistics = params => service.post('/a
 export const webGetAdminUserRegistrationsStatisticsList = params => service.post('/api/ping-admin/homeAssetsRecordStatistics', params);
 
 // 权限ID查询菜单
-export const webGetAdminUserFindRoleById = params => service.post('/back/ping-auth-menu/findAuthMenuByAdminId', params);
+export const webGetAdminUserFindRoleById = params => service.post('/whale-swim/api/auth-menu/findAuthMenuByAdminId', params);
 // 创建管理员
-export const webGetAdminRegisterAdd = params => service.post('/back/ping-admin/register', params);
+export const webGetAdminRegisterAdd = params => service.post('/whale-swim/api/auth-admin/register', params);
 // 管理员列表
-export const webGetAdminPageList = params => service.post('/back/ping-admin/pageList', params);
+export const webGetAdminPageList = params => service.post('/whale-swim/api/auth-admin/pageList', params);
 // 更改管理员账号状态
-export const webGetAdminPageDisable = params => service.post('/back/ping-admin/disable', params);
+export const webGetAdminPageDisable = params => service.post('/whale-swim/api/auth-admin/disable', params);
 
 // 添加路由
-export const webGetAdminMenuAdd = params => service.post('/back/ping-auth-menu/addAuthMenu', params);
+export const webGetAdminMenuAdd = params => service.post('/whale-swim/api/auth-menu/addAuthMenu', params);
 // 修改路由
-export const webGetAdminMenuUpdate = params => service.post('/back/ping-auth-menu/updateAuthMenu', params);
+export const webGetAdminMenuUpdate = params => service.post('/whale-swim/api/auth-menu/updateAuthMenu', params);
 // 删除路由
-export const webGetAdminMenuDelte = params => service.post('/back/ping-auth-menu/delAuthMenu', params);
+export const webGetAdminMenuDelte = params => service.post('/whale-swim/api/auth-menu/delAuthMenu', params);
 // 路由树列表
-export const webGetAdminMenuTreeList = params => service.post('/back/ping-auth-menu/findMenuTree', params);
+export const webGetAdminMenuTreeList = params => service.post('/whale-swim/api/auth-menu/findMenuTree', params);
 // 路由列表
-export const webGetAdminMenuRightList = params => service.post('/back/ping-auth-menu/findAuthMenus', params);
+export const webGetAdminMenuRightList = params => service.post('/whale-swim/api/auth-menu/findAuthMenus', params);
 
 // 添加角色
-export const webGetAdminRoleAdd = params => service.post('/back/ping-auth-menu/addAuthRole', params);
+export const webGetAdminRoleAdd = params => service.post('/whale-swim/api/auth-menu/addAuthRole', params);
 // 修改角色
-export const webGetAdminRoleUpdate = params => service.post('/back/ping-auth-menu/updateAuthRole', params);
+export const webGetAdminRoleUpdate = params => service.post('/whale-swim/api/auth-menu/updateAuthRole', params);
 // 删除角色
-export const webGetAdminRoleDelte = params => service.post('/back/ping-auth-menu/delAuthRole', params);
+export const webGetAdminRoleDelte = params => service.post('/whale-swim/api/auth-menu/delAuthRole', params);
 // 角色列表
-export const webGetAdminMenuRoleList = params => service.post('/back/ping-auth-menu/findAuthRoleList', params);
+export const webGetAdminMenuRoleList = params => service.post('/whale-swim/api/auth-menu/findAuthRoleList', params);
 
 // 公告列表
-export const webGetAdminUserNoticeList = params => service.post('/api/ping-notice/list', params);
+export const webGetAdminUserNoticeList = params => service.post('/whale-swim/api/ping-notice/list', params);
 // 添加公告
-export const webGetAdminUserNoticeAdd = params => service.post('/api/ping-notice/add', params);
+export const webGetAdminUserNoticeAdd = params => service.post('/whale-swim/api/ping-notice/add', params);
 // 修改公告状态
-export const webGetAdminUserNoticeUpdateStatus = params => service.post('/api/ping-notice/updateStatus', params);
+export const webGetAdminUserNoticeUpdateStatus = params => service.post('/whale-swim/api/ping-notice/updateStatus', params);
 // 修改公告
-export const webGetAdminUserNoticeUpdate = params => service.post('/api/ping-notice/update', params);
+export const webGetAdminUserNoticeUpdate = params => service.post('/whale-swim/api/ping-notice/update', params);
 
 // 轮播图列表
-export const webGetAdminUserBannerList = params => service.post('/api/ping-banner/list', params);
+export const webGetAdminUserBannerList = params => service.post('/whale-swim/api/ping-banner/list', params);
 // 添加轮播图
-export const webGetAdminUserBannerAdd = params => service.post('/api/ping-banner/add', params);
+export const webGetAdminUserBannerAdd = params => service.post('/whale-swim/api/ping-banner/add', params);
 // 修改轮播图状态
-export const webGetAdminUserBannerUpdateStatus = params => service.post('/api/ping-banner/updateStatus', params);
+export const webGetAdminUserBannerUpdateStatus = params => service.post('/whale-swim/api/ping-banner/updateStatus', params);
 // 修改轮播图
-export const webGetAdminUserBannerUpdate = params => service.post('/api/ping-banner/update', params);
+export const webGetAdminUserBannerUpdate = params => service.post('/whale-swim/api/ping-banner/update', params);
 
 // 系统日志列表
-export const webGetAdminPageSysJournalList = params => service.post('/api/box-sys-log/pageSysLogList', params);
+export const webGetAdminPageSysJournalList = params => service.post('/whale-swim/api/box-sys-log/pageSysLogList', params);
 // 版本列表
-export const webGetAdminEditionList = params => service.post('/api/ping-version/list', params);
+export const webGetAdminEditionList = params => service.post('/whale-swim/api/ping-version/list', params);
 // 修改版本
-export const webGetAdminEditionUpdate = params => service.post('/api/ping-version/update', params);
+export const webGetAdminEditionUpdate = params => service.post('/whale-swim/api/ping-version/update', params);
