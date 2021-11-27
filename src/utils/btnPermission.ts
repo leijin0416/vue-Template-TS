@@ -3,7 +3,7 @@ import { sessionData } from '@/filters/storage';
 import { TreeForeach } from '@/filters/common';
 
 // 权限检查
-const hasPermission = (val, item) => {
+const hasPermission = (val: any, item: any) => {
   // console.log(item);
   // 当前按钮列表，用本地缓存存储
   // let btnPermissionList = JSON.parse(sessionStorage.getItem('btnPermission') as any);
@@ -15,11 +15,12 @@ const hasPermission = (val, item) => {
   let eglishPermission = btnPermissionList.map((v, i) => {
     return v
   })
-  // 全部显示
+  // 判断全部显示
   if(eglishPermission.includes('total')) return true
 
   // 是否在权限数组里面
   let status = eglishPermission.includes(val);
+
   return status
 };
 
@@ -31,13 +32,15 @@ Vue.directive('allow', {
     let treeData = JSON.parse(sessionRouterMap);  // 后台权限路由
 
     let route = vnode.context.$route;
-    let permission = [];
+    let permission: any = [];
 
     TreeForeach(treeData, tree => {
       if (tree.router === route.path) {
-        let data = tree.permission.split(",");
-        if(data.length > 0) permission = data;
-        else permission = tree.permission;
+        if(tree.permission) {
+          let data = tree.permission.split(",");
+          if(data.length > 0) permission = data;
+          else permission.push(tree.permission);
+        }  
       }
     });
     // console.log(vnode);
