@@ -1,12 +1,9 @@
 <template>
-  <!-- 图表数据 -->
-  <div class="v-echarts-main" id="echarts">
+  <div class="v-echarts-wrap" id="echarts">
     <!-- 饼状 -->
-    <div class="v-echarts-doughnut" id="myChartDoughnut" v-if="chartFoldCount === 1" ></div>
+    <div class="v-echarts-doughnut" id="myChartDoughnut" v-if="eChartCountId === 1" ></div>
     <!-- 折线 -->
-    <div class="v-echarts-fold" id="myChartFold" v-if="chartFoldCount === 0" ></div>
-    <div class="v-echarts-fold" id="myChartFold2" style="width:100%;" v-if="chartFoldCount === 2" ></div>
-    <div class="v-echarts-fold" id="myChartFold3" v-if="chartFoldCount === 3" ></div>
+    <div class="v-echarts-fold" id="myChartFold" v-if="eChartCountId === 0" ></div>
   </div>
 </template>
 
@@ -16,17 +13,27 @@ import { deepCloneData } from '@/filters/common';
 import { UserStore } from '@/store/private/user';
 
 @Component({
+  name: 'ECharts',
   components: {
   },
 })
-export default class myChart extends Vue {
-  @Prop({ default: 0 }) chartFoldCount!: number;  // 图表类型
+export default class extends Vue {
+  [x: string]: any; // ts报错
+  private vm = window['vm'];
 
-  [x: string]: any;
-  private screenWidth:number| string = '';
-  private xAxisDoughnutData:object = [];
-  private seriesFoldTimeData:object = [];
-  private seriesFoldData:object = [];
+  @Prop({ default: 0 }) eChartCountId!: number;  // 图表类型
+
+  private screenWidth: number| string = '';
+  private xAxisDoughnutData: any = [];
+  private initDatas = [
+    {dateTime: "11/23", registerNum: 5},
+    {dateTime: "11/24", registerNum: 8},
+    {dateTime: "11/25", registerNum: 4},
+    {dateTime: "11/26", registerNum: 6},
+    {dateTime: "11/27", registerNum: 5},
+    {dateTime: "11/28", registerNum: 9},
+    {dateTime: "11/29", registerNum: 8},
+  ]
 
   // 获取数据
   get getUserInfoStatisticsList() {
@@ -42,16 +49,6 @@ export default class myChart extends Vue {
       return UserStore.getUserRegistrationStatisticsList
     }
   };
-  get getUserRegistrationList1() {
-    if(UserStore.getUserRegistrationStatisticsList1.length > 0) {
-      return UserStore.getUserRegistrationStatisticsList1
-    }
-  };
-  get getUserRegistrationList2() {
-    if(UserStore.getUserRegistrationStatisticsList2.length > 0) {
-      return UserStore.getUserRegistrationStatisticsList2
-    }
-  };
 
   /**
    *  监听数据列表
@@ -60,15 +57,15 @@ export default class myChart extends Vue {
   userInfoStatisticsList(newValue: any) {
     if(newValue) {
       let list = newValue;
-      let text1 = window['vm'].$t('Hlin.激活人数');
-      let text2 = window['vm'].$t('Hlin.实名认证人数');
-      let text3 = window['vm'].$t('Hlin.行为限制人数');
+      let text1 = this.vm.$t('Hlin.激活');
+      let text2 = this.vm.$t('Hlin.实名认证');
+      let text3 = this.vm.$t('Hlin.行为限制');
       let doughnutData = [
         { value: list.activeNums, name: text1 },
         { value: list.kycNums, name: text2 },
         { value: list.limitNums, name: text3 },
       ]
-      if(this.chartFoldCount === 1) {
+      if(this.eChartCountId === 1) {
         this.xAxisDoughnutData = doughnutData;
         this.initDoughnutChart();
       }
@@ -80,29 +77,6 @@ export default class myChart extends Vue {
     let data = newValue;
     if(newValue) {
       this.initChart(data);
-    }
-    // console.log(newValue)
-  };
-  @Watch('getUserRegistrationList1', { deep: true })
-  userRegistrationList1(newValue: any, oldValue: any) {
-    let data = newValue;
-    if(newValue) {
-      this.initChart1(data);
-    }
-    // console.log(newValue)
-  };
-  @Watch('getUserRegistrationList2', { deep: true })
-  userRegistrationList2(newValue: any, oldValue: any) {
-    let data = deepCloneData(newValue);
-    let text = window['vm'].$t('Hlin.月');
-    if(newValue) {
-      let seriesFoldData: any = [];
-      let seriesFoldTimeData: any = [];
-      data.forEach( el => {
-        seriesFoldData.push(el.registerNum);
-        seriesFoldTimeData.push(el.dateTime+ text);
-      });
-      this.initChart2(seriesFoldTimeData, seriesFoldData);
     }
     // console.log(newValue)
   };
@@ -138,44 +112,26 @@ export default class myChart extends Vue {
    */
   private initChart(data) {
     let _that = this;
-    let {seriesFoldTimeData, seriesFoldData} = _that.initData(data);
-    let xAxisName = window['vm'].$t('Hlin.近七天注册人数');
+    let {seriesFoldTimeData, seriesFoldData} = _that.initData(this.initDatas);
+    let xAxisName = this.vm.$t('Hlin.近七天注册人数');
     let myChartsize: any = document.getElementById('myChartFold');
-    myChartsize.style.width = '55vw';
+
     _that.$nextTick(() => {
-      _that.$chart.lineFold('myChartFold', seriesFoldTimeData, xAxisName, seriesFoldData);
+      myChartsize.style.width = '55vw';
     });
-  }
-  private initChart1(data) {
-    let _that = this;
-    let {seriesFoldTimeData, seriesFoldData} = _that.initData(data);
-    let xAxisName = window['vm'].$t('Hlin.近一个月注册人数');
-    let myChartsize: any = document.getElementById('myChartFold2');
-    myChartsize.style.width = '80vw';
-    _that.$nextTick(() => {
-      _that.$chart.lineFold('myChartFold2', seriesFoldTimeData, xAxisName, seriesFoldData);
-    });
-  }
-  private initChart2(seriesFoldTimeData, seriesFoldData) {
-    let _that = this;
-    let xAxisName = window['vm'].$t('Hlin.今年注册人数');
-    let myChartsize: any = document.getElementById('myChartFold3');
-    myChartsize.style.width = '55vw';
-    _that.$nextTick(() => {
-      _that.$chart.lineFold('myChartFold3', seriesFoldTimeData, xAxisName, seriesFoldData);
-    });
+    _that.$eCharts.linesChart('myChartFold', seriesFoldTimeData, xAxisName, seriesFoldData);
   }
   
   private initDoughnutChart() {
     let _that = this;
-    _that.$chart.lineDoughnut('myChartDoughnut', this.xAxisDoughnutData);
+    _that.$eCharts.piesChart('myChartDoughnut', this.xAxisDoughnutData);
   }
 
 }
 </script>
 
 <style lang='scss' scoped>
-.v-echarts-main {
+.v-echarts-wrap {
   // min-height: 700px;
   .v-echarts-doughnut {
     display: block;
