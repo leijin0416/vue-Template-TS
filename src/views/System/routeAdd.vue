@@ -365,6 +365,7 @@ export default class extends Vue {
         'type': type,
         'title': title,
         'icon': icon,
+        'permission': '',
         'titleEn': titleEn,
         'sort': sort
       });
@@ -385,6 +386,7 @@ export default class extends Vue {
         'type': type,
         'title': title,
         'icon': icon,
+        'permission': '',
         'titleEn': titleEn,
         'sort': sort
       });

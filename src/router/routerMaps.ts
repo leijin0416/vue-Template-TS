@@ -105,4 +105,10 @@ export const dynamicRouter: any = [
     component: getComponentMMin('User', 'userList'),
     meta: { title: '用户列表', permission: [] }
   },
+  {
+    path: '/course/week',
+    name: 'CourseReserveCoachWeek',
+    component: getComponentMMin('CourseReserveCoach', 'reserveWeek'),
+    meta: { title: '课程表', permission: [] }
+  },
 ]

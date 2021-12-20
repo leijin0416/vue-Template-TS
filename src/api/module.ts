@@ -9,12 +9,10 @@ export const webGetAdminUserLogin = params => service.post('/whale-swim/api/auth
 // 获取公钥
 export const webGetAdminRSAAuthKey = params => service.post('/api/ping-open/getAuthKey', params);
 
-// 首页用户统计
-export const webGetAdminUserMemberStatistics = params => service.post('/api/ping-admin/homeMemberStatistics', params);
 // 首页用户注册统计
-export const webGetAdminUserRegistrationsStatistics = params => service.post('/api/ping-admin/userRegistrations', params);
-// 首页资产统计
-export const webGetAdminUserRegistrationsStatisticsList = params => service.post('/api/ping-admin/homeAssetsRecordStatistics', params);
+export const webGetAdminUserHomeStatisticEchartsLines = params => service.post('/whale-swim/api/index/indexMemberStatistics', params);
+// 首页各类型人数统计
+export const webGetAdminUserHomeStatisticEchartsPies = params => service.post('/whale-swim/api/index/statistic', params);
 
 // 权限ID查询菜单
 export const webGetAdminUserFindRoleById = params => service.post('/whale-swim/api/auth-menu/findAuthMenuByAdminId', params);
@@ -44,6 +42,10 @@ export const webGetAdminRoleUpdate = params => service.post('/whale-swim/api/aut
 export const webGetAdminRoleDelte = params => service.post('/whale-swim/api/auth-menu/delAuthRole', params);
 // 角色列表
 export const webGetAdminMenuRoleList = params => service.post('/whale-swim/api/auth-menu/findAuthRoleList', params);
+// 按钮权限列表
+export const webGetAdminRoleButtonList = params => service.post('/whale-swim/api/auth-menu/findRoleMenuList', params);
+// 按钮权限 -修改
+export const webGetAdminRoleButtonUpdate = params => service.post('/whale-swim/api/auth-menu/roleMenuButton', params);
 
 // 公告列表
 export const webGetAdminUserNoticeList = params => service.post('/whale-swim/api/ping-notice/list', params);

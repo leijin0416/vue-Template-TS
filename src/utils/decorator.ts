@@ -78,7 +78,7 @@ export const DRRequest = (params) => (target, key, descriptor) => {
                 } else {
                     failHandler.apply(this, [request.message]);
                 }
-            } catch (error) {
+            } catch (error: any) {
                 // 如果当前是由于重复发起请求导致的error,则不再提示
                 if (error.message === 'Network Error') {
                     return NET_ERROR(retryHandle);
@@ -133,7 +133,7 @@ export const DRCatchError = (params: any = noop) => (target, key, descriptor) =>
     descriptor.value = async function () {
         try {
             await original.apply(this, arguments);
-        } catch (error) {
+        } catch (error: any) {
             let resp = (error && error.response) || {};
             let errorData = resp.data || error.message;
             if (typeof errorHandler === 'function') {

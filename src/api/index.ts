@@ -1,6 +1,3 @@
-import service from '@/common/https/httpService';
-
+// 引用
 export * from './module';
-
-// 用户列表
-export const webGetAdminPageUserList = params => service.post('/back/open-user/pageList', params);
+export * from './common';

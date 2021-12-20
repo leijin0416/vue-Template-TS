@@ -18,10 +18,8 @@ export default class User extends VuexModule {
   public RouterMap: any = [];
   public TagListMap: any = [];
   public getExportExcelsMap: any = [];
-  public getUserInfoStatisticsMap: any = [];   // 首页用户统计
-  public getUserRegistrationStatisticsMap: any = [];  // 首页用户注册统计
-  public getUserRegistrationStatisticsMap1: any = [];
-  public getUserRegistrationStatisticsMap2: any = [];
+  public getUserHomeEchartsPiesMap: any = {};   // 首页用户统计
+  public getUserHomeEchartsLinesMap: any = [];  // 首页用户注册统计
 
   get getUserName() {
     return `${this.UserName}`;
@@ -29,17 +27,11 @@ export default class User extends VuexModule {
   get getExportExcelsList() {
     return this.getExportExcelsMap;
   }
-  get getUserInfoStatisticsList() {
-    return this.getUserInfoStatisticsMap;
+  get getStoreUserHomeEchartsPiesMap() {
+    return this.getUserHomeEchartsPiesMap;
   }
-  get getUserRegistrationStatisticsList() {
-    return this.getUserRegistrationStatisticsMap;
-  }
-  get getUserRegistrationStatisticsList1() {
-    return this.getUserRegistrationStatisticsMap1;
-  }
-  get getUserRegistrationStatisticsList2() {
-    return this.getUserRegistrationStatisticsMap2;
+  get getStoreUserHomeEchartsLinesMap() {
+    return this.getUserHomeEchartsLinesMap;
   }
 
   @Action
@@ -72,23 +64,13 @@ export default class User extends VuexModule {
   }
 
   @Action
-  public storeUserInfoStatisticsMap(item: any) {  // 首页用户统计
-    this.SET_StoreUserInfoStatisticsMap(item);
+  public storeUserHomeEchartsPiesMap(item: any) {  // 首页用户统计 饼状图
+    this.SET_StoreUserHomeEchartsPiesMap(item);
     // console.log(item);
   }
   @Action
-  public storeUserRegistrationStatisticsMap(item: any) {  // 首页用户注册统计
-    this.SET_StoreUserRegistrationStatisticsMap(item);
-    // console.log(item);
-  }
-  @Action
-  public storeUserRegistrationStatisticsMap1(item: any) {  // 首页用户注册统计
-    this.SET_StoreUserRegistrationStatisticsMap1(item);
-    // console.log(item);
-  }
-  @Action
-  public storeUserRegistrationStatisticsMap2(item: any) {  // 首页用户注册统计
-    this.SET_StoreUserRegistrationStatisticsMap2(item);
+  public storeUserHomeEchartsLinesMap(item: any) {  // 首页用户注册统计 走势图
+    this.SET_StoreUserHomeEchartsLinesMap(item);
     // console.log(item);
   }
   @Action
@@ -140,23 +122,14 @@ export default class User extends VuexModule {
   }
 
   @Mutation
-  private SET_StoreUserInfoStatisticsMap(item: any) {
-    this.getUserInfoStatisticsMap = item;
+  private SET_StoreUserHomeEchartsPiesMap(item: any) {
+    this.getUserHomeEchartsPiesMap = item;
+    console.log(`【缓存】___饼状图___${item}`);
   }
   @Mutation
-  private SET_StoreUserRegistrationStatisticsMap(item: any) {
+  private SET_StoreUserHomeEchartsLinesMap(item: any) {
     // console.log(item);
-    this.getUserRegistrationStatisticsMap = item;
-  }
-  @Mutation
-  private SET_StoreUserRegistrationStatisticsMap1(item: any) {
-    // console.log(item);
-    this.getUserRegistrationStatisticsMap1 = item;
-  }
-  @Mutation
-  private SET_StoreUserRegistrationStatisticsMap2(item: any) {
-    // console.log(item);
-    this.getUserRegistrationStatisticsMap2 = item;
+    this.getUserHomeEchartsLinesMap = item;
   }
   @Mutation
   private SET_StoreExportExcelsMap(item: any) {

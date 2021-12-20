@@ -5,15 +5,17 @@ import { publicLinesChart, publicPiesChart } from './common';
  */
 const install = (Vue: any) => {
   Object.defineProperties(Vue.prototype, {
-    $eCharts: {
+    $chart: {
       get() {
         const vm = this;
         return {
-          linesChart: (vm, id: string, xAxisData: any, xAxisName: string, seriesFoldData: any) => {
-            publicLinesChart(vm, id, xAxisData, xAxisName, seriesFoldData)
+          linesChart: (id: string, xAxisData: any, xAxisName: string, seriesFoldData: any) => {
+            const vms: any = this;
+            publicLinesChart(vms, id, xAxisData, xAxisName, seriesFoldData)
           },
-          piesChart: (vm, id: string, xAxisData: any) => {
-            publicPiesChart(vm, id, xAxisData)
+          piesChart: (id: string, xAxisData: any) => {
+            const vms: any = this;
+            publicPiesChart(vms, id, xAxisData)
           }
         }
       }

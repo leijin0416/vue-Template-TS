@@ -7,13 +7,13 @@ import { getRealJsonData } from '@/assets/js/jsonData';  // 格式化返回数�
 
 /**
  * @description: IP信息
- * @param {*} "http://185.251.248.xxx"
+ * @param {*} "185.251.230"
  * @return {*}
  */
 let baseUrl = '';
 switch (process.env.NODE_ENV) {
   case "development":
-    baseUrl = "http://185.251.248.xxx"
+    baseUrl = "https://xxxxxxx.com"
     break
   case "production":
     baseUrl = "https://xxxxxxx.com"
@@ -36,15 +36,17 @@ const service = axios.create(axiosConfig);
 
 /**
  * @description: request 拦截器实现, 传给后台的
- * config.data.hash = md5((new Date()).valueOf() + config.data.func);  // Encrypt加密  
- * config.data = { data: CryptoJS.ECBEncrypt(JSON.stringify(config.data))  // 文本数据交换格式 }
+ * @param {*} config.data.hash = md5((new Date()).valueOf() + config.data.func);  // Encrypt加密  
+ * @param {*} config.data = { data: CryptoJS.ECBEncrypt(JSON.stringify(config.data))  // 文本数据交换格式 }
+ * @return {*}
  */
 service.interceptors.request.use(
   config => {
     const token = sessionData('get', 'HasSessionToken', '');
-    // tslint:disable-next-line:no-unused-expression
+    // console.log(token);
+    
     token && (config.headers.Authorization = token);  // token
-    config.headers.AuthType = 'OPEN_ADMIN';
+    config.headers.AuthType = 'WHALE_ADMIN';
     config.headers['content-Type'] = "application/json;charset=utf-8";
     config.headers['Accept-Language'] = sessionStorage.getItem('accessLocaleI18n') || 'zh-CN';
 
@@ -59,13 +61,12 @@ service.interceptors.request.use(
 /**
  * @description: response 拦截器实现, 拿后台返回的
  * @param {*} getRealJsonData -去掉双引号，转化json格式
- * @return {*}
+ * @param {*} if(response.data !== null) response.data = CryptoJS.RSADecrypt(response.data); // Decrypt解密
+ * @return {*} 
  */
 service.interceptors.response.use(
   response => {
-    // if(response.data !== null) response.data = CryptoJS.RSADecrypt(response.data); // Decrypt解密
-    
-    if (response.data.code === 401120) {
+    if(response.data.code === 401120) {
       sessionData('clean', 'HasSessionToken', '');
       sessionData('clean', 'HasSessionUserId', '');
       sessionData('clean', 'HasSessionRouterMap', '');
@@ -97,7 +98,7 @@ service.interceptors.response.use(
         504: '网关超时',
         505: 'HTTP版本不受支持',
       };
-      error.message = RESPONSE_CODE[error.response.status] || '服务器开小差！！';
+      error.message = RESPONSE_CODE[error.response.status] || '服务器开小差!!';
       Message({
         message: error.message,
         type: 'error',

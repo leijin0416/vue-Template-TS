@@ -1,9 +1,9 @@
 <template>
   <div class="v-echarts-wrap" id="echarts">
-    <!-- 饼状 -->
-    <div class="v-echarts-doughnut" id="myChartDoughnut" v-if="eChartCountId === 1" ></div>
     <!-- 折线 -->
     <div class="v-echarts-fold" id="myChartFold" v-if="eChartCountId === 0" ></div>
+    <!-- 饼状 -->
+    <div class="v-echarts-doughnut" id="myChartDoughnut" v-if="eChartCountId === 1" ></div>
   </div>
 </template>
 
@@ -12,6 +12,11 @@ import { Component, Provide, Vue, Watch, Prop } from 'vue-property-decorator';
 import { deepCloneData } from '@/filters/common';
 import { UserStore } from '@/store/private/user';
 
+type inits = {
+  id?: number;
+  createTime: string;
+  registerNum: number;
+}
 @Component({
   name: 'ECharts',
   components: {
@@ -23,62 +28,71 @@ export default class extends Vue {
 
   @Prop({ default: 0 }) eChartCountId!: number;  // 图表类型
 
-  private screenWidth: number| string = '';
   private xAxisDoughnutData: any = [];
-  private initDatas = [
-    {dateTime: "11/23", registerNum: 5},
-    {dateTime: "11/24", registerNum: 8},
-    {dateTime: "11/25", registerNum: 4},
-    {dateTime: "11/26", registerNum: 6},
-    {dateTime: "11/27", registerNum: 5},
-    {dateTime: "11/28", registerNum: 9},
-    {dateTime: "11/29", registerNum: 8},
+  private initDatas: Array<inits> = [
+    {createTime: "11/23", registerNum: 5},
+    {createTime: "11/24", registerNum: 8},
+    {createTime: "11/25", registerNum: 4},
+    {createTime: "11/26", registerNum: 6},
+    {createTime: "11/27", registerNum: 5},
+    {createTime: "11/28", registerNum: 9},
+    {createTime: "11/29", registerNum: 8},
   ]
+  private screenWidth:number | string = '';
 
   // 获取数据
-  get getUserInfoStatisticsList() {
-    if(UserStore.getUserInfoStatisticsList.length === 0) {
-      return null
-    } else {
-      // console.log(UserStore.getUserInfoStatisticsList);
-      return UserStore.getUserInfoStatisticsList
+  get getStoreUserHomeEchartsPiesMap() {
+    const res = UserStore.getStoreUserHomeEchartsPiesMap;
+    if(res.code === 200) {
+      // console.log(res);
+      const data = deepCloneData(res.data)
+      return data
     }
   };
-  get getUserRegistrationList() {
-    if(UserStore.getUserRegistrationStatisticsList.length > 0) {
-      return UserStore.getUserRegistrationStatisticsList
+  get getStoreUserHomeEchartsLinesMap() {
+    const res = UserStore.getStoreUserHomeEchartsLinesMap;
+    if(res.length > 0) {
+      return res
     }
   };
 
   /**
-   *  监听数据列表
+   * @description: 监听数据列表
+   * @param {array} getStoreUserHomeEchartsPiesMap    饼状
+   * @param {array} getStoreUserHomeEchartsLinesMap   折线
    */
-  @Watch('getUserInfoStatisticsList', { deep: true })
-  userInfoStatisticsList(newValue: any) {
+  @Watch('getStoreUserHomeEchartsPiesMap', { deep: true })
+  watchStoreUserHomeEchartsPiesMap(newValue: any, oldValue: any) {
+    // console.log(newValue)
     if(newValue) {
-      let list = newValue;
-      let text1 = this.vm.$t('Hlin.激活');
-      let text2 = this.vm.$t('Hlin.实名认证');
-      let text3 = this.vm.$t('Hlin.行为限制');
-      let doughnutData = [
-        { value: list.activeNums, name: text1 },
-        { value: list.kycNums, name: text2 },
-        { value: list.limitNums, name: text3 },
+      const list = newValue;
+      const text1 = this.vm.$t('Hlin.总注册数');
+      const text2 = this.vm.$t('Hlin.总配套数');
+      const text3 = this.vm.$t('Hlin.总预约数');
+      const doughnutData = [
+        { value: list.totalRegisterNum, name: text1 },
+        { value: list.totalPurchasePackage, name: text2 },
+        { value: list.totalAppointments, name: text3 },
       ]
-      if(this.eChartCountId === 1) {
-        this.xAxisDoughnutData = doughnutData;
-        this.initDoughnutChart();
-      }
+      this.xAxisDoughnutData = doughnutData;
+      this.initDoughnutChart();
     }
-    // console.log(newValue)
+    // console.log(oldValue)
   };
-  @Watch('getUserRegistrationList', { deep: true })
+  @Watch('getStoreUserHomeEchartsLinesMap', { deep: true })
   userRegistrationList(newValue: any, oldValue: any) {
-    let data = newValue;
-    if(newValue) {
-      this.initChart(data);
-    }
     // console.log(newValue)
+    if(newValue) {
+      const data = deepCloneData(newValue);
+      // this.$chart.linesChart('myChartFold', [], '', []);
+      if(data.length === 12) {
+        const text = this.vm.$t('Hlin.月');
+        data.forEach( (el, i, arr) => {
+          el.createTime += text
+        });
+      }
+      this.initChartLines(data);
+    }
   };
 
   // 生命周期
@@ -94,12 +108,12 @@ export default class extends Vue {
     }
   };
 
-  initData(data) {
-    let seriesFoldData: Array<object> = [];
-    let seriesFoldTimeData: Array<object> = [];
-    data.forEach( el => {
+  private initData(data) {
+    let seriesFoldData: any = [];
+    let seriesFoldTimeData: any = [];
+    data.forEach( (el, i, arr) => {
       seriesFoldData.push(el.registerNum);
-      seriesFoldTimeData.push(el.dateTime);
+      seriesFoldTimeData.push(el.createTime);
     });
     return {
       seriesFoldData,
@@ -108,23 +122,38 @@ export default class extends Vue {
   }
   
   /**
-   *  挂载
+   * @description: 挂载图表 -折线
+   * @param {array} seriesFoldTimeData   X轴时间线
+   * @param {array} seriesFoldData       数据线
+   * @param {string} xAxisName           标题
+   * @return {*}
    */
-  private initChart(data) {
-    let _that = this;
-    let {seriesFoldTimeData, seriesFoldData} = _that.initData(this.initDatas);
-    let xAxisName = this.vm.$t('Hlin.近七天注册人数');
-    let myChartsize: any = document.getElementById('myChartFold');
+  private initChartLines(data) {
+    // console.log(data);
+    const _that = this;
+    const {seriesFoldTimeData, seriesFoldData} = _that.initData(data);
+    const myChartsize: any = document.getElementById('myChartFold');
+    let xAxisName = '';
+    if(data.length === 7) xAxisName = this.vm.$t('Hlin.近七天注册人数');
+    else if(data.length === 30) xAxisName = this.vm.$t('Hlin.近一个月注册人数');
+    else xAxisName = this.vm.$t('Hlin.今年注册人数');
 
-    _that.$nextTick(() => {
-      myChartsize.style.width = '55vw';
-    });
-    _that.$eCharts.linesChart('myChartFold', seriesFoldTimeData, xAxisName, seriesFoldData);
+    _that.$chart.linesChart('myChartFold', seriesFoldTimeData, xAxisName, seriesFoldData);
+    setTimeout(() => {
+      _that.$nextTick(() => {
+        // myChartsize.style.width = '100vw';
+      });
+    }, 1000);
   }
   
+  /**
+   * @description: 挂载图表 -饼状
+   * @param {array} xAxisDoughnutData     数据线
+   * @return {*}
+   */
   private initDoughnutChart() {
     let _that = this;
-    _that.$eCharts.piesChart('myChartDoughnut', this.xAxisDoughnutData);
+    _that.$chart.piesChart('myChartDoughnut', this.xAxisDoughnutData);
   }
 
 }
@@ -135,14 +164,14 @@ export default class extends Vue {
   // min-height: 700px;
   .v-echarts-doughnut {
     display: block;
-    width: 75%;
+    width: 60%;
     height: 400px;
     margin: auto;
   }
   .v-echarts-fold {
     display: block;
     width: 100%;
-    height: 400px;
+    height: 500px;
     margin: auto;
   }
 }

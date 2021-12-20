@@ -85,6 +85,10 @@ export default class AdminSystemList extends VuexModule implements IterAdminSyst
     } else console.log(res);
   }
   @Action
+  public storeActionAdminMenuTreeButtonList(item) {  // 按钮 路由树列表
+    this.SET_MutationAdminMenuTreeList(item)
+  }
+  @Action
   public async storeActionAdminMenuRightList(item: object) {  // 路由列表
     let res = await webGetAdminMenuRightList(item)
     if (res.data.code === 200) {

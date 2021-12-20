@@ -60,7 +60,7 @@ import {
 interface IndexData {
   userName: string;
   pass: string;
-};
+}
 /**
  * 定义当前表单验证
  */
@@ -161,7 +161,6 @@ export default class extends Vue {
     this.scrollReveal.reveal('.reveal-top', revealTop);
   };
 
-
   onRadioChange() {
     sessionStorage.setItem('accessLocaleI18n', this.radioLocale); // 设置语言包
     this.$message.success({
@@ -189,14 +188,14 @@ export default class extends Vue {
   private submitForm(formName: string) {
     const _that = this;
     const ref: any = _that.$refs[formName]; // 类型断言的用，定义一个变量等价ref
-    _that.loadingType = true;
+    
     ref.validate( (valid: boolean) => {
       if (valid) {
+        _that.loadingType = true;
         _that.submitFormClick();
         // console.log(_that.ruleForm);
-        // this.$store.dispatch('login', this.ruleForm);
+
       } else {
-        _that.loadingType = false;
         console.log('error submit!!');
         return false;
       }
@@ -213,19 +212,19 @@ export default class extends Vue {
   private async submitFormClick() {
     let { userName, pass } = this.ruleForm;
     let md5s = md5(pass).toUpperCase();
-    let subMenuUser = await webGetAdminUserLogin({
+    let res = await webGetAdminUserLogin({
       'userName': userName,
       'password': pass,
     });
-    let type = MessageTips(subMenuUser, false, true, '', null, item => {
+    let type = MessageTips(res, false, true, '', null, item => {
       this.loadingType = false;
     });
-    // console.log(subMenuUser);
+    // console.log(res);
     if (type) {
-      const roleId = subMenuUser.data.data.userId;
+      const roleId = res.data.data.userId;
       // this.loadingType = false;
-      UserStore.storeActionUserName(subMenuUser.data.data.userName);
-      UserStore.storeActionToken(subMenuUser.data.data.token);  // 用户Token
+      UserStore.storeActionUserName(res.data.data.userName);
+      UserStore.storeActionToken(res.data.data.token);  // 用户Token
       // 调用resetRouter方法，把原来的路由替换  【位置关系】
       resetRouter();
       this.submitFormRoleId(roleId);
@@ -237,6 +236,7 @@ export default class extends Vue {
 	 * @param {*} storeActionRouterMap()  缓存后台路由数组
 	 * @param {*} addRoutes()    动态挂载路由
 	 * @param {*} TreeForeach()  递归遍历
+   * @return {*}
    */
   public async submitFormRoleId(roleId: number) {
     let routersMapList = subMenuRouters;  // 本地挂载路由
@@ -244,11 +244,13 @@ export default class extends Vue {
     let subMenu = await webGetAdminUserFindRoleById({
       'adminId': roleId,
     });
-    // console.log(subMenu);
+    console.log(subMenu);
     const text = this.vm.$t('Hlin.登录成功');
     MessageTips(subMenu, true, true, text, item => {
-      let dynamicMapList = dynamicRouter;  // 本地路由
-      TreeForeach(item.data.data, tree => { // 权限递归
+      let treeData = item.data.data;       // 后台权限路由
+      let dynamicMapList = dynamicRouter;  // 比对路由
+
+      TreeForeach(treeData, tree => { // 权限递归
         dynamicMapList.forEach( el => {
           if(tree.router === el.path) {
             routersMapList[0].children.push(el);
@@ -256,11 +258,14 @@ export default class extends Vue {
         });
       });
 
-      UserStore.storeActionRouterMap(item.data.data);
+      UserStore.storeActionRouterMap(treeData);
       router.addRoutes(routersMapList);
       this.$router.push({path: '/'});
       this.loadingType = false;
-    }, null);
+
+    }, err => {
+      this.loadingType = false;
+    });
 
   }
 }

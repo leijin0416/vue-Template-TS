@@ -3,15 +3,19 @@
     <div class="course-table" >
       <el-scrollbar style="height: 100%" >
         <div class="course-table-content" >
+          <div class="v-header-left" >
+            <p class="v-text">{{$t('Hlin.泳道')}}</p>
+            <p class="v-text">{{$t('Hlin.时间')}}</p>
+          </div>
           <div class="top":style="{width:courseWidth * weekTable.length + 'px'}">
-            <div v-for="item in weekTable" class="top-text" :style="{width: courseWidth + 'px'}">{{item.value ? item.label : '周' + item}}</div>
+            <div v-for="(item, i) in weekTable" :key="i" class="top-text" :style="{width: courseWidth + 'px'}">{{item.value ? item.label : '周' + item}}</div>
           </div>
           <div class="main" 
             :style="{ width:courseWidth * weekTable.length + 35 + 'px',
                       height:courseHeight * timeTable.length +'px'}">
               <div class="period">
                 <div v-for="(item, i) in timeTable" :key="i" class="left-text" :style="{height: courseHeight + 'px'}">
-                  <p>{{item}}</p>
+                  <p >{{item.value ? item.label : item}}</p>
                 </div>
               </div>
               <!--课表-->
@@ -112,6 +116,36 @@ export default class extends Vue {
     border: 1px solid #eee;
     overflow: hidden;
   }
+  .course-table-content {
+    position: relative;
+    .v-header-left {
+      position: absolute;
+      left: 0;
+      top: 0;
+      box-sizing: border-box;
+      width: 80px;
+      padding: 5px;
+      font-size: 12px;
+      text-align: left;
+      color: #fff;
+      .v-text {
+        &:nth-child(1) {
+          text-align: right;
+        }
+      }
+      &::before {
+        content: ' ';
+        z-index: 999;
+        position: absolute;
+        left: 2px;
+        top: 23px;
+        width: 100%;
+        height: 1px;
+        transform: rotate(30deg);
+        background-color: #fff;
+      }
+    }
+  }
   .top {
     display: flex;
     flex-direction: row;
@@ -136,6 +170,7 @@ export default class extends Vue {
     position: relative;
   }
   .flex-item {
+    cursor: pointer;
     width: 95px;
     height: 200px;
   }
