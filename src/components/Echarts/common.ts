@@ -148,7 +148,7 @@ const publicPiesChart = (vm: any, id, xAxisData) => {
           show: false,
           position: 'center'
         },
-        emphasis: {
+        emphasis: { // 提示类型名称
           label: {
             show: true,
             fontSize: '16',

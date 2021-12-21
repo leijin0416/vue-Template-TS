@@ -7,7 +7,6 @@ const install = (Vue: any) => {
   Object.defineProperties(Vue.prototype, {
     $chart: {
       get() {
-        const vm = this;
         return {
           linesChart: (id: string, xAxisData: any, xAxisName: string, seriesFoldData: any) => {
             const vms: any = this;
