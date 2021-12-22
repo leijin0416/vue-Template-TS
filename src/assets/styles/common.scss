@@ -6,20 +6,24 @@ input:focus {
   outline:none; 
   box-shadow: none !important;
 }
-
 // 去掉input type=number时输入框内的上下箭头
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-
 input[type="number"] {
   -moz-appearance: textfield !important;
 }
 
 // 层级
-.v-zindex {z-index: 2021 !important;}
-.viewer-transition {z-index: 2021 !important;}
+.el-message, .v-zindex, .viewer-transition {z-index: 9999 !important;}
+// 日期选择
+.el-picker-panel.v-picker-box {
+  .el-date-table td.today span {
+    color: #fff !important;
+    background-color: #ff3828;
+  }
+}
 
 .pages {
   min-height: 700px;
@@ -27,6 +31,40 @@ input[type="number"] {
   border: 1px solid #ddd;
   border-radius: 5px;
   background: #fff;
+}
+
+.padd10 {padding: 10px;}
+.padd-left10 {padding-left: 10px;}
+.padd-left5 {padding-left: 5px;}
+.padd-right10 {padding-right: 10px;}
+.padd-right5 {padding-right: 5px;}
+.padd-top10 {padding-top: 10px;}
+.padd-top5 {padding-top: 5px;}
+.padd-bottom10 {padding-bottom: 10px;}
+.padd-bottom15 {padding-bottom: 15px;}
+.padd-bottom5 {padding-bottom: 5px;}
+
+.margin-bottom30 {margin-bottom: 30px;}
+.margin-bottom15 {margin-bottom: 15px;}
+
+.font-size12 {font-size: 12px;}
+.font-size14 {font-size: 14px;}
+.font-size16 {font-size: 16px;}
+.font-size18 {font-size: 18px;}
+.font-weight {font-weight: bold;}
+
+.text-red {color: #ff3828;}
+.text-warning {color: #eea63b;}
+.text-grey6 {color: #666;}
+.text-grey9 {color: #999;}
+
+.text-inline {display: inline-block;}
+.text-center {text-align: center;}
+// 英文字符自动换行
+.text-wrap {
+  word-wrap: break-word;
+  white-space: normal;
+  word-break: break-all;
 }
 
 // 弹性布局
@@ -65,8 +103,6 @@ input[type="number"] {
     &:hover::before{display: block;}
   }
 }
-
-.v-text-center {text-align: center;}
 
 .v-btn-green {
   color: #67c23a;
