@@ -6,7 +6,10 @@
         v-for="(item, index) in tagsList"
         :class="{'active': isActive(item.path)}"
         :key="index" >
-        <span class="tags-li-title" @click="onTagsClick(item)">{{item.title}}</span>
+        <span class="tags-li-title" @click="onTagsClick(item)" v-if="item.title === '首页' ">{{ $t('Hlin.首页') }}</span>
+        <span class="tags-li-title" @click="onTagsClick(item)" v-else>
+          {{ $t('Hlin.'+ item.title) }}
+        </span>
 
         <span class="tags-li-icon" v-if="item.name === 'Index'">
           <i class="el-icon-s-opportunity"></i>
@@ -19,12 +22,12 @@
     <div class="tags-close-box">
       <el-dropdown @command="handleTags">
         <el-button size="mini" type="primary">
-          标签选项
+          {{ $t('Hlin.标签选项') }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu size="small" slot="dropdown">
-          <el-dropdown-item command="other">关闭其他</el-dropdown-item>
-          <el-dropdown-item command="all">关闭所有</el-dropdown-item>
+          <el-dropdown-item command="other">{{ $t('Hlin.关闭其他') }}</el-dropdown-item>
+          <el-dropdown-item command="all">{{ $t('Hlin.关闭所有') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -32,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch, Inject, Provide, Emit, Prop } from "vue-property-decorator";
+import { Component, Inject, Provide, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import { UserStore } from '@/store/private/user';
 import { sessionData } from "@/filters/storage";
 import { TreeForeach, FormatArrMapHas } from '@/filters/common';
@@ -43,12 +46,11 @@ type IndexData = {
   names: string;
   messages: number;
 };
-
 // 挂载组件
 @Component({
   components: {}
 })
-export default class vTagBar extends Vue {
+export default class TagBar extends Vue {
   private tagsList: any = [];
   private tagsId: any = '';
   private activeLocale: string = 'zh-CN';
@@ -69,7 +71,7 @@ export default class vTagBar extends Vue {
       _that.tagsId = newVal;
       _that.setTags(_that.$route);
     }
-    console.log(`【watch】TAG标签index：${newVal}`);
+    console.log(`【监听】TAG数组路由Index: ${newVal}`);
   }
 
   created() {
@@ -194,7 +196,8 @@ export default class vTagBar extends Vue {
       });
       
     } else {
-      TreeForeach(JSON.parse(sessionRouterMap), tree => {  // 权限递归
+      // 权限递归
+      TreeForeach(JSON.parse(sessionRouterMap), tree => {
         // data.push(tree);
         if (tree.index === tagsId) {
           data.push({

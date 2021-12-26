@@ -1,7 +1,7 @@
 import service from '@/common/https/httpService';
 
 // 用户列表
-export const webGetAdminPageUserList = params => service.post('/back/open-user/pageList', params);
+export const webGetAdminPageUserList = params => service.post('/whale-swim/api/cn-member/memberList', params);
 // 购买附加配套列表
 export const webGetAdminPageUserMemberAdditionalAdd = params => service.post('/whale-swim/api/cn-package/buyPackage', params);
 // 用户配套列表

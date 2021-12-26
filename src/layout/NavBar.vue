@@ -16,26 +16,30 @@
           <el-submenu :index="item.index" :key="item.index" :route="item.router" >
             <template slot="title">
               <i :class="item.icon"></i>
-              <span slot="title">{{ activeLocale === 'zh-CN' ? item.title : item.titleEn }}</span>
+              <span class="v-title-box">{{ $t('Hlin.'+ item.title) }}</span>
             </template>
             <!-- 三级 children -->
             <template v-for="subItem in item.children">
               <el-submenu v-if="subItem.children && subItem.children.length > 0" :index="subItem.index" :key="subItem.index" :route="subItem.router">
-                <template slot="title">{{ subItem.title }}</template>
+                <template slot="title">
+                  <span class="v-title-box">{{ $t('Hlin.'+ subItem.title) }}</span> 
+                </template>
                 <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.index" :route="threeItem.router" >
-                  <span>{{ activeLocale === 'zh-CN' ? threeItem.title : threeItem.titleEn }}</span>
+                  <span class="v-title-box">{{ $t('Hlin.'+ threeItem.title) }}</span>
+                  
                 </el-menu-item>
               </el-submenu>
               <el-menu-item :index="subItem.index" :key="subItem.index" :route="subItem.router" v-else >
-                {{ activeLocale === 'zh-CN' ? subItem.title : subItem.titleEn }}
+                <span class="v-title-box">{{ $t('Hlin.'+ subItem.title) }}</span> 
               </el-menu-item>
             </template>
           </el-submenu>
         </template>
+        <!-- 一级 -->
         <template v-else>
           <el-menu-item :index="item.index" :key="item.index" :route="item.router" >
             <i :class="item.icon"></i>
-            <span slot="title">{{ activeLocale === 'zh-CN' ? item.title : item.titleEn }}</span>
+            <span slot="title" class="v-title-box">{{ $t('Hlin.'+ item.title) }}</span>
           </el-menu-item>
         </template>
       </template>
@@ -55,12 +59,11 @@ type IndexData = {
   names: string;
   messages: number;
 };
-
 // 挂载组件
 @Component({
   components: {}
 })
-export default class vNavBar extends Vue {
+export default class NavBar extends Vue {
   private items: object = [
     {
       icon: 'el-icon-lx-home',
@@ -99,9 +102,9 @@ export default class vNavBar extends Vue {
   ];
   private navMenuData: any = [];
   private collapse: boolean = false;
-  private activeLocale: string = '';  // 当前语言
-  private activeIndex: string = '';   // 当前激活
-  private defaultOpeneds: any = [];   // 当前打开
+  private activeIndex: string = '';
+  private activeLocale: string = 'zh-CN';
+  private routeStatusType: boolean = false;    // 判断是否是手动点击
 
   // computed -计算 get 用法
   get onRoutes(): any {
@@ -109,45 +112,47 @@ export default class vNavBar extends Vue {
     return routes;
   }
 
-  get pageStates(): any {
+  get getMenuItemActiveId(): any {
     const state = UserStore.MenuItemId;
     return state;
   }
 
-  @Watch("pageStates", { deep: true, })
-  private getShowStatus(newVal, oldVal) {
+  @Watch("getMenuItemActiveId", { deep: true, })
+  WatchGetMenuItemId(newVal, oldVal) {
     const _that = this;
-    if (newVal === '') _that.activeIndex = '';
-    else _that.activeIndex = newVal;
-    console.log(`【watch】左侧导航路由index：${newVal}`);
+    console.log(`【监听】NavsLeft 路由index: ${newVal}`);
+  }
+
+  // 路由变化时执行
+  @Watch('$route', {deep: true, immediate: true})
+  onRouteChange(newVal, oldVal) {
+    // console.log(newVal);
+    // console.log(oldVal);
+    if(this.routeStatusType) this.routeStatusType = false
+    else {
+      const sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
+      if(this.activeIndex === '' && sessionRouterId != null) {
+        this.getNavsMenuItemData();
+        this.getNavMenuItemActiveId(newVal);
+
+      } else if(this.activeIndex !== '') {
+        this.getNavMenuItemActiveId(newVal);
+
+      }
+
+    }
   }
 
   created() {
     const _that = this;
-    let getLocaleI18n = sessionStorage.getItem('accessLocaleI18n');
-    if(getLocaleI18n !== null) this.activeLocale = getLocaleI18n;
-
-    const sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');  // 左侧导航路由数组index
-    const routerData: any = sessionData('get', 'HasSessionRouterMap', '');       // 循环左侧导航路由数组
-    const navbarData: any = JSON.parse(routerData);
-    // console.log(navbarData);
+    const sessionRouterId: any = sessionData('get', 'HasSessionMenuItemId', '');
+    const getLocaleI18n = sessionStorage.getItem('accessLocaleI18n');
     
-    if (sessionRouterId != null) this.activeIndex = sessionRouterId;
-    if (navbarData) {
-      navbarData.forEach( el => {
-        let data = el.children;
-        el.index = el.menuId.toString();       // 父标识
-        if (data.length > 0) {
-          data.forEach( (cd, j) => {
-            let size = Number(j) + 1;
-            let num = el.menuId + '-' + size;
-            cd.index = num.toString();  // 子标识
-          });
-        }
-      });
-      this.navMenuData = navbarData;
-      UserStore.storeActionMenuMap(navbarData);   // 缓存菜单
-    };
+    if(getLocaleI18n !== null) this.activeLocale = getLocaleI18n;
+    if(sessionRouterId === null) {
+      this.getNavsMenuItemData();
+      this.activeIndex = '1';
+    }
     
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
     Event.$on('collapse', msg => {
@@ -155,9 +160,67 @@ export default class vNavBar extends Vue {
     });
   };
 
+  /**
+   * @description: 获取导航高亮 index
+   * @param {*} newVal 路由信息
+   * @return {*}
+   */
+  getNavMenuItemActiveId(newVal) {
+    const navBarMenuData = this.navMenuData;
+    // console.log(newVal);
+    
+    navBarMenuData.forEach(item => {
+      if(item.children.length > 0) {
+        const data = item.children;
+        // 比对子级 children
+        let key = data.findIndex(item => item.router === newVal.path)
+        
+        if(key != -1) {
+          // let index = data[key].index.split('-')
+          this.activeIndex = data[key].index
+        }
+        
+      } else {
+        if(item.router === newVal.path) this.activeIndex = item.index
+      }
+    })
+  }
+
+  /**
+   * @description: 导航栏
+   * @param {*} menuSort 父标识
+   * @return {*}
+   */
+  getNavsMenuItemData() {
+    const _that = this;
+    // 获取并循环 左侧路由数组
+    const sessionRouterData: any = sessionData('get', 'HasSessionRouterMap', '');
+    const navBarMenuData = JSON.parse(sessionRouterData);
+    // console.log(navBarMenuData);
+    
+    if (navBarMenuData.length > 0) {
+      navBarMenuData.forEach( el => {
+        let data = el.children;
+        el.index = el.menuId.toString();       // 父标识
+        if (data.length > 0) {
+          data.forEach( (cd, j) => {
+            let num = Number(j) + 1;
+            let index = (el.menuId + '-' + num).toString();
+            cd.index = index;  // 子标识
+          });
+        }
+      });
+      // console.log(navBarMenuData);
+      _that.navMenuData = navBarMenuData;
+      UserStore.storeActionMenuMap(navBarMenuData);   // 缓存菜单
+    };
+
+  }
+
   // 点击导航
   onSelect(key: any, keyPath: any) {
     let _that = this;
+    _that.routeStatusType = true;
     _that.activeIndex = key;
     UserStore.storeActionLeftMenuMapId(key);
     // console.log(key, keyPath);
@@ -166,22 +229,43 @@ export default class vNavBar extends Vue {
 </script>
 
 <style lang='scss' scoped>
-.el-menu-item.is-active {
+/deep/.el-submenu__title {
+  padding: 0 10px !important;
+}
+/deep/.el-submenu__icon-arrow {
+  right: 15px !important;
+}
+/deep/.el-submenu [class^=el-icon-] {
+  margin-right: 2px !important;
+}
+/deep/.el-menu-item {
+  min-width: 200px;
+  height: auto;
+  padding: 15px 15px 15px 30px;
+  line-height: 1.25;
+}
+/deep/.el-menu-item.is-active {
   color: #20a0ff !important;
   background-color: #43556f !important;
 }
+
 .navBar {
-  ul {
-    position: relative;
-    z-index: 9;
-    height: 100%;
-  }
   display: block;
   position: absolute;
   left: 0;
   top: 70px;
   bottom: 0;
   overflow-y: scroll;
+  ul {
+    position: relative;
+    z-index: 9;
+    height: 100%;
+    span {
+      word-wrap: break-word;
+      white-space: normal;
+      word-break: break-all;
+    }
+  }
 
   .sidebar::-webkit-scrollbar {
     width: 0;
