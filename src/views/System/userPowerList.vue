@@ -4,7 +4,7 @@
     <el-row>
       <el-col :span="24">
         <div class="v-refresh-box">
-          <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="v-btn" @click="onAddsClick">{{ $t('Sats.添加管理员账号') }}</el-button>
+          <el-button type="primary" size="small" icon="el-icon-circle-plus-outline" class="v-btn" @click="onAddsClick" v-allow="'add'">{{ $t('Sats.添加管理员账号') }}</el-button>
           <el-button size="small" icon="el-icon-download" class="v-btn" @click="onExportClick">{{ $t('Sats.导出Excel') }}</el-button>
           <el-button type="info" size="small" icon="el-icon-refresh" class="v-btn" @click="onRefreshClick" circle />
         </div>
@@ -55,7 +55,7 @@
                 <el-input type="text" v-model="formData.userName" size="medium"></el-input>
               </el-form-item>
               <el-form-item :label="$t('Sats.登录密码')" prop="password">
-                <el-input type="password" v-model="formData.password" size="medium" show-password></el-input>
+                <el-input type="password" v-model="formData.password" size="medium" :placeholder="$t('Hlin.6-18位字母')" show-password></el-input>
               </el-form-item>
               <el-form-item :label="$t('Sats.用户角色')" prop="roleId">
                 <el-select v-model="formData.roleId" :placeholder="$t('Sats.请选择')">
@@ -87,9 +87,10 @@
 <script lang="ts">
 import md5 from 'js-md5';
 import { Component, Provide, Vue, Watch } from 'vue-property-decorator';
-import { AdminSystemStore } from '@/store/private/StoreAdminIstrators';
+import { regBlank, regEmailMin, regMakeUpPass } from '@/filters/RegexSplit';
 import { UserStore } from '@/store/private/user';
 import { FTisFormatCurrentTime, deepCloneData } from '@/filters/common';
+import { AdminSystemStore } from '@/store/private/StoreAdminIstrators';
 import { MessageTips } from '@/filters/MessageTips';
 import { 
   webGetAdminRegisterAdd, 
@@ -114,6 +115,20 @@ type IndexData = {
 })
 export default class extends Vue {
   private vm = window['vm'];
+
+  private validateFormPass = (rule: any, value: string, callback: (res?: any) => {}) => {
+    if (value.length < 6) {
+      const text = this.vm.$t('Hlin.密码不能小于6位');
+      callback(new Error(text));
+
+    } else if (!regMakeUpPass.test(value)) {
+      const text = this.vm.$t('Hlin.6-18位字母');
+      callback(new Error(text));
+      
+    } else {
+      callback();
+    }
+  };
 
   // 分页器
   private param: IndexData = {
@@ -175,13 +190,13 @@ export default class extends Vue {
     ],
     password: [
       { required: true, message: this.vm.$t('Sats.请输入登录密码'), trigger: 'blur' },
-      { min: 6, max: 18, message: this.vm.$t('Sats.密码长度'), trigger: 'blur' },
       {
         required: true,
         pattern: /^\S*$/,
         message: this.vm.$t('Sats.请勿输入空字符'),
         trigger: 'blur'
       },
+      { required: true, validator: this.validateFormPass, trigger: 'blur' }
     ],
     roleId: [
       { required: true, message: this.vm.$t('Sats.请选择管理员用户角色'), trigger: 'change' },
@@ -190,14 +205,16 @@ export default class extends Vue {
 
   // 获取数据
   get getAdminSystemPageList() {
-    if(AdminSystemStore.getAdminSystemPageList.code === 200) {
-      return AdminSystemStore.getAdminSystemPageList
+    const data = AdminSystemStore.getAdminSystemPageList;
+    if(data.code === 200) {
+      return data
     }
   };
   get getAdminSystemMenuRoleList() { // 角色列表
+    const data = AdminSystemStore.getAdminSystemMenuRoleList;
     // console.log(AdminSystemStore.getAdminSystemMenuRoleList);
-    if(AdminSystemStore.getAdminSystemMenuRoleList.code === 200) {
-      return AdminSystemStore.getAdminSystemMenuRoleList
+    if(data.code === 200) {
+      return data
     }
   };
 
