@@ -210,25 +210,32 @@ export default class extends Vue {
    * @return {*}
    */
   private async submitFormClick() {
-    let { userName, pass } = this.ruleForm;
-    let md5s = md5(pass).toUpperCase();
-    let res = await webGetAdminUserLogin({
+    const { userName, pass } = this.ruleForm;
+    const md5s = md5(pass).toUpperCase();
+    const {data: res} = await webGetAdminUserLogin({
       'userName': userName,
       'password': pass,
     });
-    let type = MessageTips(res, false, true, '', null, item => {
-      this.loadingType = false;
-    });
-    // console.log(res);
-    if (type) {
-      const roleId = res.data.data.userId;
-      // this.loadingType = false;
-      UserStore.storeActionUserName(res.data.data.userName);
-      UserStore.storeActionToken(res.data.data.token);  // 用户Token
+    if(res.code === 200) {
+      const data = res.data;
+      const roleId = data.userId;
       // 调用resetRouter方法，把原来的路由替换  【位置关系】
       resetRouter();
-      this.submitFormRoleId(roleId);
+      UserStore.storeActionUserName(data.userName);
+      UserStore.storeActionToken(data.token);      // 用户Token
+      this.getRouterNavsData(roleId);
+
+    } else {
+      this.$message({
+        message: res.message,
+        type: 'error',
+        onClose: () => {
+          this.loadingType = false;
+        }
+      });
+
     }
+    // console.log(res);
   }
 
   /** 
@@ -238,20 +245,21 @@ export default class extends Vue {
 	 * @param {*} TreeForeach()  递归遍历
    * @return {*}
    */
-  public async submitFormRoleId(roleId: number) {
+  public async getRouterNavsData(roleId: number) {
+    const text = this.vm.$t('Hlin.登录成功');
+    const localsList = dynamicRouter;     // 比对路由
     let routersMapList = subMenuRouters;  // 本地挂载路由
-    // 后台路由
-    let subMenu = await webGetAdminUserFindRoleById({
+   
+    let res = await webGetAdminUserFindRoleById({
       'adminId': roleId,
     });
-    console.log(subMenu);
-    const text = this.vm.$t('Hlin.登录成功');
-    MessageTips(subMenu, true, true, text, item => {
+    console.log(res);
+
+    MessageTips(res, true, true, text, item => {
       let treeData = item.data.data;       // 后台权限路由
-      let dynamicMapList = dynamicRouter;  // 比对路由
 
       TreeForeach(treeData, tree => { // 权限递归
-        dynamicMapList.forEach( el => {
+        localsList.forEach( el => {
           if(tree.router === el.path) {
             routersMapList[0].children.push(el);
           }

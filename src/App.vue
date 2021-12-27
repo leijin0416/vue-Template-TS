@@ -8,21 +8,22 @@
 import { Component, Vue, Watch, } from 'vue-property-decorator';
 import router, { resetRouter } from '@/router/index';
 import { subMenuRouters, dynamicRouter } from '@/router/routerMaps';
-import { UserStore } from '@/store/private/user';
 import { sessionData } from '@/filters/storage';
 import { TreeForeach } from '@/filters/common';
+import { UserStore } from '@/store/private/user';
 
 @Component({
   components: {},
 })
 export default class Index extends Vue {
   created () {
-    let routersMapList = UserStore.RouterMap;
-    let sessionRouterMap: any = sessionData('get', 'HasSessionRouterMap', '');
+    const routersMapList = UserStore.RouterMap;
+    const sessionRouterMap: any = sessionData('get', 'HasSessionRouterMap', '');
     
     if (routersMapList.length === 0 && sessionRouterMap !== null) {
-      this.onUserAddRoutes();
-      UserStore.storeActionRouterMap(JSON.parse(sessionRouterMap));
+      const jsonData = JSON.parse(sessionRouterMap);
+      this.getRouterNavsData(jsonData);
+      UserStore.storeActionRouterMap(jsonData);
       console.log(`【刷新】再次执行路由${routersMapList}`);
     }
     // sessionData('set', 'HasSessionLocale', 'zh');
@@ -30,14 +31,13 @@ export default class Index extends Vue {
   };
   
   // 刷新路由
-	onUserAddRoutes () {
+	private getRouterNavsData(data) {
+    const localsList = dynamicRouter;
     let routersMapList = subMenuRouters;
-    let dynamicMapList = dynamicRouter;
-    let sessionRouterMap: any = sessionData('get', 'HasSessionRouterMap', '');
     // 权限递归
-    TreeForeach(JSON.parse(sessionRouterMap), tree => {
-      dynamicMapList.forEach(el => {
-        if (tree.router === el.path) {
+    TreeForeach(data, tree => {
+      localsList.forEach(el => {
+        if(tree.router === el.path) {
           routersMapList[0].children.push(el);
         }
       });
