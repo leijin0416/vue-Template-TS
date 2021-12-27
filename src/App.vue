@@ -16,6 +16,8 @@ import { UserStore } from '@/store/private/user';
   components: {},
 })
 export default class Index extends Vue {
+  private vm = window['vm'];
+  
   created () {
     const routersMapList = UserStore.RouterMap;
     const sessionRouterMap: any = sessionData('get', 'HasSessionRouterMap', '');
@@ -42,6 +44,7 @@ export default class Index extends Vue {
         }
       });
     });
+
     // console.log(routersMapList);
     router.addRoutes(routersMapList);
   }

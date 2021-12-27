@@ -161,8 +161,20 @@ export default class extends Vue {
     this.scrollReveal.reveal('.reveal-top', revealTop);
   };
 
-  onRadioChange() {
-    sessionStorage.setItem('accessLocaleI18n', this.radioLocale); // 设置语言包
+  // 重置
+  private resetForm(formName) {
+    const _that = this;
+    const ref: any = _that.$refs[formName];
+    ref.resetFields();
+  }
+
+  /**
+   * @description: 设置语言包
+   * @param {String} radioLocale  -当前语言
+   * @return {*}
+   */
+  private onRadioChange() {
+    sessionStorage.setItem('accessLocaleI18n', this.radioLocale);
     this.$message.success({
       message: this.vm.$t('Hlin.切换成功'),
       duration: 3000,
@@ -171,13 +183,6 @@ export default class extends Vue {
       }
     })
     // console.log(this.radioLocale);
-  }
-
-  // 重置
-  private resetForm(formName) {
-    const _that = this;
-    const ref: any = _that.$refs[formName];
-    ref.resetFields();
   }
 
   /** 
@@ -204,9 +209,9 @@ export default class extends Vue {
 
   /** 
    * @description: 按钮登录
-	 * @param {*} storeActionUserName  缓存用户名
-	 * @param {*} storeActionToken  缓存用户Token
-	 * @param {*} resetRouter  重置路由
+	 * @param {*} storeActionUserName  -缓存用户名
+	 * @param {*} storeActionToken  -缓存用户Token
+	 * @param {*} resetRouter  -重置路由
    * @return {*}
    */
   private async submitFormClick() {
@@ -216,6 +221,7 @@ export default class extends Vue {
       'userName': userName,
       'password': pass,
     });
+    // console.log(res);
     if(res.code === 200) {
       const data = res.data;
       const roleId = data.userId;
@@ -235,14 +241,13 @@ export default class extends Vue {
       });
 
     }
-    // console.log(res);
   }
 
   /** 
    * @description: 拿用户ID -> 查询权限表
-	 * @param {*} storeActionRouterMap()  缓存后台路由数组
-	 * @param {*} addRoutes()    动态挂载路由
-	 * @param {*} TreeForeach()  递归遍历
+	 * @param {*} storeActionRouterMap()  -Store 缓存后台路由数组
+	 * @param {*} addRoutes()    -动态挂载路由
+	 * @param {*} TreeForeach()  -递归遍历
    * @return {*}
    */
   public async getRouterNavsData(roleId: number) {
@@ -253,10 +258,10 @@ export default class extends Vue {
     let res = await webGetAdminUserFindRoleById({
       'adminId': roleId,
     });
-    console.log(res);
+    // console.log(res);
 
     MessageTips(res, true, true, text, item => {
-      let treeData = item.data.data;       // 后台权限路由
+      const treeData = item.data.data;       // 后台权限路由
 
       TreeForeach(treeData, tree => { // 权限递归
         localsList.forEach( el => {
@@ -268,13 +273,12 @@ export default class extends Vue {
 
       UserStore.storeActionRouterMap(treeData);
       router.addRoutes(routersMapList);
-      this.$router.push({path: '/'});
       this.loadingType = false;
+      this.$router.push({path: '/'});
 
     }, err => {
       this.loadingType = false;
     });
-
   }
 }
 </script>
